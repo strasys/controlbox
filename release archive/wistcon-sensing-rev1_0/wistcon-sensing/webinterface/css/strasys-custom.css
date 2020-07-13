@@ -1,0 +1,232 @@
+/*!
+* strasys.at
+* CSS cusomisation
+* Johannes Strasser
+*  2017 - April
+*/
+
+@CHARSET "UTF-8";
+
+body
+{
+	background-color: #999999;
+}
+
+.addNavbar {
+	padding-top: 0px;
+	background-color: #333;
+}
+
+.navbar {
+	width: 100%;
+	margin: 0px auto;
+	border-radius: 0px;
+	max-width: 768px;
+}
+
+.navbar-inverse {
+	background-color:#333;	
+}
+
+
+.desk {
+	padding-top: 80px;
+	padding-bottom: 80px;
+	background-color: #FFF;
+	margin: 0 auto;
+	max-width: 768px;
+}
+
+.databox {
+	box-shadow: 0px 0px 10px 2px #c2daec;
+}
+
+.databox.info {
+	margin-top: 10px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 25px;
+	padding-right: 15px;
+}
+
+.databox.switch {
+	margin-top: 10px;
+	box-shadow: 0px 0px 10px 2px #999;
+}
+
+.databox.switch-on {
+	margin-top: 10px;
+	box-shadow: 0px 0px 10px 2px #e6b591;
+}
+
+.badge.switch-on {
+	background-color: #f8780c;
+}
+
+.databox.switch-off {
+	margin-top: 10px;
+	box-shadow: 0px 0px 10px 2px #d7d2d2;
+}
+
+.badge.switch-off {
+	background-color: #999;
+}
+
+.nav_active {
+	color: white;
+}
+.nav_notactive {
+	color: #999;
+}
+
+.led-yellow {
+    margin: 20px auto;
+    width: 25px;
+    height: 25px;
+    background-color: #A90;
+    border-radius: 50%;
+    box-shadow: #000 0 -1px 7px 1px, inset #660 0 -1px 9px, #DD0 0 2px 12px;
+}
+
+.led-green {
+    margin: 20px auto;
+    width: 25px;
+    height: 25px;
+    background-color: #690;
+    border-radius: 50%;
+    box-shadow: #000 0 -1px 7px 1px, inset #460 0 -1px 9px, #7D0 0 2px 12px;
+}
+
+.led-blue {
+    margin: 20px auto;
+    width: 25px;
+    height: 25px;
+    background-color: #1919FF;
+    border-radius: 50%;
+    box-shadow: #000 0 -1px 7px 1px, inset #4D4FFF 0 -1px 9px, #0F0FFF 0 2px 25px;
+}
+
+.led-blue-off {
+    margin: 20px auto;
+    width: 25px;
+    height: 25px;
+    background-color: #FFF;
+    border-radius: 50%;
+    border:solid 1px black
+}
+
+
+.panel-info {
+  border-color: #cbd9fb;
+}
+
+.panel-info > .panel-heading {
+background: #e2e9fb;
+color: #005bea;
+border-color: #cbd9fb; 
+}
+
+/* badge - info - custom color */
+
+.alert-info {
+  color: #32c82d;
+  background-color: #efefef;
+}
+
+.login-msg
+{
+	color: black;
+	border: 1px solid #dadfe1;
+    	height: 30px;
+    	line-height: 28px;
+    	transition: all ease-in-out 500ms;
+}
+
+.login-msg.success
+{
+	border: 1px solid #68c3a3;
+	background-color: #c8f7c5;
+}
+
+.login-msg.error
+{
+	border: 1px solid #eb575b;
+	background-color: #ffcad1;
+}
+
+.login-icon
+{
+	color: black;
+	width: 30px;
+    	float: left;
+    	line-height: 28px;
+    	text-align: center;
+    	background-color: #dadfe1;
+    	margin-right: 5px;
+	top: 0px;
+	bottom: 0px;
+    	transition: all ease-in-out 500ms;	
+}
+
+.login-icon.success
+{
+	background-color: #68c3a3 !important;
+}
+
+.login-icon.error
+{
+	background-color: #eb575b !important;
+}
+
+.pooltemp-icon
+{
+	width: 50px;
+	height: 50px;
+	line-height: 28px;
+	background-image: url("../fonts/pooltemp.svg");
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+/* Support */
+.positionontop {
+    position: relative;
+    z-index: 9999;
+}
+
+.loader {
+  border: 8px solid #999999;
+  border-radius: 50%;
+  border-top: 8px solid #ffa00e;
+  border-bottom: 8px solid #2179ff;;
+  width: 40px;
+  height: 40px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 1s linear infinite; 
+}
+
+.loader.pos-rel {
+  position: relative;
+    top: 50%;
+    left: 50%;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/*position modal*/
+.modalpos {
+  max-height: calc(100% - 100px);
+  max-width: 72px;
+  position: fixed;
+    top: 50%;
+    left: 50%;
+  transform: translate(-50%, -50%);
+}

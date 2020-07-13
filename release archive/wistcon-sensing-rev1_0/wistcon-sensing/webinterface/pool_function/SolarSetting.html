@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>wistcon</title>
+
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+     <!-- color - adoption -->
+    <link href="/css/strasys-custom.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+<!-- Fixed Navbar -->
+	<div id="mainNavbar">
+	</div>
+  	<div class="container desk">
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h3><b> Solar Parameter:</b></h3>
+			</div>
+			<div class="panel-body">
+				<div class="row" id="SolarModeField">
+					<div class="clo-xs-12 col-sm-6 col-md5" id="SolarCheckboxesOperationmode">
+						<div class="radio">
+ 						<label>
+      						<input type="radio" id="radioSolarOFF" name="OptionsRadios" value="OFF" onclick="setSolarModeXML('radioSolarOFF')">
+						<h4><b>AUS</b></h4>
+   						</label>
+						</div>
+						<div class="radio">
+ 						<label>
+      						<input type="radio" id="radioSolarAUTO" name="OptionsRadios" value="AUTO" onclick="setSolarModeXML('radioSolarAUTO')">
+						<h4><b>Automatic Mode</b></h4>
+						</label>
+						</div>
+					</div>	
+				</div>
+				<div class="row" id="SolarBackWaterTempField">	
+    				<div class= "col-xs-12 col-sm-6 col-md-6">
+					<div style="padding-top:20px; max-width:350px;" class = "input-group">
+						<span class="input-group-addon" style="min-width:180px;">Soll Temperatur</span>
+						<select id="SolarBackWaterTemp" class="form-control"></select>
+						<span class="input-group-addon" style="min-width:20px;">°C</span>
+						<span class="input-group-btn">
+							<button id="ButtonBackWaterTemp" class="btn btn-default" type="button" onclick="setSolarParameterXML('SolarBackWaterTemp','ButtonBackWaterTemp','TempBackWater')">Set</button>
+						</span>
+
+					</div>
+				</div>							
+				</div>
+				<div class="row" id="SolarDifferenceONTempField">	
+    				<div class= "col-xs-12 col-sm-6 col-md-6">
+					<div style="padding-top:20px; max-width:350px;" class = "input-group">
+						<span class="input-group-addon" style="min-width:180px;">Einschalt Differenz</span>
+						<select id="SolarDifferenceONTemp" class="form-control" ></select>
+						<span class="input-group-addon" style="min-width:20px;">°C</span>
+						<span class="input-group-btn">
+						<button id="ButtonDifferenceONTemp" class="btn btn-default" type="button" onclick="setSolarParameterXML('SolarDifferenceONTemp','ButtonDifferenceONTemp','DifferenceONTemp')">Set</button>
+					</div>
+				</div>
+				</div>
+				<div class="row" id="SolarDifferenceOFFTempField">	
+    				<div class= "col-xs-12 col-sm-6 col-md-6">
+					<div style="padding-top:20px; max-width:350px;" class = "input-group">
+						<span class="input-group-addon" style="min-width:180px;">Ausschalt Differenz</span>
+						<select id="SolarDifferenceOFFTemp" class="form-control"></select>
+						<span class="input-group-addon" style="min-width:20px;">°C</span>
+						<span class="input-group-btn">
+						<button id="ButtonDifferenceOFFTemp" class="btn btn-default" type="button" onclick="setSolarParameterXML('SolarDifferenceOFFTemp','ButtonDifferenceOFFTemp','DifferenceOFFTemp')">Set</button>
+						</span>
+					</div>
+				</div>
+				</div>
+				<div class="row" id="SolarSwitchOFFdelayField">	
+    				<div class= "col-xs-12 col-sm-6 col-md-6">
+					<div style="padding-top:20px; max-width:350px;" class = "input-group">
+						<span class="input-group-addon" style="min-width:180px;">Ausschalt Verzögerung</span>
+						<select id="SolarSwitchOFFdelay" class="form-control"></select>
+						<span class="input-group-addon" style="min-width:20px;">min.</span>
+						<span class="input-group-btn">
+						<button id="ButtonSwitchOFFdelay" class="btn btn-default" type="button" onclick="setSolarParameterXML('SolarSwitchOFFdelay','ButtonSwitchOFFdelay','SwitchOFFdelay')">Set</button>
+						</span>
+					</div>
+				</div>
+				</div>
+				<div class="row" id="SolarSwitchONdelayField">	
+    				<div class= "col-xs-12 col-sm-6 col-md-6">
+					<div style="padding-top:20px; max-width:350px;" class = "input-group">
+						<span class="input-group-addon" style="min-width:180px;">Einschalt Verzögerung</span>
+						<select id="SolarSwitchONdelay" class="form-control"></select>
+						<span class="input-group-addon" style="min-width:20px;">min.</span>
+						<span class="input-group-btn">
+						<button id="ButtonSwitchONdelay" class="btn btn-default" type="button" onclick="setSolarParameterXML('SolarSwitchONdelay','ButtonSwitchONdelay','SwitchONdelay')">Set</button>
+						</span>
+					</div>
+				</div>
+				</div>
+	
+	</div>
+	</div>
+	
+	</div>
+	</div>
+	</div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/jQuery/3.2.1/jquery.min.js"></script> 
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="SolarSetting.js?ver=1"></script>
+  </body>
+</html>
+

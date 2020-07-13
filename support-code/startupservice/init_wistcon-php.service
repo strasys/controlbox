@@ -1,0 +1,11 @@
+[Unit]
+Description=init phpstartupscript
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/lib/cgi-bin/init-php.sh
+
+[Install]
+WantedBy=multi-user.target
+

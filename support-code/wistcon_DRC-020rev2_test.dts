@@ -1,0 +1,275 @@
+/*  
+* Copyright (C) 2012 Texas Instruments Incorporated - http://www.ti.com/
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Purpose License Version 2 as
+* published by the Free Software Foundation
+*
+*Device tree description of wistcon DRC-020 
+*Idea and development
+*wistcon.at
+*Dipl.-Ing. Johannes Strasser
+*July 2017
+*modified: 
+*/
+
+/dts-v1/;
+/plugin/;
+
+/{
+       compatible = "ti,beaglebone", "ti,beaglebone-black";
+       part-number = "EL-100-020-001";
+       version = "00A0";
+       manufacturer = "strasys.at";
+       board-name = "wistcon-DRC020";
+       
+       /* state the resources this cape uses */
+	exclusive-use =
+		/* the pin header uses */
+		"P8.07",	/* digiin: gpio2_2 */
+		"P8.08",	/* digiin: gpio2_3 */
+		"P8.09",	/* digiin: gpio2_5 */
+		"P8.10",	/* digiin: gpio2_4 */
+		"P8.11",	/* digiin: gpio1_13 */
+		"P8.12",	/* digiin: gpio1_12 */
+		"P8.13",	/* digiin: gpio0_23 */
+		"P8.14",	/* digiin: gpio0_26 */
+		"P8.15",	/* digiin: gpio1_15 */
+		"P8.16",	/* digiin: gpio1_14 */
+		"P8.17",	/* digiin: gpio0_27 */
+		"P8.18",	/* digiin: gpio2_1 */
+		"P8.27",	/* digiout: gpio2_22 */
+		"P8.28",	/* digiout: gpio2_24 */
+		"P8.29",	/* digiout: gpio2_23 */
+		"P8.30",	/* digiout: gpio2_25 */
+		"P8.39",	/* digiout: gpio2_12 */
+		"P8.40",	/* digiout: gpio2_13 */
+		"P8.41",	/* digiout: gpio2_10 */
+		"P8.42",	/* digiout: gpio2_11 */
+		"P8.43",	/* digiout: gpio2_8 */
+		"P8.44",	/* digiout: gpio2_9 */
+		"P8.45",	/* digiout: gpio2_6 */
+		"P8.46",	/* digiout: gpio2_7 */
+		"P9.14",	/* digiout: gpio1_18 */
+		"P9.15",	/* digiout: gpio1_16 */
+		"P9.17",	/* I2C1_SCL */
+		"P9.18",	/* I2C1_SDA */
+		"P9.21",	/* UART2_TX */
+		"P9.22",	/* UART2_RX */
+		"P9.23",	/* digiout: gpio1_17*/
+		"P9.24",	/* TTL-TXD_4D: uart1_txd */
+		"P9.26",	/* TTL-TXD_4D: uart1_rxd */
+		"P9.39",	/* AIN0 */
+		"P9.40",	/* AIN1 */
+		"P9.37",	/* AIN2 */
+		"P9.38",	/* AIN3 */
+		"P9.33",	/* AIN4 */
+		"P9.36",	/* AIN5 */
+		"P9.35",	/* AIN6 */
+		/* the hardware IP uses */
+		"gpio2_2",
+		"gpio2_3",
+		"gpio2_5",
+		"gpio2_4",
+		"gpio1_13",
+		"gpio1_12",
+		"gpio0_23",
+		"gpio0_26",
+		"gpio1_15",
+		"gpio1_14",
+		"gpio0_27",
+		"gpio2_1",
+		"gpio2_22",
+		"gpio2_24",
+		"gpio2_23",
+		"gpio2_25",
+		"gpio2_12",
+		"gpio2_13",
+		"gpio2_10",
+		"gpio2_11",
+		"gpio2_8",
+		"gpio2_9",
+		"gpio2_6",
+		"gpio2_7",
+		"gpio1_18",
+		"gpio1_16",
+		"gpio1_17",
+		"gpio3_19",		
+		"uart1",
+		"uart2",
+		"tscadc",
+		"i2c1";
+
+       fragment@0 {
+             target = <&am33xx_pinmux>;
+            
+             __overlay__ {
+                  digi_in_out: strasys_homectrl_Pins {
+			pinctrl-single,pins = <
+				0x090 0x27 /* P8_07 66 INPUT MODE7 */
+				0x094 0x27 /* P8_08 67 INPUT MODE7 */
+				0x09c 0x27 /* P8_09 69 INPUT MODE7 */
+				0x098 0x27 /* P8_10 68 INPUT MODE7 */
+				0x034 0x27 /* P8_11 45 INPUT MODE7 */
+				0x030 0x27 /* P8_12 44 INPUT MODE7 */
+				0x024 0x27 /* P8_13 23 INPUT MODE7 */
+				0x028 0x27 /* P8_14 26 INPUT MODE7 */
+				0x03c 0x27 /* P8_15 47 INPUT MODE7 */
+				0x038 0x27 /* P8_16 46 INPUT MODE7 */
+				0x02c 0x27 /* P8_17 27 INPUT MODE7 */
+				0x08c 0x27 /* P8_18 65 INPUT MODE7 */
+				0x0e0 0x07 /* P8_27 86 OUTPUT MODE7 */
+				0x0e8 0x07 /* P8_28 88 OUTPUT MODE7 */
+				0x0e4 0x07 /* P8_29 87 OUTPUT MODE7 */
+				0x0ec 0x07 /* P8_30 89 OUTPUT MODE7 */
+				0x0b8 0x07 /* P8_39 76 OUTPUT MODE7 */	
+				0x0bc 0x07 /* P8_40 77 OUTPUT MODE7 */
+				0x0b0 0x07 /* P8_41 74 OUTPUT MODE7 */
+				0x0b4 0x07 /* P8_42 75 OUTPUT MODE7 */
+				0x0a8 0x07 /* P8_43 72 OUTPUT MODE7 */
+				0x0ac 0x07 /* P8_44 73 OUTPUT MODE7 */
+				0x0a0 0x07 /* P8_45 70 OUTPUT MODE7 */
+				0x0a4 0x07 /* P8_46 71 OUTPUT MODE7 */
+				0x048 0x07 /* P9_14 50 OUTPUT MODE7 */
+				0x040 0x07 /* P9_15 48 OUTPUT MODE7 */ 
+				0x044 0x07 /* P9_23 49 OUTPUT MODE7 */
+				0x1a4 0x07 /* P9_27 115 OUTPUT MODE7 */
+          				
+                   		/* OUTPUT  GPIO(mode7) 0x07 pulldown, 0x17 pullup, 0x?f no pullup/down */
+			       /* INPUT   GPIO(mode7) 0x27 pulldown, 0x37 pullup, 0x?f no pullup/down */
+
+			>;
+			};
+            };
+       		};
+
+       fragment@1 {
+		target = <&ocp>;
+		__overlay__ {
+		
+			homectrl_helper: helper {
+				compatible = "bone-pinmux-helper";
+				pinctrl-names = "default";
+				pinctrl-0 = <&digi_in_out>;
+				status = "okay";
+			};
+		};
+	};
+	
+	fragment@11 {
+		target = <&am33xx_pinmux>;
+		__overlay__ {
+			bb_uart1_pins: pinmux_bb_uart1_pins {
+				pinctrl-single,pins = <
+					0x184 0x20	/* P9.24 uart1_txd.uart1_txd | MODE0 */
+					0x180 0x20	/* P9.26 uart1_rxd.uart1_rxd | MODE0 */
+				>;
+			};
+		};
+	};
+
+	fragment@12 {
+		target = <&uart1>;	/* really uart1 */
+		__overlay__ {
+			status = "okay";
+			pinctrl-names = "default";
+			pinctrl-0 = <&bb_uart1_pins>;
+		};
+	};
+
+	fragment@13 {
+	target = <&am33xx_pinmux>;
+	__overlay__ {
+		bb_uart2_pins: pinmux_bb_uart2_pins {
+			pinctrl-single,pins = <
+				0x150 0x21	/* spi0_sclk.uart2_rxd | MODE1 */
+				0x154 0x01	/* spi0_d0.uart2_txd | MODE1 */
+			>;
+			};
+		};
+	};
+
+	fragment@14 {
+		target = <&uart3>;	/* really uart2 */
+		__overlay__ {
+			status = "okay";
+			pinctrl-names = "default";
+			pinctrl-0 = <&bb_uart2_pins>;
+		};
+	};	
+
+
+	fragment@20 {
+		target = <&am33xx_pinmux>;
+		__overlay__ {
+			bb_i2c1_pins: pinmux_bb_i2c1_pins {
+				pinctrl-single,pins = <
+					0x158 0x72	/* spi0_d1.i2c1_sda, SLEWCTRL_SLOW | INPUT_PULLUP | MODE2 */
+					0x15c 0x72	/* spi0_cs0.i2c1_scl, SLEWCTRL_SLOW | INPUT_PULLUP | MODE2 */
+				>;
+			};
+		};
+	};
+
+
+	fragment@21 {
+		target = <&i2c1>;	/* i2c1 is numbered correctly */
+		__overlay__ {
+			status = "okay";
+			pinctrl-names = "default";
+			pinctrl-0 = <&bb_i2c1_pins>;
+
+			/* this is the configuration part */
+			clock-frequency = <100000>;
+
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			/* add any i2c devices on the bus here */
+
+			// commented out example of a touchscreen (taken from BB-BONE-LCD7-01-00A4) */
+			// maxtouch@4a {
+			//	compatible = "mXT224";
+			//	reg = <0x4a>;
+			//	interrupt-parent = <&gpio4>;
+			//	interrupts = <19 0x0>;
+			//	atmel,irq-gpio = <&gpio4 19 0>;
+			// };
+		};
+	};
+
+	fragment@40 {
+		target = <&ocp>;
+		__overlay__ {
+			/* avoid stupid warning */
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			tscadc {
+				compatible = "ti,ti-tscadc";
+				reg = <0x44e0d000 0x1000>;
+				interrupt-parent = <&intc>;
+				interrupts = <16>;
+				ti,hwmods = "adc_tsc";
+				status = "okay";
+
+				adc {
+					ti,adc-channels = <0 1 2 3 4 5 6 7>;
+				};
+			};
+
+			test_helper: helper {
+				compatible = "bone-iio-helper";
+				vsense-name  = "AIN0", "AIN1", "AIN2", "AIN3", "AIN4", "AIN5", "AIN6", "AIN7";
+				vsense-scale = <100     100     100     100     100     100     100     100>;
+				status = "okay";
+			};
+		};
+	};
+
+
+}; /* root node end */
+
+	
+
+

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>wistcon</title>
+
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+     <!-- color - adoption -->
+    <link href="/css/strasys-custom.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+<!-- Fixed Navbar -->
+	<div id="mainNavbar"></div>	
+	<div id="idDeviceOwnerRegistration" class="container desk">
+		<ol class="breadcrumb">
+			<li><a href="/set/set.html?ver=0">Set</a></li>
+			<li class="active">Registrierung</li>
+		</ol>
+
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h3><b> Produktregistrierung Eigentümer</b></h3>
+			</div>
+			<div class="panel-body">
+				<!-- Start Owner Registration Product not registered --!>
+				<div id = "reg_form_owner_start" class="row">
+					<div class="row">
+						<div class="col-xs-0 col-sm-1 col-md-1"></div>
+						<div class="col-xs-12 col-sm-10 col-md-10">
+							<h3 style="color:orange; text-align: center;"><strong>Produktregistrierung mit bestehendem<br>wistcon Cloud Account</strong></h3>
+							<br>
+						</div>
+						<div class="col-xs-0 col-sm-1 col-md-1"></div>
+					</div>
+					<div class=row>
+					<div class="col-xs-0 col-sm-3 col-md-3"></div>
+					<div class="col-xs-12 col-sm-6 col-md-6">
+						<div id="div-login-msg-customer" class="login-msg">
+                                			<div id="icon-login-msg" class="login-icon glyphicon glyphicon-chevron-right"></div>
+                                			<span id="text-login-msg">Eingabe Benutzernamen und Passwort</span>
+			   			</div>
+						<br>
+			    			<input id="login_username" class="form-control" type="text" placeholder="Benutzername wistcon Cloud" required autocomplete="on">
+						<br>
+						<input id="login_password" class="form-control" type="password" placeholder="Passwort wistcon Cloud" required>
+						<br>
+      						<div>
+						<button id="login_button_submit_customer" type="submit" class="btn btn-primary btn-lg btn-block" onclick="startRegistration_existingAccount()">Neuprodukt registrieren</button>	
+						<br>
+						<a href="#">Neuprodukt Registrierung ohne bestehenden wistcon Cloud Account</a>
+					</div>
+					
+					<div class="col-xs-0 col-sm-3 col-md-3"></div>
+					</div>
+				</div>
+				</div>	
+				<!-- End Owner Registration Product not registered --!>
+	
+				<!-- Start Owner Registration form -->
+				<div id = "reg_form_owner_register" class="row">
+					<div class="col-xs-12 form-group">			
+ 						<label class="radio-inline">
+							<input type="radio" id="radioMR" name="optradio" value="Herr">Herr
+   						</label>
+ 						<label class="radio-inline">
+      							<input type="radio" id="radioMS" name="optradio" value="Frau">Frau
+						</label>
+					</div>
+					<div class="col-xs-12">
+					      	<div id="firstName_div" class="form-group">
+						<input class="form-control" type="text" id="firstName" placeholder="Vorname - Pflichtfeld">
+						<span id = "firstName_span"class=""></span>
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<div id="FamilyName_div" class="form-group">
+							<input class="form-control" type="text" id="FamilyName" placeholder="Nachname - Pflichtfeld">
+							<span id = "FamilyName_span"class=""></span>
+						</div>
+					</div>
+					<div class="col-xs-8">
+						<div id="street_div" class="form-group">
+							<input class="form-control" type="text" id="street" placeholder="Straße">
+							<span id = "street_span"class=""></span>
+						</div>
+					</div>
+					<div class="col-xs-4">
+						<div id="number_div" class="form-group">
+							<input class="form-control" type="text" id="number" placeholder="Nr.">
+							<span id = "number_span"class=""></span>
+						</div>
+					</div>
+					<div class="col-xs-4">
+						<div id="PLZ_div" class="form-group">
+							<input class="form-control" type="text" id="PLZ" placeholder="PLZ">
+							<span id = "PLZ_span"class=""></span>
+						</div>
+					</div>
+					<div class="col-xs-8">
+						<div id="City_div" class="form-group">
+							<input class="form-control" type="text" id="City" placeholder="Ort - Pflichtfeld">
+							<span id = "City_span"class=""></span>
+						</div>
+					</div>
+					<div class="col-xs-12 form-group">
+						<select class="form-control" id="Country"></select>
+					</div>
+					<div class="col-xs-12">
+						<div id="email_div" class="form-group">
+							<input class="form-control" type="email" id="email" placeholder="e-mail - Pflichtfeld">
+							<span id = "email_span"class=""></span>
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<div id="password1_div" class="input-group">
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="password1_show" onclick="showpassword_text()">
+									<i id="password1_i" class="glyphicon glyphicon-eye-open"></i>
+								</button>
+							</div>
+							<input class="form-control" type="password" id="password1" placeholder="Passwort" onkeyup="passwordstrength()" onfocus="tooltip_password('1')" onblur="tooltip_password('0')">
+							<span id = "password1_span"class=""></span>
+						</div>
+					</div>
+					<div class="col-xs-12" style="padding-top:10px">
+						<div id="password2_div" class="form-group">
+							<input class="form-control" type="password" id="password2" placeholder="Passwort wiederholen" onkeyup="password_repeat()">
+							<span id = "password2_span"class=""></span>
+						</div>
+					</div>
+				</div>
+				<!-- End of Owner Registration form -->		
+			</div>
+  		</div>
+	</div>	
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/jQuery/3.2.1/jquery.min.js"></script> 
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="deviceOwnerRegistration.js?ver=3"></script>
+  </body>
+</html>
+

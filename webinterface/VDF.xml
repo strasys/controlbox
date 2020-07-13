@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sensingbox>
+<PT1000>
+	<PT1000Name1>PT1000_1</PT1000Name1>
+</PT1000>
+<PT1000>
+	<PT1000Name1>PT1000_2</PT1000Name1>
+</PT1000>
+<PT1000>
+	<PT1000Name2>PT1000_1</PT1000Name2>
+</PT1000>
+<PT1000>
+	<PT1000Name2>PT1000_2</PT1000Name2>
+</PT1000>
+
+<HUMIDITY>
+	<HUMIDITYname1>Feuchte</HUMIDITYname1>
+</HUMIDITY>
+<HUMIDITY>
+	<HUMIDITYname1>Temperatur</HUMIDITYname1>
+</HUMIDITY>
+<HUMIDITY>
+	<HUMIDITYname2>Feuchte</HUMIDITYname2>
+</HUMIDITY>
+<HUMIDITY>
+	<HUMIDITYname2>Temperatur</HUMIDITYname2>
+</HUMIDITY>
+<HUMIDITY>
+	<HUMIDITYname3>Feuchte</HUMIDITYname3>
+</HUMIDITY>
+<HUMIDITY>
+	<HUMIDITYname3>Temperatur</HUMIDITYname3>
+</HUMIDITY>
+<HUMIDITY>
+	<HUMIDITYname4>Feuchte</HUMIDITYname4>
+</HUMIDITY>
+<HUMIDITY>
+	<HUMIDITYname4>Temperatur</HUMIDITYname4>
+</HUMIDITY>
+
+
+<data_cloud>
+<datatocloud>HUMIDITY_0:2:humidity_val1:5:%r.F.:1</datatocloud><datatocloud>HUMIDITY_1:2:humidity_temp_val1:5:°C:1</datatocloud></data_cloud>
+
+<data_cloud_transfer_status>
+	<database_write_status>1</database_write_status>
+</data_cloud_transfer_status>
+
+<OperationModeDevice>
+	<AutomaticHand>stop</AutomaticHand>
+	<DNSService>stop</DNSService>
+	<PushDataCloudService>stop</PushDataCloudService>
+	<indicatorLED>stop</indicatorLED>
+</OperationModeDevice>
+<timedate>
+	<timezone>Europe/Berlin</timezone>
+	<ntpserver>ntp1.hetzner.de/ntp2.hetzner.com/ntp3.hetzner.net</ntpserver>
+</timedate>
+<Owner>
+	<email/>
+	<userName/>
+</Owner>
+</sensingbox>

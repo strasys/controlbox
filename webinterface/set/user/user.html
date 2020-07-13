@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>wistcon</title>
+
+    <!-- Bootstrap --> 
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/strasys-custom.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+<!-- Fixed Navbar -->
+	<div id="mainNavbar">
+	</div>
+	<div class="container desk">
+		<ol class="breadcrumb">
+			<li><a href="/set/set.html?ver=0">Set</a></li>
+			<li class="active">Benutzerverwaltung</li>
+		</ol>
+
+		<div id="alert_user" class="row" style="margin-top:15px; margin-bottom:25px;">
+			<div class="col-xs-0 col-sm-3 col-md-3"></div>
+			<div class="col-xs-12 col-sm-6 col-md-6">
+				<div id="alert_msg" class="login-msg">
+	      				<div id="alert_icon" class="login-icon glyphicon glyphicon-chevron-right"></div>
+					<span id="alert_text-msg"></span>
+				</div>
+			</div>
+			<div class="col-xs-0 col-sm-3 col-md-3"></div>	
+		</div>		
+		<div id="adduser" class="row">
+			<div class="col-xs-0 col-sm-3 col-md-3"></div>
+			<div class="col-xs-12 col-sm-6 col-md-6">
+				<label for="inputadduser">Benutzer Name</label>
+				<div id="adduser_help" style="margin-bottom:15px; border:1px solid #dadfe1;">
+					<p class="text-default"><small><strong>Benutzername - Regeln:</strong></small></p>
+					<p class="text-default"><small> Darf nicht vorkommen: Ä ä Ö ö Ü ü ß [Leerzeichen]</small><span class=""></span></p>
+					<p class="text-default"><small> Länge: 3 - 10 Zeichen  </small><span class=""></span></p>
+				</div>
+				<div class="form-group" id="addusername">
+					<input class="form-control" type="text" id="inputadduser">
+					<span class=""></span>
+				</div>				
+				
+				<label>Benutzer Rechte</label><br>
+				<div class="input-group" id="adduserright">
+					<label class="radio-inline"><input type="radio" name="right" value="user" checked>user</label>
+					<label class="radio-inline"><input type="radio" name="right" value="admin">admin</label>
+				</div>
+				<p style="margin-top:15px;"><strong>Passwort</strong></p>
+				<div id="addpassword_help" style="margin-bottom:15px; border:1px solid #dadfe1;">
+					<p class="text-default"><small><strong>Passwort - Regeln:</strong></small></p>
+					<p class="text-default"><small> Groß- und Kleinbuchstaben: A-Z a-z  </small><span class=""></span></p>
+					<p class="text-default"><small> Sonderzeichen: #_!?  </small><span class=""></span></p>
+					<p class="text-default"><small> Länge: 6 - 15 Zeichen  </small><span class=""></span></p>
+				</div>
+				
+				<div id="addpassword1" class="input-group">
+					<div class="input-group-btn">
+						<button class="btn btn-default">
+							<i class="glyphicon glyphicon-eye-close"></i>
+						</button>
+					</div>
+					<input class="form-control" type="password" id="addpassword1_input" placeholder="Passwort">
+					<span class=""></span>
+				</div>
+				<div id="addpassword2" class="form-group" style="padding-top:10px">
+					<input class="form-control" type="password" id="addpassword2_input" placeholder="Passwort wiederholen">
+					<span class="" style="padding-top:10px;"></span>
+				</div>
+								
+				<input id="ButtonSaveNewUser" class="btn btn-primary btn-lg" type="button" style="width:100%; margin-top:15px;" value="Speichern">	
+			</div>
+			<div class="col-xs-0 col-sm-3 col-md-3"></div>
+		</div>
+		
+		<div id="userlist" class="row">
+			<div class="col-xs-0 col-sm-3 col-md-3"></div>
+			<div class="col-xs-12 col-sm-6 col-md-6">
+				<table class="table table-striped">
+					<thead id="userlist_head"></thead>
+					<tbody id="userlist_body"></tbody>
+				</table>
+				
+				<input class="btn btn-primary btn-lg" id="ButtonChangeSelectedUser" type="button" style="width:100%;" value="Auswahl Bearbeiten">
+				<input class="btn btn-danger btn-lg" id="ButtonDeletSelectedUser" type="button" style="width:100%; margin-top:15px;" value="Auswahl löschen">
+				<input class="btn btn-warning btn-lg" id="ButtonaddUser" type="button" style="width:100%; margin-top:25px;" value="Neuen Benutzer anlegen">
+			</div>
+			<div class="col-xs-0 col-sm-3 col-md-3"></div>
+		</div>
+		
+		<div id="changeuserlist" class="row">
+			<div class="col-xs-0 col-sm-3 col-md-3"></div>
+			<div class="col-xs-12 col-sm-6 col-md-6">
+				<div class="form-group">
+					<label for="inputchangeuser">Benutzer Name</label>
+					<div id="changeuser_help" style="margin-bottom:15px; border:1px solid #dadfe1;">
+						<p class="text-default"><small><strong>Benutzername - Regeln:</strong></small></p>
+						<p class="text-default"><small> Darf nicht vorkommen: Ä ä Ö ö Ü ü ß [Leerzeichen]</small><span class=""></span></p>
+						<p class="text-default"><small> Länge: 3 - 10 Zeichen  </small><span class=""></span></p>
+					</div>
+					<div class="form-group" id="changeusername">
+						<input class="form-control" type="text" id="inputchangeuser" disabled>
+						<span class=""></span>
+					</div>	
+				</div>				
+				<label>Benutzer Rechte</label><br>
+				<div class="input-group" id="changeuserright">
+					<label class="radio-inline"><input type="radio" name="changeright" value="user">user</label>
+					<label class="radio-inline"><input type="radio" name="changeright" value="admin">admin</label>
+				</div>
+
+				<p style="margin-top:15px;"><strong>Neues Passwort</strong></p>
+				<div id="changepassword_help" style="margin-bottom:15px; border:1px solid #dadfe1;">
+					<p class="text-default"><small><strong>Passwort - Regeln:</strong></small></p>
+					<p class="text-default"><small> Groß- und Kleinbuchstaben: A-Z a-z  </small><span class=""></span></p>
+					<p class="text-default"><small> Sonderzeichen: #_!?  </small><span class=""></span></p>
+					<p class="text-default"><small> Länge: 6 - 15 Zeichen  </small><span class=""></span></p>
+				</div>
+				
+				<div id="changepassword1" class="input-group">
+					<div class="input-group-btn">
+						<button class="btn btn-default">
+							<i class="glyphicon glyphicon-eye-close"></i>
+						</button>
+					</div>
+					<input class="form-control" type="password" id="changepassword1_input" placeholder="Passwort">
+					<span class=""></span>
+				</div>
+				<div id="changepassword2" class="form-group" style="padding-top:10px">
+					<input class="form-control" type="password" id="changepassword2_input" placeholder="Passwort wiederholen">
+					<span class="" style="padding-top:10px;"></span>
+				</div>
+							
+				<input id="ButtonChangeUserList" class="btn btn-primary btn-lg" type="button" style="width:100%; margin-top:15px;" value="Speichern">
+			</div>
+			<div class="col-xs-0 col-sm-3 col-md-3"></div>
+		</div>
+
+	</div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/jQuery/3.2.1/jquery.min.js"></script> 
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="user.js?ver=1"></script>
+  </body>
+</html>

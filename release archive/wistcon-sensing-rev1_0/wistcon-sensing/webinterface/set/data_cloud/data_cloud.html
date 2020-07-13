@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  	<meta charset="utf-8">
+  <!--   <meta http-equiv="X-UA-Compatible" content="IE=edge">  -->
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+   
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png"/>
+    <!-- Apple iOS specific meta data setting -->
+
+ 	
+    <title>wistcon</title>
+
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/strasys-custom.css" rel="stylesheet">
+	
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  <!-- Fixed navbar -->
+  <div id="mainNavbar">
+  </div>
+
+  <div class="container desk">
+	  <div id="panelQuickView">
+		<ol class="breadcrumb">
+			<li><a href="/set/set.html?ver=0">Set</a></li>
+			<li class="active">Daten Management</li>
+		</ol>
+	<div class="databox info">
+	<div class="row" id="NiveauModeField">
+		<div class="clo-xs-12 col-sm-12 col-md-12" id="SolarCheckboxesOperationmode">
+			<h4 style="color:#0087e8;">Run / Stop Push Data to Cloud Service</h4>
+			<div class="radio">
+ 			<label>
+      				<input type="radio" id="radioCloudPushModeOFF" name="OptionsRadios" value="0" onclick="setDataPushModeXML('radioCloudPushModeOFF')">
+				<h4><b>Stop </b></h4>
+   			</label>
+			</div>
+			<div class="radio">
+ 			<label>
+      			<input type="radio" id="radioCloudPushModeRUN" name="OptionsRadios" value="1" onclick="setDataPushModeXML('radioCloudPushModeRUN')">
+				<h4><b>Run</b></h4>
+			</label>
+			</div>
+		</div>	
+	</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div id="data_selected" class="databox info" style="border-radius:3px; min-width:100%;">
+				<div class="page-header">
+					<h3 style="color:#0087e8;">Ausgewählte Messstellen</h3>
+				</div>
+			<table class="table table-striped">
+				<thead id="data_selected_list_head"></thead>
+				<tbody id="data_selected_userlist_body"></tbody>
+
+			</table>
+			<input class="btn btn-danger btn-lg" id="Button_delete_data" type="button" style="width:100%; margin-top:15px; margin-bottom:15px;" value="Auswahl löschen">
+	
+			</div>
+		</div>
+
+
+
+	<!--	<div class="col-md-12 col-sm-12 col-xs-12">
+			<div id="DigiIN" class="databox info" style="border-radius:3px; min-width:100%;">
+				<div class="page-header">
+					<h3 style="color:#0087e8;">Digitale Eingänge</h3>
+				</div>
+				<div class="input-group">	
+					<span class="input-group-addon">Wert</span>
+					<select id="Digi_IN_Select_Val" class="form-control" style="min-width:200px;"></select>
+					<span class="input-group-addon">Ext.</span>
+					<input id="Digi_IN_Ext" type="text" class="form-control" value="Digi_IN" readonly></input>
+					<span class="input-group-addon">Zeit-Interval [Minuten]</span>
+					<select id="Digi_IN_Select_Interval" class="form-control"></select>
+				</div>
+				<p></p>
+				<div class="input-group">
+					<span class="input-group-addon">Messstellen ID</span>
+					<input id="Messstellen_ID_Digi_IN" type="text" class="form-control" placeholder="Messstellen Name " style="min-width:200px;">
+					<span class="input-group-addon">Einheit</span>
+					<input id="Messstellen_Einheit_Digi_IN" type="text" class="form-control" >
+					<span class="input-group-addon">Umrechnung</span>
+					<input id="Messstellen_Umrechnung_Digi_IN" type="text" class="form-control" >
+					<span class="input-group-btn">
+						<button id="Button_add_Digi_IN" class="btn btn-default" type="button" onclick="addtoCloudData('Digi_IN')">Add</button>
+					</span>
+				</div>
+
+				<p></p>	
+			</div> 
+		</div>
+		
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div id="DigiOUT" class="databox info" style="border-radius:3px; min-width:100%;">
+				<div class="page-header">
+					<h3 style="color:#0087e8;">Digitale Ausgänge</h3>
+				</div>
+				<div class="input-group">	
+					<span class="input-group-addon">Wert</span>
+					<select id="Digi_OUT_Select_Val" class="form-control" style="min-width:200px;"></select>
+					<span class="input-group-addon">Ext.</span>
+					<input id="Digi_OUT_Ext" type="text" class="form-control" value="Digi_OUT" readonly></input>
+					<span class="input-group-addon">Zeit-Interval</span>
+					<select id="Digi_OUT_Select_Interval" class="form-control"></select>
+				</div>
+				<p></p>
+				<div class="input-group">
+					<span class="input-group-addon">Messstellen ID</span>
+					<input id="Messstellen_ID_Digi_OUT" type="text" class="form-control" placeholder="Messstellen Name " style="min-width:200px;">
+					<span class="input-group-addon">Einheit</span>
+					<input id="Messstellen_Einheit_Digi_OUT" type="text" class="form-control" >
+					<span class="input-group-addon">Umrechnung</span>
+					<input id="Messstellen_Umrechnung_Digi_OUT" type="text" class="form-control" >
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" onclick="addtoCloudData('Digi_OUT')">Add</button>
+					</span>
+				</div> 
+			<p></p>
+			</div>
+		</div>			
+		-->		
+		<div id="Extension1" class="col-md-12 col-sm-12 col-xs-12"></div>
+		<div id="Extension2" class="col-md-12 col-sm-12 col-xs-12"></div>
+		<div id="Extension3" class="col-md-12 col-sm-12 col-xs-12"></div>
+		<div id="Extension4" class="col-md-12 col-sm-12 col-xs-12"></div>
+	</div>
+
+</div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/jQuery/3.2.1/jquery.min.js"></script> 
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/js/bootstrap.min.js"></script>
+  	<script src="data_cloud.js?ver=1"></script>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+[Unit]
+Description=init EL100020001
+
+[Service]
+ExecStart=/usr/lib/cgi-bin/init_wistcon-020.sh
+SyslogIdentifier=init_wistcon-020
+
+[Install]
+WantedBy=multi-user.target
