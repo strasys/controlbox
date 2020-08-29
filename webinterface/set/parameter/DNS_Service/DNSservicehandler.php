@@ -7,21 +7,26 @@
 include_once ('/var/www/privateplc_php.ini.php');
 session_start();
 include_once ('/var/www/authentification.inc.php');
-unset($getLoginStatus, $setgetDNSserviceStatus, $runstop, $setrunstopStatus);
-$getLoginStatus = $_POST['getLoginStatus'];
-$setgetDNSserviceStatus = $_POST['setgetDNSserviceStatus'];
-$setrunstopStatus = $_POST['setrunstopStatus'];
+unset($runstop);
+
+
 //$getLoginStatus = "g";
 unset($arr);
 $get = "g";
 $set = "s";
 
-if ($getLoginStatus == $get)
-{
-	transfer_javascript($loginstatus, $adminstatus);
+if (isset($_POST['getLoginStatus'])){
+    if ($_POST['getLoginStatus'] == $get)
+    {
+        $arr = array(	'loginstatus' => $loginstatus ,
+            'adminstatus' => $adminstatus 
+            );
+        echo json_encode($arr);
+    }
 }
 
-if ($setgetDNSserviceStatus == $get)
+if (isset($_POST['setgetDNSserviceStatus'])){
+if ($_POST['setgetDNSserviceStatus'] == $get)
 {
 	$statusFile = fopen("/var/www/tmp/DNSservicestatus.txt", "r");
 	if ($statusFile == false)
@@ -34,7 +39,7 @@ if ($setgetDNSserviceStatus == $get)
 	elseif ($statusFile)
 	{
 		$statusWord = trim(fgets($statusFile, 5));
-		fclose($status);
+		fclose($statusFile);
 	}
 	
 	switch ($statusWord){
@@ -45,10 +50,13 @@ if ($setgetDNSserviceStatus == $get)
 			$runstop = 1; 
 			break;
 	}
-	transfer_javascript($loginstatus, $adminstatus, $runstop);
+	$arr = array(
+	    'runstop' => $runstop
+	);
+	echo json_encode($arr);
 }
 
-if (($setgetDNSserviceStatus == $set) && ($adminstatus == true))
+if (($_POST['setgetDNSserviceStatus'] == $set) && ($adminstatus == true))
 {
 	$statusFile = fopen("/var/www/tmp/DNSservicestatus.txt", "w");
 	if ($statusFile == false)
@@ -57,7 +65,7 @@ if (($setgetDNSserviceStatus == $set) && ($adminstatus == true))
 	}
 	elseif ($statusFile)
 	{
-		switch ($setrunstopStatus){
+	    switch ($_POST['setrunstopStatus']){
 			case 0:
 				$statusWord = "stop";
 				$runstop = 0;
@@ -80,20 +88,11 @@ if (($setgetDNSserviceStatus == $set) && ($adminstatus == true))
 		$xml->asXML("/var/www/VDF.xml");
 
 	}
-	transfer_javascript($loginstatus, $adminstatus, $runstop, $errorMsg);
-}
-
-
-
-function transfer_javascript($loginstatus, $adminstatus, $runstop, $errorMsg)
-{
-	$arr = array(	'loginstatus' => $loginstatus ,
-					'adminstatus' => $adminstatus ,
-					'runstop' => $runstop,
-					'errorMsg' => $errorMsg
-				);
-
+	$arr = array(
+	    'runstop' => $runstop
+	);
 	echo json_encode($arr);
+}
 }
 
 ?>

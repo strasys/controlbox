@@ -31,8 +31,8 @@ echo "change user mode of PT1000handler_sensingbox"
 chown root:www-data PT1000handler_sensingbox
 chmod 4110 PT1000handler_sensingbox
 echo "change user mode of GPIOhandler_020"
-chown root:www-data GPIOhandler_020
-chmod 4110 GPIOhandler_020
+chown root:www-data GPIOhandler_controlbox
+chmod 4110 GPIOhandler_controlbox
 echo "change user mode of rweeprom"
 chown root:www-data rweeprom
 chmod 4110 rweeprom

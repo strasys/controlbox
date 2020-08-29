@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>wistcon</title>
-
+	<!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="../images/favicon_wistcon.ico"> 
     <!-- Bootstrap -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
      <!-- color - adoption -->
@@ -23,6 +24,10 @@
 	<div id="mainNavbar">
 	</div>
   	<div class="container desk">
+  	  	<ol class="breadcrumb">
+			<li><a href="/pool_function/poolfunctions.html?ver=0">Funktionen</a></li>
+			<li class="active">Filterzeiten</li>
+		</ol>
 		<div class="panel panel-info">
 			<div class="panel-heading">
 				<h3><span class="glyphicon glyphicon-time"></span><b> Filterzeiten:</b></h3>
@@ -41,7 +46,7 @@
 						<div class="radio">
  						<label>
       						<input type="radio" id="radioFilterOFF" name="OptionsRadios" value="OFF" onclick="setFilterModeXML('radioFilterOFF')">
-						<h4><b>AUS</b></h4>
+						<h4><strong>AUS</strong></h4>
    						</label>
 						</div>
 						<div class="radio">
@@ -160,10 +165,6 @@
 		<div><h3 id="test1"></h3></div>
 		<div><h3 id="test2"></h3></div>
 		<div><h3 id="test3"></h3></div>
-	</div>
-	
-	</div>
-	</div>
 	</div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

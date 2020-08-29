@@ -38,19 +38,12 @@ function getOutstatus(callback1){
 					parseInt(getOUT.OUT3),
 					parseInt(getOUT.OUT4),
 					parseInt(getOUT.OUT5),
-					parseInt(getOUT.OUT6),
-					parseInt(getOUT.OUT7),
-					parseInt(getOUT.OUT8),
-					parseInt(getOUT.OUT9),
-					parseInt(getOUT.OUT10),
-					parseInt(getOUT.OUT11),
-					parseInt(getOUT.OUT12),
 					getOUT.loginstatus,
 					getOUT.adminstatus
 				];
 
 				if (callback1){
-					callback1();
+					callback1(getOUT);
 				}
 			}
 		}, "setgetGPIO=g&InOut=o");		
@@ -85,7 +78,7 @@ function setOutstatus(numOut){
 // of the button.
 function setButtonOut(){
 	 
-	for (i=0; i<12; i++){
+	for (i=0; i<5; i++){
 		var status = OUT[i];
 		if(status == 1){
 			span = document.getElementById("badgeOut"+(i));
@@ -156,7 +149,7 @@ function setGPIOoutXMLDataInput(callback3){
 
 	var ButtonText = "";
 	var ButtonTextRequest = "";
-		for (i=0; i<12; i++){
+		for (i=0; i<5; i++){
 			ButtonText = document.getElementById("setButtonNameInputOut"+i).value;
 			ButtonTextRequest = ButtonTextRequest+"ButtonText"+i+"="+ButtonText+"&";
 		}
@@ -208,9 +201,9 @@ function CollapseSetButtonName(){
 //Check if the operater is already loged on the system.
 function loadNavbar(callback1)
 {
-	getOutstatus(function()
+	getOutstatus(function(getOUT)
 	{
-		if (OUT[13])
+		if (getOUT.loginstatus)
 		{
 			$(document).ready(function()
 			{

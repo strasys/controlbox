@@ -3,7 +3,7 @@
 	class GPIO
 	
 	Johannes Strasser
-	28.07.2017
+	14.07.2020
 	www.wistcon.at
 */
 class GPIO
@@ -12,14 +12,14 @@ class GPIO
 	/*
 	 * set the digital output 
 	 *$out[$i] is an array  => (0 = off, 1 = on)
-	 *$i is the (=number of digital output) 0 to 11 => OUT1 ... OUT12
+	 *$i is the (=number of digital output) 0 to 4 => OUT1 ... OUT5
 	 */
 	function setOut($out)
 	{
-		for ($i = 0; $i<11; $i++)
+		for ($i = 0; $i<5; $i++)
 		{
 			
-			exec("flock /tmp/GPIOlock /usr/lib/cgi-bin/GPIOhandler_020 s $i $out[$i]");
+			exec("flock /tmp/GPIOlock /usr/lib/cgi-bin/GPIOhandler_controlbox s $i $out[$i]");
 		}
 	}
 	/*
@@ -31,21 +31,21 @@ class GPIO
 	function setOutsingle($i, $outs)
 	{
 		
-		exec("flock /tmp/GPIOslock /usr/lib/cgi-bin/GPIOhandler_020 s $i $outs");
+		exec("flock /tmp/GPIOslock /usr/lib/cgi-bin/GPIOhandler_controlbox s $i $outs");
 	}
 	/*
-	 * The function getOut returns an array numbered 0..11 (=OUT 1 to OUT 12)
+	 * The function getOut returns an array numbered 0..8 (=OUT 1 to OUT 9)
 	 */
 	function getOut()
 	{
 		unset($ausgabeOut);
-		exec("flock /tmp/GPIOslock /usr/lib/cgi-bin/GPIOhandler_020 g O", $ausgabeOut);
+		exec("flock /tmp/GPIOslock /usr/lib/cgi-bin/GPIOhandler_controlbox g O", $ausgabeOut);
 		
 		return $ausgabeOut;
 	}
 
 	function getOutSingle($channel){
-		exec("flock /tmp/GPIOslock /usr/lib/cgi-bin/GPIOhandler_020 g O", $ausgabeOut);
+		exec("flock /tmp/GPIOslock /usr/lib/cgi-bin/GPIOhandler_controlbox g O", $ausgabeOut);
 		$OutSingle = $ausgabeOut[$channel];
 		return (int) $OutSingle;
 	}
@@ -55,14 +55,14 @@ class GPIO
 	function getIn()
 	{
 		unset($ausgabeIn);
-		exec("flock /tmp/GPIOslock /usr/lib/cgi-bin/GPIOhandler_020 g I", $ausgabeIn);
+		exec("flock /tmp/GPIOslock /usr/lib/cgi-bin/GPIOhandler_controlbox g I", $ausgabeIn);
 		
 		return $ausgabeIn;
 	}
 
 	function getInSingle($num){
 		unset($ausgabeIn);
-		exec("flock /tmp/GPIOslock /usr/lib/cgi-bin/GPIOhandler_020 g I", $ausgabeIn);
+		exec("flock /tmp/GPIOslock /usr/lib/cgi-bin/GPIOhandler_controlbox g I", $ausgabeIn);
 		
 		return (int) $ausgabeIn[$num];
 	}

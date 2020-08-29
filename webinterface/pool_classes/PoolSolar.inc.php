@@ -3,13 +3,12 @@
  * class Pool Solar functionality 
  *
  * Johannes Strasser
- * 31.08.2016
+ * 21.08.2020
  * www.strasys.at
  *
  */
 
 include_once "/var/www/hw_classes/PT1000.inc.php";
-include_once "/var/www/hw_classes/RTC.inc.php";
 
 class Solar
 {
@@ -22,7 +21,7 @@ class Solar
 	{			
 		$xml = simplexml_load_file("/var/www/VDF.xml");
 		$Temp = new PT1000();
-		$RTC = new RTC();
+		//$RTC = new RTC();
 		(bool) $SolarFlag = false;
 		(bool) $waitFlag = false;
 		(bool) $waitFlagRoofCycling = false;
@@ -35,25 +34,26 @@ class Solar
 		$PoolTemp = $Temp->getPT1000(0);
 		$RoofTemp = $Temp->getPT1000(2);
 		$CyclingTemp = $Temp->getPT1000(3);
-
-		//Unix time
-		$actualTime = strtoTime($RTC->getstrTimeHHMM()); 
-	
+		
+		//$actualTime = strtoTime($RTC->getstrTimeHHMM()); 
+		$date = new DateTime();
+		//get UNIX - time stamp
+		$actualTime = $date->getTimestamp();
 		// In a text file waiting times are stored.
 		// waitmintime = UnixTime + x minutes => This is the minimum time the heating cycle is off after switch off.
 		// runmintime = UnixTime + x minutes => This is the minimum time the heating cycle is on after switch on.
 		// StatusSolar = shows the last status of the system => 0 = off, 1 = on
 		$artemp = array();
 		$i = 0;
-		$TempControlFile = fopen("/tmp/PoolTempControlFile.txt", "r");
+		$TempControlFile = fopen("/var/www/tmp/PoolTempControlFile.txt", "r");
 		if ($TempControlFile == false){
-			$TempControlFile = fopen("/tmp/PoolTempControlFile.txt","w");
-			exec("chown www-data:root /tmp/PoolTempControlFile.txt");
+			$TempControlFile = fopen("/var/www/tmp/PoolTempControlFile.txt","w");
+			exec("chown www-data:root /var/www/tmp/PoolTempControlFile.txt");
 			fwrite($TempControlFile,"SwitchONdelay:0\r\n");
 			fwrite($TempControlFile,"SwitchOFFdelay:0\r\n");
 			fwrite($TempControlFile,"SolarON:0\r\n");
 			fclose($TempControlFile);
-			$TempControlFile = fopen("/tmp/PoolTempControlFile.txt", "r");
+			$TempControlFile = fopen("/var/www/tmp/PoolTempControlFile.txt", "r");
 		}
 		if ($TempControlFile){
 			$x=0;
@@ -106,7 +106,7 @@ class Solar
 			$SolarFlag = true;
 		}
 		
-		$TempControlFile = fopen("/tmp/PoolTempControlFile.txt", "w");
+		$TempControlFile = fopen("/var/www/tmp/PoolTempControlFile.txt", "w");
 		$i = 0;
 		for ($i=0;$i<6;$i=$i+2){
 			fwrite($TempControlFile,$artemp[$i].":".$artemp[$i+1]."\r\n");	
@@ -133,7 +133,7 @@ class Solar
 			$OperationFlag = false;
 
 			//Delete all Time - Marker
-			$TempControlFile = fopen("/tmp/PoolTempControlFile.txt", "w");
+			$TempControlFile = fopen("/var/www/tmp/PoolTempControlFile.txt", "w");
 			if ($TempControlFile == true){
 				fwrite($TempControlFile,"SwitchONdelay:0\r\n");
 				fwrite($TempControlFile,"SwitchOFFdelay:0\r\n");

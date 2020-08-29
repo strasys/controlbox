@@ -69,6 +69,7 @@ while ($loopstatus)
 	curl_exec($ch);
 	curl_close($ch);
  */
+	unset($local_IP, $IP);
 	sleep(60);
 }
 

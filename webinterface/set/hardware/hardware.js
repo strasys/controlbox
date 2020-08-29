@@ -142,7 +142,11 @@ function startatLoad(){
 	loadNavbar(function(){
 		getExtensions(function(){
 			sethardwarehtmlinterface(function(){
-				loadHardwareConfig();
+				loadHardwareConfig(function(){
+					loadGPIO_OUT(function(){
+						loadGPIO_IN();
+					});
+				});
 			});
 		});
 	});
@@ -201,7 +205,14 @@ $("#System").on('click', function(){
 
 	window.location = "System.html?ver=1";
 });
+$("#GPIO_OUT").on('click', function(){
 
+	window.location = "gpioOut.html?ver=1";
+});
+$("#GPIO_IN").on('click', function(){
+
+	window.location = "gpioIN.html?ver=1";
+});
 
 function loadExtensions(ExtensionNo, idData, header, description, callback){
 
@@ -238,6 +249,50 @@ function loadHardwareConfig(callback){
 				"</div>"+
 				"<div class=\"row\">"+
 					"<p class=\"col-xs-12 col-md-12\">Übersicht: Software- u. Hardware<br>Hardware, Firmware, Betriebssystem, etc.</p>"+
+				"</div>"+
+				"</div>"
+	);
+
+	if (callback){
+		callback();
+	}
+};
+
+function loadGPIO_OUT(callback){
+
+	$("#GPIO_OUT").html("	<div id=\"GPIO_OUT\" class=\"databox info btn btn-default\" style=\"border-radius:0px; min-width:100%;\">"+
+				"<div class=\"page-header\">"+
+					"<div class=\"row\">"+
+						"<h3 class=\"col-xs-2 text-right\"><span class=\"glyphicon\" style=\"color:grey;\"></span></h3>"+
+						"<h3 class=\"col-xs-8\" style=\"color:#0087e8;\">Digitale Signale</h3>"+
+						"<h3 class=\"col-xs-2\"><span class=\"glyphicon glyphicon-chevron-right\" style=\"color:grey;\"></span></h3>"+
+						"<h4 class=\"col-xs-12\">Ausgangssignale</h4>"+
+					"</div>"+	
+				"</div>"+
+				"<div class=\"row\">"+
+					"<p class=\"col-xs-12 col-md-12\">Einzelbetätigung, Beschriftung<br>und Status der Digitalen Ausgänge.</p>"+
+				"</div>"+
+				"</div>"
+	);
+
+	if (callback){
+		callback();
+	}
+};
+
+function loadGPIO_IN(callback){
+
+	$("#GPIO_IN").html("	<div id=\"GPIO_IN\" class=\"databox info btn btn-default\" style=\"border-radius:0px; min-width:100%;\">"+
+				"<div class=\"page-header\">"+
+					"<div class=\"row\">"+
+						"<h3 class=\"col-xs-2 text-right\"><span class=\"glyphicon\" style=\"color:grey;\"></span></h3>"+
+						"<h3 class=\"col-xs-8\" style=\"color:#0087e8;\">Digitale Signale</h3>"+
+						"<h3 class=\"col-xs-2\"><span class=\"glyphicon glyphicon-chevron-right\" style=\"color:grey;\"></span></h3>"+
+						"<h4 class=\"col-xs-12\">Eingangssignale</h4>"+
+					"</div>"+	
+				"</div>"+
+				"<div class=\"row\">"+
+					"<p class=\"col-xs-12 col-md-12\">Einzelbetätigung, Beschriftung<br>und Status der Digitalen Eingänge.</p>"+
 				"</div>"+
 				"</div>"
 	);

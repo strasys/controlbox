@@ -81,7 +81,9 @@ function getPT1000values(callback1){
 			PT1000temperaturevalues = [
 						(getPT1000.temperature11),
 						(getPT1000.temperature12),
-			                        (getPT1000.loginstatus),
+						(getPT1000.temperature13),
+						(getPT1000.temperature14),
+			            (getPT1000.loginstatus),
 						(getPT1000.adminstatus)
 			                          ];
 				if (callback1){
@@ -96,7 +98,7 @@ function getPT1000XMLData(callback4){
 	getPT1000Data("POST", "PT1000handler.php", function(){
 		if (xhttp.readyState==4 && xhttp.status==200){
 			var getPT1000XML = JSON.parse(xhttp.responseText);
-			for (i=0; i<2; i++){
+			for (i=0; i<4; i++){
 				document.getElementById("labelPT1000"+i).innerHTML = getPT1000XML[i];
 			}
 			if (callback4){
@@ -167,7 +169,7 @@ function setPT1000XMLDataInput(callback3){
 	
 	var PT1000Text = [];
 	
-	for (i=0;i<2;i++){
+	for (i=0;i<4;i++){
 		PT1000Text[i] = document.getElementById("changePT1000Name"+i).value;
 	}	
 		
@@ -180,6 +182,8 @@ function setPT1000XMLDataInput(callback3){
 		},
 		"PT1000Text0="+PT1000Text[0]+
 		"&PT1000Text1="+PT1000Text[1]+
+		"&PT1000Text2="+PT1000Text[2]+
+		"&PT1000Text3="+PT1000Text[3]+
 		"&PT1000ext=PT1000Name"+PT1000Num+
 		"&setPT1000NameFlag=1");
 	

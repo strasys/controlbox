@@ -82,3 +82,7 @@ $("#SolarSetting").on('click', function(){
 $("#NiveauControl").on('click', function(){
 	window.location = "NiveauControl.html?ver=0";
 });
+
+$("#Timer").on('click', function(){
+	window.location = "Timer.html?ver=0";
+});

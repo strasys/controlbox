@@ -7,14 +7,14 @@
 
 #Installation of Server components
 #
-echo "update debian wheeze 7"
+echo "update debian 10"
 apt-get update
 wait
 echo "install apache2"
 apt-get install apache2
 wait
-echo "install php5 libapache2-mod-php5"
-apt-get install php5 libapache2-mod-php5 php5-curl
+echo "install php7.3 libapache2-mod-php7.3"
+apt-get install php7.3 libapache2-mod-php7.3 php7.3-curl php7.3-xml
 wait
 echo "Disabeling of not used services:"
 echo "disabel cloud9.service"
@@ -33,7 +33,7 @@ echo "disable gdm.service"
 systemctl disable gdm.service
 echo "disable mpd.service"
 systemctl disable mpd.service
-echo "Installation of apache2, php5 and libapache2-mod-php5 completed"
+echo "Installation of apache2, php7.3 libapache2-mod-php7.3 php7.3-curl php7.3-xml completed"
 echo "restart apache2"
 service apache2 restart
 wait

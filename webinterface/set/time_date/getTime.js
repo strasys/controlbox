@@ -32,7 +32,6 @@ function getloginstatus(callback1){
 }
 
 function getXMLData(callback4){
-	var getXMLData;
 	setgetdata("GET","/timezone.xml",function(){
 		
 		if (xhttp.readyState==4 && xhttp.status==200){
@@ -218,7 +217,7 @@ function startatLoad(){
 	    	loadNavbar(function(){
 			getXMLData(function(){
 				getTimeZone(1, function(){
-					getSystemTimeDate();
+					/* getSystemTimeDate();*/
 				});
 			});
 		});

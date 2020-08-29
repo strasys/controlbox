@@ -1,0 +1,3 @@
+SwitchONdelay:0
+SwitchOFFdelay:0
+SolarON:0

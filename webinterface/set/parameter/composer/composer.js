@@ -28,12 +28,13 @@ function getStatusLogin(callback1){
 			if (xhttp.readyState==4 && xhttp.status==200)
 			{
 			var getComposerLogin = JSON.parse(xhttp.responseText); 
-			
+			/*
 			LoginStatus = [(getComposerLogin.loginstatus),
 			               (getComposerLogin.adminstatus)
 			               ];
+			*/
 				if (callback1){
-				callback1();
+				callback1(getComposerLogin);
 				}
 			}
 		},"getLoginStatus=g");		
@@ -83,8 +84,8 @@ window.onload=startatLoad();
 //active site roots.
 //Check if the operater is already loged on the system as admin.
  function loadNavbar(callback1){
-			getStatusLogin(function(){
-				if (LoginStatus[1])
+			getStatusLogin(function(log){
+				if (log.loginstatus)
 				{
 					$(document).ready(function(){
 						$("#mainNavbar").load("/navbar.html?ver=2", function(){

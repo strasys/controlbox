@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sensingbox>
 <PT1000>
-	<PT1000Name1>PT1000_1</PT1000Name1>
-</PT1000>
+	<PT1000Name1>Pool Temperatur</PT1000Name1></PT1000>
 <PT1000>
-	<PT1000Name1>PT1000_2</PT1000Name1>
-</PT1000>
+	<PT1000Name1>Außen-Temp.</PT1000Name1></PT1000>
 <PT1000>
-	<PT1000Name2>PT1000_1</PT1000Name2>
-</PT1000>
+	<PT1000Name1>Solar-Temp.</PT1000Name1></PT1000>
 <PT1000>
-	<PT1000Name2>PT1000_2</PT1000Name2>
-</PT1000>
+	<PT1000Name1>Umlauf-Temp.</PT1000Name1></PT1000>
 
 <HUMIDITY>
 	<HUMIDITYname1>Feuchte</HUMIDITYname1>
@@ -37,20 +33,19 @@
 <HUMIDITY>
 	<HUMIDITYname4>Temperatur</HUMIDITYname4>
 </HUMIDITY>
-
-
 <data_cloud>
-<datatocloud>HUMIDITY_0:2:humidity_val1:5:%r.F.:1</datatocloud><datatocloud>HUMIDITY_1:2:humidity_temp_val1:5:°C:1</datatocloud></data_cloud>
-
+	<datatocloud>HUMIDITY_0:1:humidity_val1:5:%r.F.:1</datatocloud>
+	<datatocloud>HUMIDITY_1:1:humidity_temp_val1:5:°C:1</datatocloud>
+</data_cloud>
 <data_cloud_transfer_status>
 	<database_write_status>1</database_write_status>
 </data_cloud_transfer_status>
 
 <OperationModeDevice>
 	<AutomaticHand>stop</AutomaticHand>
-	<DNSService>stop</DNSService>
+	<DNSService>run</DNSService>
 	<PushDataCloudService>stop</PushDataCloudService>
-	<indicatorLED>stop</indicatorLED>
+	<indicatorLED>run</indicatorLED>
 </OperationModeDevice>
 <timedate>
 	<timezone>Europe/Berlin</timezone>
@@ -60,4 +55,65 @@
 	<email/>
 	<userName/>
 </Owner>
+<GPIOOUT><OutputName>Pumpe</OutputName></GPIOOUT>
+<GPIOOUT><OutputName>Mischer</OutputName></GPIOOUT>
+<GPIOOUT><OutputName>Frischwasser</OutputName></GPIOOUT>
+<GPIOOUT><OutputName>Poolbeleuchtung</OutputName></GPIOOUT>
+<GPIOOUT><OutputName>Ausgang 5</OutputName></GPIOOUT>
+<GPIOIN><InputName>Schwimmer</InputName></GPIOIN>
+<GPIOIN><InputName>Eingang 2</InputName></GPIOIN>
+<GPIOIN><InputName>Eingang 3</InputName></GPIOIN>
+<GPIOIN><InputName>Eingang 4</InputName></GPIOIN>
+<CleaningInterval>
+	<Start>00:00</Start>
+	<Stop>00:00</Stop>
+	<Periode>00:00</Periode>
+</CleaningInterval>
+<CleaningInterval>
+	<Start>00:10</Start>
+	<Stop>00:15</Stop>
+	<Periode>00:05</Periode>
+</CleaningInterval>
+<CleaningInterval>
+	<Start>00:45</Start>
+	<Stop>00:50</Stop>
+	<Periode>00:05</Periode>
+</CleaningInterval>
+<CleaningSetting>
+	<OperationMode>OFF</OperationMode>
+	<tipCleaningTime>0</tipCleaningTime>
+</CleaningSetting>
+<SolarSetting>
+	<operationMode>OFF</operationMode>
+	<backWaterTemp>30</backWaterTemp>
+	<diffONTemp>6</diffONTemp>
+	<diffOFFTemp>3</diffOFFTemp>
+	<SwitchOFFdelay>3</SwitchOFFdelay>
+	<SwitchONdelay>4</SwitchONdelay>
+</SolarSetting>
+<LevelControl>
+	<operationMode>OFF</operationMode>
+	<Overtraveltime>30</Overtraveltime>
+	<SensorONTime>8</SensorONTime>
+</LevelControl>
+<TimerControl>
+	<OutputTimer>
+		<operationMode>AUTO</operationMode>
+		<Number>3</Number>
+		<TimerSetting>
+			<Start>15:05</Start>
+			<Stop>17:05</Stop>
+			<Periode>01:00</Periode>
+		</TimerSetting>
+		<TimerSetting>
+			<Start>15:05</Start>
+			<Stop>17:05</Stop>
+			<Periode>01:00</Periode>
+		</TimerSetting>
+	</OutputTimer>
+	<OutputTimer>
+		<operationMode>OFF</operationMode>
+		<Number>4</Number>
+	</OutputTimer>		
+</TimerControl>
 </sensingbox>

@@ -24,11 +24,11 @@ wait
 echo "Copy password file user.txt to /var/secure/"
 cp /tmp/wistcon-control/webinterface/user.txt /var/secure/
 wait
-echo "remove user.txt from /tmp/wistcon-sensing/webinterface/"
+echo "remove user.txt from /tmp/wistcon-control/webinterface/"
 rm /tmp/wistcon-control/webinterface/user.txt
 wait
 echo "Copy webcontent to /var/www"
-cp -rT /tmp/wistcon-sensing/webinterface/ /var/www/
+cp -rT /tmp/wistcon-control/webinterface/ /var/www/
 wait
 echo "Copy firmware files to /usr/lib/cgi-bin"
 cp -rT /tmp/wistcon-control/firmware/ /usr/lib/cgi-bin/
@@ -64,7 +64,7 @@ wait
 read -p "Would you like to continue with change of uid gid of files? (y/n)? " RESP
 if [ "$RESP" = "y" ]; then
 	echo "change uid of install_setuidgid.sh"
-	cd /tmp/wistcon-sensing/
+	cd /tmp/wistcon-control/
 	wait
 	chmod a+x install_setuidgid.sh
 	wait

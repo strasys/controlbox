@@ -120,10 +120,10 @@ function getEthernetConnectedStatus()
 function setErrorLEDOnOff($color, $OnOFF){
 	$GPIO = new GPIO;
 	if($color == 'blue'){
-		$GPIO->setOutsingle(12, $OnOFF);
+		$GPIO->setOutsingle(7, $OnOFF);
 	}
 	elseif($color == 'red'){
-		$GPIO->setOutsingle(13, $OnOFF);	
+		$GPIO->setOutsingle(8, $OnOFF);	
 	}	
 }
 

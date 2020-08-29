@@ -3,12 +3,11 @@
  * class Pool Niveau control functionality
  *
  * Johannes Strasser
- * 14.09.2016
+ * 21.08.2020
  * www.strasys.at
  *
  */
 
-include_once "/var/www/hw_classes/RTC.inc.php";
 include_once "/var/www/hw_classes/GPIO.inc.php";
 
 class Niveau
@@ -21,7 +20,7 @@ class Niveau
 	{
 		$xml = simplexml_load_file("/var/www/VDF.xml");
 		$DIGI = new GPIO();
-		$RTC = new RTC();
+		//$RTC = new RTC();
 		(bool) $NiveauFlag = false;
 		//openFlag will be set when condition start water filling is given.
 		//It stays true until OvertravelTime elapses.
@@ -33,16 +32,16 @@ class Niveau
 	//	$NiveauSensor = 1;
 		$artemp = array();
 			$i = 0;
-			$NiveauControlFile = fopen("/tmp/PoolNiveauControlFile.txt", "r");
+			$NiveauControlFile = fopen("/var/www/tmp/PoolNiveauControlFile.txt", "r");
 			if ($NiveauControlFile == false){
-				$NiveauControlFile = fopen("/tmp/PoolNiveauControlFile.txt","w");
-				exec("chown www-data:root /tmp/PoolNiveauControlFile.txt");
+				$NiveauControlFile = fopen("/var/www/tmp/PoolNiveauControlFile.txt","w");
+				exec("chown www-data:root /var/www/tmp/PoolNiveauControlFile.txt");
 				fwrite($NiveauControlFile,"timeStampaddWater:0\r\n");
 				fwrite($NiveauControlFile,"timeStampNiveau:0\r\n");
 				fwrite($NiveauControlFile,"sensorOnFlag:0\r\n");
 				fwrite($NiveauControlFile,"openValveFlag:0\r\n");
 				fclose($NiveauControlFile);
-				$NiveauControlFile = fopen("/tmp/PoolNiveauControlFile.txt", "r");
+				$NiveauControlFile = fopen("/var/www/tmp/PoolNiveauControlFile.txt", "r");
 			}
 			if ($NiveauControlFile){
 				$x=0;
@@ -60,7 +59,9 @@ class Niveau
 			}
 
 		//Unix time
-		$actualTime = strtoTime($RTC->getstrTimeHHMM());
+		$date = new DateTime();
+		//get UNIX - time stamp
+		$actualTime = $date->getTimestamp();
 		//check of openValveFlag is set to 1
 		if ($artemp[7] == 1)
 		{
@@ -107,7 +108,7 @@ class Niveau
 		}
 	
 
-		$NiveauControlFile = fopen("/tmp/PoolNiveauControlFile.txt", "w");
+		$NiveauControlFile = fopen("/var/www/tmp/PoolNiveauControlFile.txt", "w");
 			$i = 0;
 			for ($i=0;$i<8;$i=$i+2){
 				fwrite($NiveauControlFile,$artemp[$i].":".$artemp[$i+1]."\r\n");	

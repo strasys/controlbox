@@ -8,7 +8,7 @@
  */
 
 var sortoutcache = new Date();
-var TimeDifference;
+var offsetTime;
 var overlappflag;
 
 function getData(setget, url, cfunc, senddata){
@@ -39,40 +39,34 @@ function getloginstatus(callback1){
 }
 
 function getSystemTimeDate(callback2){
-	getData("post","/set/time_date/setgetTime.php",function()
+	getData("post","/set/time_date/getDeviceTime.php",function()
 		{
 			if (xhttp.readyState==4 && xhttp.status==200)
 			{
 			var getSystemTime = JSON.parse(xhttp.responseText); 
-			
-			timedevice = [
-				(getSystemTime.Day),
-				(getSystemTime.Month),
-				(getSystemTime.Year),
-				(getSystemTime.hh),
-				(getSystemTime.mm),
-				(getSystemTime.ss),
-			];
-
+			/*
+			'timezone' => $timezone_set,
+	    	'local_time_Y' => $date->format('Y'),
+	    	'local_time_M' => $date->format('n'),
+	    	'local_time_D' => $date->format('j'),
+	    	'local_time_h' => $date->format('G'),
+	    	'local_time_m' => $date->format('i'),
+	    	'local_time_s' => $date->format('s'),
+			'UNIX_time' => $unix_time_formated)
+			*/
 				if (callback2){
-				callback2();
+				callback2(getSystemTime);
 				}
 			}
 		});
 }
 
 function calcoffsettime(callback3){
-		getSystemTimeDate(function(){
+		getSystemTimeDate(function(s){
+		var deviceTime = new Date(s.local_time_Y,s.local_time_M,s.local_time_D,s.local_time_h,s.local_time_m,s.local_time_s);
 		var clientTime = new Date();
-		var deviceTime = new Date();
-		deviceTime.setDate(parseInt(timedevice[0]));
-		deviceTime.setMonth(parseInt(timedevice[1]));
-		deviceTime.setYear(parseInt(timedevice[2]));
-		deviceTime.setHours(parseInt(timedevice[3]));
-		deviceTime.setMinutes(parseInt(timedevice[4]));
-		deviceTime.setSeconds(parseInt(timedevice[5]));
 		var device = deviceTime.getTime();
-		var client = deviceTime.getTime();
+		var client = clientTime.getTime();
 		offsetTime = client - device;
 		
 		if(callback3){
@@ -115,13 +109,10 @@ function getSetXMLData(callback4){
 			
 	}	
 		
-
-
 function DisplayTime(){
-	var clientTime = new Date();
-	clientTime.setTime(clientTime.getTime()-offsetTime);
-	document.getElementById("curTime").innerHTML=clientTime.toLocaleTimeString();
-	setTimeout(function(){DisplayTime()}, 1000);
+		var clientTime = new Date();
+		clientTime.setTime(clientTime.getTime()-offsetTime);
+		document.getElementById("curTime").innerHTML=clientTime.toLocaleTimeString();
 }
 
 
@@ -336,7 +327,9 @@ function startatLoad(){
 		setSelectMenuesValues(function(){
 			calcoffsettime(function(){
 				getSetXMLData(function(){
-					DisplayTime();
+					calcoffsettime(function(){
+							setInterval(DisplayTime, 1000);
+					});
 				});
 			});
 		});

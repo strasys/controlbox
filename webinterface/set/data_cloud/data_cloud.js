@@ -100,7 +100,7 @@ function sethardwarehtmlinterface(callback){
 			case "HUMIDITY":
 				counter_AIN += 1;
 				var idData = "HUMIDITY"+counter_HUMIDITY;
-				var header = "Feuche Sensor Eingänge";
+				var header = "Feuchte Sensor Eingänge";
 				var selectVal = "HUMIDITY";
 				loadExtensions(i+1, idData, header, function(){
 					setSelectExt(idData+"_Select_Val", selectVal, idData+"_Select_Interval", function(){

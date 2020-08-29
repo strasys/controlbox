@@ -12,14 +12,16 @@ include_once "/var/www/service_classes/composerService.inc.php";
 include_once "/var/www/pool_classes/PoolCleaninterval.inc.php";
 include_once "/var/www/pool_classes/PoolSolar.inc.php";
 include_once "/var/www/pool_classes/PoolNiveau.inc.php";
+include_once "/var/www/pool_classes/PoolTimer.inc.php";
 
 $DIGI = new GPIO();
 $loopstatuscontrol = new composerService();
 $Cleaning = new CleaningInterval();
 $Solar = new Solar();
 $Niveau = new Niveau();
+$Timer = new TimerInterval();
 
-date_default_timezone_set('CET');
+//date_default_timezone_set('CET');
 
 
 /*
@@ -29,25 +31,28 @@ date_default_timezone_set('CET');
 $loopstatus = true;
 
 /*
- * Define basic settings.
+ * Define basic settings. => Solarbetriebenes Bad
+ * Ausgang 0 = Pumpe
+ * Ausgang 1 = Mischer
+ * Ausgang 2 = Wasserventil
+ * Ausgang 3 = Pool-Beleuchtung
+ * Ausgang 4 und weitere nicht relevant für Steuerung
  */
 
-$OUT = array (	0 => 0,
+$OUT = array (	
+        0 => 0,
 		1 => 0,
 		2 => 0,
-		3 => 0,
-		4 => 0,
-		5 => 0,
-		6 => 0,
-		7 => 0
+		3 => 0
 );
 
-//$DIGI->setOut($OUT);
+$DIGI->setOut($OUT);
 
 /*
- * Set RUN LED to true
+ * Set RUN LED blue to on and red to off
  */
-$DIGI->setOutsingle(12,1);
+$DIGI->setOutsingle(5,1);
+$DIGI->setOutsingle(6,0);
 
 while ($loopstatus){
 	/*
@@ -66,7 +71,14 @@ while ($loopstatus){
 	 *Further this function should secure the run of the system.
 	 */
 	set_time_limit(5); //Set to 5 seconds.
-
+    
+	/*
+	 * Timer for Outputs like (pool lightning, fontaines, etc.)
+	 */
+	if ($Timer->getopModeFlag()){
+	    $Timer->setTimerOutput();
+	}
+	
 	/*
 	 * Decission loop of pump on or off based on functions.
 	 */
@@ -99,18 +111,18 @@ while ($loopstatus){
 	//TODO: Add solar Mixer movement evaluation and display error if Solar mixer does not reach the position.
 	
 	(bool) $MixerOFF = false;
-	if ($DIGI->getOutSingle(0) == 0)
+	if ($DIGI->getOutSingle(1) == 0)
 	{
 		(bool) $MixerOFF = true;
 	}
 
 	if ($SolarMixerFlag && $MixerOFF)
 	{
-		$DIGI->setOutsingle(0,1);
+		$DIGI->setOutsingle(1,1);
 	}
 	elseif ($SolarMixerFlag == false)
 	{
-		$DIGI->setOutsingle(0,0);	
+		$DIGI->setOutsingle(1,0);	
 	}
 
 	/*
@@ -122,13 +134,13 @@ while ($loopstatus){
 		$WatterValveON = true;
 	}
 
-	if (($DIGI->getOutSingle(4) == 0)&&($WatterValveON == true))
+	if (($DIGI->getOutSingle(2) == 0)&&($WatterValveON == true))
 	{
-		$DIGI->setOutsingle(4,1);	
+		$DIGI->setOutsingle(2,1);	
 	}
-	else if (($DIGI->getOutSingle(4) == 1)&&($WatterValveON == false))
+	else if (($DIGI->getOutSingle(2) == 1)&&($WatterValveON == false))
 	{
-		$DIGI->setOutsingle(4,0);
+		$DIGI->setOutsingle(2,0);
 	}
 	
 
@@ -137,18 +149,18 @@ while ($loopstatus){
 	 */
 
 	(bool) $PumpOFF = false;
-	if ($DIGI->getOutSingle(1) == 0)
+	if ($DIGI->getOutSingle(0) == 0)
 	{
 		(bool) $PumpOFF = true;
 	}
 
 	if ($PumpFlag && $PumpOFF)
 	{
-		$DIGI->setOutsingle(1,1);			
+		$DIGI->setOutsingle(0,1);			
 	}
 	elseif ($PumpFlag == false)
 	{
-		$DIGI->setOutsingle(1,0);
+		$DIGI->setOutsingle(0,0);
 	}
 	
 	usleep(150000); //Time set in µs!
@@ -161,18 +173,16 @@ while ($loopstatus){
 	
 	if ($loopstatus == false)
 	{
-		$OUT = array (	0 => 0,
+		$OUT = array (	
+		        0 => 0,
 				1 => 0,
 				2 => 0,
-				3 => 0,
-				4 => 0,
-				5 => 0,
-				6 => 0,
-				7 => 0
+				3 => 0
 		);
-	//	$DIGI->setOut($OUT);
-
-		$DIGI->setOutsingle(12,0);
+		$DIGI->setOut($OUT);
+//indicator light switch of blue (5) and switch on red (6)
+		$DIGI->setOutsingle(5,0);
+		$DIGI->setOutsingle(6,1);
 	}
 
 }

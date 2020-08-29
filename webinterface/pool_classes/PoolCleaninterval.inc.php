@@ -3,13 +3,10 @@
  * class Pool Cleaning interval setting
  *
  * Johannes Strasser
- * 27.08.2016
+ * 21.08.2020
  * www.strasys.at
  *
  */
-
-include_once "/var/www/hw_classes/RTC.inc.php";
-
 
 class CleaningInterval
 {
@@ -23,15 +20,19 @@ class CleaningInterval
 				
 		$xml = simplexml_load_file("/var/www/VDF.xml");
 		
-		$RTC = new RTC();
 		(bool) $TimeFlag = false;
-		$actualTime = (int) strtoTime($RTC->getstrTimeHHMM());
+		//$RTC = new RTC();
+		//get set timezone
+		$Timezone = (string)($xml->timedate[0]->timezone);
+		$date = new DateTime("now", new DateTimeZone($Timezone));
+		$actualTime = $date->getTimestamp();
 		$NumberNodes = (int) $xml->CleaningInterval->count();
 
 		for ($i=0;$i<$NumberNodes;$i++){
-			$CStart = (int) strtoTime($xml->CleaningInterval[$i]->Start);
-			$CStop = (int) strtoTime($xml->CleaningInterval[$i]->Stop);
-			
+		    $CStart = new DateTime($xml->CleaningInterval[$i]->Start, new DateTimeZone($Timezone));
+		    $CStart = $TStart->getTimestamp();
+		    $CStop = new DateTime($xml->CleaningInterval[$i]->Stop, new DateTimeZone($Timezone));
+		    $CStop = $TStop->getTimestamp();
 			if(($actualTime >= $CStart) && ($actualTime <= $CStop)){
 				$TimeFlag = true;
 				break 1;

@@ -58,18 +58,17 @@ $statusFile = fopen("/var/www/tmp/DNSservicestatus.txt", "w");
 		}	
 	}
 
-/*
+
 //Set status of Composer
 	unset($statusFile, $statusWord);
 	$statusFile = fopen("/var/www/tmp/composerstatus.txt", "w");
 	if ($statusFile == false)
 	{
 		die ("The composerstatus.txt file was not generated!");
-		break;
 	}
 	elseif ($statusFile)
 	{
-		//exec("chown www-data:root /tmp/composerstatus.txt");
+		exec("chown www-data:root /var/www/tmp/composerstatus.txt");
 		switch (($ComposerService)){
 			case 'stop':
 				$statusWord = "stop";
@@ -84,7 +83,6 @@ $statusFile = fopen("/var/www/tmp/DNSservicestatus.txt", "w");
 		}
 
 	}
- */
 
 //Set status of Cloud Service
 	unset($statusFile, $statusWord);

@@ -22,10 +22,12 @@ unset($arr);
 if (isset($_POST["setgetPT1000handler"])){ 
 	if (($_POST["setgetPT1000handler"] == 'g') && ($loginstatus)){
 		$num = $_POST["PT1000ext"];	
-		exec("flock /tmp/PT1000handlerlock /usr/lib/cgi-bin/PT1000handler_020 g 0 $num", $output);
-		exec("flock /tmp/PT1000handlerlock /usr/lib/cgi-bin/PT1000handler_020 g 1 $num", $output);
+		exec("flock /tmp/PT1000handlerlock /usr/lib/cgi-bin/PT1000_controlbox g 0 $num", $output);
+		exec("flock /tmp/PT1000handlerlock /usr/lib/cgi-bin/PT1000_controlbox g 1 $num", $output);
+		exec("flock /tmp/PT1000handlerlock /usr/lib/cgi-bin/PT1000_controlbox g 2 $num", $output);
+		exec("flock /tmp/PT1000handlerlock /usr/lib/cgi-bin/PT1000_controlbox g 3 $num", $output);
 
-		transfer_javascript($output[0], $output[1], $loginstatus, $adminstatus);
+		transfer_javascript($output[0], $output[1], $output[2], $output[3], $loginstatus, $adminstatus);
 	}
 }
 
@@ -33,12 +35,15 @@ if (isset($_POST["setPT1000NameFlag"])){
 	if (($_POST["setPT1000NameFlag"] == 1) && ($adminstatus)){
 		$PT1000Text = array(
 			0 => $_POST["PT1000Text0"],
-			1 => $_POST["PT1000Text1"]
+			1 => $_POST["PT1000Text1"],
+		    2 => $_POST["PT1000Text2"],
+		    3 => $_POST["PT1000Text3"]
 		);
 
 		$xml=simplexml_load_file("/var/www/VDF.xml") or die("Error: Cannot create object");
-		for ($i=0; $i<2; $i++){
-			$xml->PT1000[$i]->$_POST["PT1000ext"] = $PT1000Text[$i];
+		for ($i=0; $i<4; $i++){
+		    $PT1000extension = $_POST['PT1000ext'];
+			$xml->PT1000[$i]->$PT1000extension = $PT1000Text[$i];
 		}
 		echo $xml->asXML("/var/www/VDF.xml");
 	}
@@ -57,12 +62,14 @@ if (isset($_POST["getXMLData"])){
 	}
 }
 
-function transfer_javascript($temperature11, $temperature12, $loginstatus, $adminstatus)	
+function transfer_javascript($temperature11, $temperature12, $temperature13, $temperature14, $loginstatus, $adminstatus)	
 {
 	$arr = array( 'temperature11' => $temperature11,
-			'temperature12' => $temperature12,
-			'loginstatus' => $loginstatus,
-			'adminstatus' => $adminstatus
+			     'temperature12' => $temperature12,
+	             'temperature13' => $temperature13,
+	             'temperature14' => $temperature14,
+			     'loginstatus' => $loginstatus,
+			     'adminstatus' => $adminstatus
 				);
 	
 	echo json_encode($arr);

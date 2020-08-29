@@ -47,7 +47,7 @@ enable_uboot_overlays=1
 ###Additional custom capes
 uboot_overlay_addr4=/lib/firmware/BB-I2C2-00A0.dtbo
 uboot_overlay_addr5=/lib/firmware/BB-I2C1-00A0.dtbo
-uboot_overlay_addr6=/lib/firmware/WISTCON-SENSING20-00A0.dtbo
+uboot_overlay_addr6=/lib/firmware/WISTCON-CONTROL-00A0.dtbo
 #uboot_overlay_addr7=/lib/firmware/<file7>.dtbo
 ###
 ###Custom Cape
@@ -181,11 +181,22 @@ use: ifconfig -a to get the hardwareaddress
 	hwclock --systohc
 	//hwclock --systohc
 
-5.5. set crone jobs
+4.6. set crone jobs
 shell: crontab -e
 add following in crontab -e
 @reboot /usr/lib/cgi-bin/firmware
 @reboot php /var/www/startupSetting.php
+
+4.7. write EEPROM
+sudo write.sh
+
+Fehler - fixes Debian 10.3:
+/etc/nginx/sites-available/default
+=> default löschen, da sonst der Webserver nicht funktioniert.
+Eine Möglichkeit:
+sudo apt-get remove nginx
+
+
 
 	
 

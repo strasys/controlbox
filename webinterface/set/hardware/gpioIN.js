@@ -30,21 +30,13 @@ function getGPIOinStatus(callback1){
 			IN =  [	parseInt(getIN.IN1),
 			        parseInt(getIN.IN2),
 			        parseInt(getIN.IN3),
-				parseInt(getIN.IN4),
-				parseInt(getIN.IN5),
-				parseInt(getIN.IN6),
-				parseInt(getIN.IN7),
-				parseInt(getIN.IN8), 
-				parseInt(getIN.IN9),
-				parseInt(getIN.IN10),
-				parseInt(getIN.IN11),
-				parseInt(getIN.IN12),
+					parseInt(getIN.IN4),
 		        	(getIN.loginstatus),
 		        	(getIN.adminstatus)
 		        ];
 			
 			if (callback1){
-				callback1();
+				callback1(getIN);
 			}
 			}
 		}, "setgetGPIO=g" +
@@ -53,9 +45,9 @@ function getGPIOinStatus(callback1){
 
 
 function setInputStatusHMI(callback3){
-	getGPIOinStatus(function()
+	getGPIOinStatus(function(getIN)
 	{
-	for (i=0; i<12; i++){
+	for (i=0; i<4; i++){
 		if((IN[i]) == 0){
 			document.getElementById("InputStatusLED"+i).className = "led-blue";
 		}
@@ -65,7 +57,7 @@ function setInputStatusHMI(callback3){
 		}	
 	}
 	if (callback3){
-		callback3();
+		callback3(getIN);
 	}
 	});
 }
@@ -119,7 +111,7 @@ function getGPIOinXMLDataInput(){
 function setGPIOinXMLDataInput(callback3){
 		var InputRequest = "";
 		var InputText = "";
-		for (i=0; i<12; i++){
+		for (i=0; i<4; i++){
 			InputText = document.getElementById("setInputNameInputIn"+i).value;
 			InputRequest = InputRequest+"InputText"+i+"="+InputText+"&";
 		}
@@ -167,9 +159,9 @@ function CollapseSetInputName(){
 //Check if the operater is already loged on the system.
 function loadNavbar(callback1)
 {
-	setInputStatusHMI(function()
+	setInputStatusHMI(function(getIN)
 	{
-		if(IN[5])
+		if(getIN.loginstatus)
 		{
 			$(document).ready(function()
 			{

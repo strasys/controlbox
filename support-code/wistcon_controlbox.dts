@@ -9,7 +9,7 @@
 *Idea and development
 *wistcon.at
 *Dipl.-Ing. Johannes Strasser
-*September 2018
+*July 2020
 *modified: 
 */
 
@@ -18,22 +18,44 @@
 
 /{
        compatible = "ti,beaglebone", "ti,beaglebone-black";
-       part-number = "EL-100-020-001";
+       part-number = "EL-200-010-002";
        version = "00A0";
-       manufacturer = "strasys.at";
-       board-name = "WISTCON-SENSING";
+       manufacturer = "wistcon.at";
+       board-name = "WISTCON-CONTROL";
        
        /* state the resources this cape uses */
 	exclusive-use =
 		/* the pin header uses */
+		"P8.07",	/* digiin: gpio2_2 */
+		"P8.08",	/* digiin: gpio2_3 */
+		"P8.09",	/* digiin: gpio2_5 */
+		"P8.10",	/* digiin: gpio2_4 */
+		"P8.11",	/* digiout: gpio1_13 */
+		"P8.12",	/* digiout: gpio1_12 */
+		"P8.13",	/* digiout: gpio0_23 */
+		"P8.14",	/* digiout: gpio0_26 */
+		"P8.15",	/* digiout: gpio1_15 */
+		"P9.13",	/* digiout: gpio0_31 */
 		"P9.14",	/* digiout: gpio1_18 */
 		"P9.15",	/* digiout: gpio1_16 */
+		"P9.16",	/* digiout: gpio1_19 */
 		"P9.17",	/* I2C1_SCL */
 		"P9.18",	/* I2C1_SDA */
 		/* the hardware IP uses */
+		"gpio2_2",
+		"gpio2_3",
+		"gpio2_5",
+		"gpio2_4",
+		"gpio1_13",
+		"gpio1_12",
+		"gpio0_26",
+		"gpio1_15",
+		"gpio0_31",
 		"gpio1_18",
 		"gpio1_16",
-		"i2c1";
+		"gpio1_19",
+		"i2c1",
+		"i2c2";
 
        fragment@0 {
              target = <&am33xx_pinmux>;
@@ -41,8 +63,19 @@
              __overlay__ {
                   digi_in_out: strasys_homectrl_Pins {
 			pinctrl-single,pins = <
+				0x090 0x27 /* P8_07 66 INPUT MODE7 */
+				0x094 0x27 /* P8_08 67 INPUT MODE7 */
+				0x09c 0x27 /* P8_09 69 INPUT MODE7 */
+				0x098 0x27 /* P8_10 68 INPUT MODE7 */
+				0x034 0x07 /* P8_11 45 OUTPUT MODE7 */
+				0x030 0x07 /* P8_12 44 OUTPUT MODE7 */
+				0x024 0x07 /* P8_13 23 OUTPUT MODE7 */
+				0x028 0x07 /* P8_14 26 OUTPUT MODE7 */
+				0x03c 0x07 /* P8_15 47 OUTPUT MODE7 */
+				0x074 0x07 /* P9_13 31 OUTPUT MODE7 */
 				0x048 0x07 /* P9_14 50 OUTPUT MODE7 */
-				0x040 0x07 /* P9_15 48 OUTPUT MODE7 */ 
+				0x040 0x07 /* P9_15 48 OUTPUT MODE7 */
+				0x04c 0x07 /* P9_16 51 OUTPUT MODE7 */ 
           				
                    		/* OUTPUT  GPIO(mode7) 0x07 pulldown, 0x17 pullup, 0x?f no pullup/down */
 			       /* INPUT   GPIO(mode7) 0x27 pulldown, 0x37 pullup, 0x?f no pullup/down */
@@ -104,6 +137,33 @@
 			// };
 		};
 	};
+
+	fragment@30 {
+                target = <&am33xx_pinmux>;
+                __overlay__ {
+                        bb_i2c2_pins: pinmux_bb_i2c2_pins {
+                                pinctrl-single,pins = <
+                                        0x178 0x73    // spi0_d1.i2c2_sda,  SLEWCTRL_SLOW | IMPUT_PULLUP | MODE3
+                                        0x17c 0x73    // spi0_cs0.i2c2_scl, SLEWCTRL_SLOW | INPUT_PULLUP | MODE3
+                                >;
+                        };
+                };
+        };
+
+        fragment@31 {
+                target = <&i2c2>;    /* i2c2 is numbered correctly */
+                __overlay__ {
+                        status = "okay";
+                        pinctrl-names = "default";
+                        pinctrl-0 = <&bb_i2c2_pins>;
+
+                        /* this is the configuration part */
+                        clock-frequency = <100000>;
+
+                        #address-cells = <1>;
+                        #size-cells = <0>;
+                };
+        };
 
 }; /* root node end */
 
