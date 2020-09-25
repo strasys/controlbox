@@ -1,4 +1,4 @@
-timeStampaddWater:0
-timeStampNiveau:1598377768
-sensorOnFlag:0
-openValveFlag:0
+:
+:1600976349
+:0
+:

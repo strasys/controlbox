@@ -75,9 +75,7 @@ while ($loopstatus){
 	/*
 	 * Timer for Outputs like (pool lightning, fontaines, etc.)
 	 */
-	if ($Timer->getopModeFlag()){
-	    $Timer->setTimerOutput();
-	}
+	 $Timer->setTimerOutput();
 	
 	/*
 	 * Decission loop of pump on or off based on functions.

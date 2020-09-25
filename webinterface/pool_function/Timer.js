@@ -11,6 +11,7 @@ var sortoutcache = new Date();
 var offsetTime;
 var overlappflag;
 var arrOutputTimerall = new Array();
+var arrOutputTimeralltemp = new Array();
 
 function getData(setget, url, cfunc, senddata){
 	xhttp = new XMLHttpRequest();
@@ -21,7 +22,7 @@ function getData(setget, url, cfunc, senddata){
 }
 
 function getloginstatus(callback1){
-		getData("post","CleaningInterval.php",function()
+		getData("post","Timer.php",function()
 		{
 			if (xhttp.readyState==4 && xhttp.status==200)
 			{
@@ -39,16 +40,68 @@ function getloginstatus(callback1){
 		},"getLogData=g");		
 }
 
-function getUTCtimestampfromString(strTimeDate){
+//write Data after Change
+function writeChangeData(StartTime,StopTime,timePeriode,OutputNumber,Number,callback){
 	getData("post","Timer.php",function()
 		{
 			if (xhttp.readyState==4 && xhttp.status==200)
 			{
-			var Data = JSON.parse(xhttp.responseText); 
-				callback(Data.UTCtimestamp);
+			var Data = JSON.parse(xhttp.responseText);
+			 
+
+				if(callback){
+					callback(Data);
+				}
 			}
-		},"getUTCTimstampfromString="+strTimeDate);		
-		
+		},"Start="+StartTime+"&Stop="+StopTime+"&Periode="+timePeriode+"&OutputNo="+OutputNumber+"&Number="+Number+"&ChangeTimeperiode='true'");
+}
+
+//wirte Data after Add
+function writeAddData(StartTime,StopTime,timePeriode,OutputNumber,Number,callback){
+	getData("post","Timer.php",function()
+		{
+			if (xhttp.readyState==4 && xhttp.status==200)
+			{
+			var Data = JSON.parse(xhttp.responseText);
+			 
+
+				if(callback){
+					callback(Data);
+				}
+			}
+		},"Start="+StartTime+"&Stop="+StopTime+"&Periode="+timePeriode+"&OutputNo="+OutputNumber+"&Number="+Number+"&AddTimeperiode='true'");
+}
+
+//delete Data after Add
+function deleteData(StartTime,OutputNumber,Number,callback){
+	getData("post","Timer.php",function()
+		{
+			if (xhttp.readyState==4 && xhttp.status==200)
+			{
+			var Data = JSON.parse(xhttp.responseText);
+			 
+
+				if(callback){
+					callback(Data);
+				}
+			}
+		},"Start="+StartTime+"&OutputNo="+OutputNumber+"&Number="+Number+"&DeleteTimeperiode='true'");
+}
+
+//write Mode
+function writeModeData(OutputNumber,Mode,callback){
+	getData("post","Timer.php",function()
+		{
+			if (xhttp.readyState==4 && xhttp.status==200)
+			{
+			var Data = JSON.parse(xhttp.responseText);
+			 
+
+				if(callback){
+					callback(Data);
+				}
+			}
+		},"Mode="+Mode+"&OutputNo="+OutputNumber+"&writeMode='true'");
 }
 
 //Display Outputs for which timer can be set.
@@ -169,7 +222,7 @@ function displaySetTimer(callback){
 								"<div class='radio'>"+
 		 							"<label>"+
 		      							"<input type='radio' name='Output"+OutputNumber+"' value='AUTO' "+checkedON+">"+
-										"<h4><b>EIN</b></h4>"+
+										"<h4><b>AUTO</b></h4>"+
 									"</label>"+
 								"</div>"+
 							"</div>"+
@@ -183,36 +236,34 @@ function displaySetTimer(callback){
 					
 				
 				for(j=4;j<arrOutputTimerall[i].length;j=j+3){
-					if(j === arrOutputTimerall[i].length-3){
-						var addTimebutton = "<button id='buttonTimerAdd' class='btn btn-default' type='button' style='width:40px;' onclick='clearCleaningIntervalTimeXML(0,'ButtonCleanTimeClear1')'><span class='glyphicon glyphicon-plus'></span></button>";
-					} else {
-						var addTimebutton = "";
-					}
 					$("#table"+OutputNumber).append(
+								"<div id='table"+OutputNumber+"_"+(j-4)/3+"'>"+
 		    						"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
-										"<div style='padding-top:20px; max-width:140px;' class = 'input-group'>"+
-											"<span class='input-group-addon'>Ein 1</span>"+
-											"<select id='StartTime"+OutputNumber+""+(j-4)/3+"' class='form-control' onchange='calcCleanTime(0,'CleanTimeField1','CleanTimePeriode1','ButtonCleanTime1','StartTime1','StopTime1')'></select>"+
+										"<div id='divStartTime"+OutputNumber+""+(j-4)/3+"' style='padding-top:20px; max-width:160px;' class = 'input-group'>"+
+											"<span class='input-group-addon'>Ein "+(1+(j-4)/3)+"</span>"+
+											"<select id='StartTime"+OutputNumber+""+(j-4)/3+"' class='form-control' onchange='checkNewTimeset("+(j-4)/3+", "+OutputNumber+")'></select>"+
 										"</div>"+
 									"</div>"+
-									"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
-										"<div style='padding-top:20px; max-width:140px;' class = 'input-group'>"+
-											"<span class='input-group-addon'>Aus 1</span>"+
-											"<select id='StopTime"+OutputNumber+""+(j-4)/3+"' class='form-control' onchange='calcCleanTime(0,'CleanTimeField1','CleanTimePeriode1','ButtonCleanTime1','StartTime1','StopTime1')'></select>"+
-										"</div>"+
+									"<div id='divStopTime"+OutputNumber+""+(j-4)/3+"' class= 'col-xs-12 col-sm-3 col-lg-3'>"+
+										"<div style='padding-top:20px; max-width:160px;' class = 'input-group'>"+
+											"<span class='input-group-addon'>Aus "+(1+(j-4)/3)+"</span>"+
+											"<select id='StopTime"+OutputNumber+""+(j-4)/3+"' class='form-control' onchange='checkNewTimeset("+(j-4)/3+", "+OutputNumber+")'></select>"+
+										"</div>"+ 
 									"</div>"+
 									"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
-										"<div style='padding-top:20px; padding-bottom:20px; max-width:140px;' class = 'input-group'>"+
-											"<span class='input-group-addon' style='padding-top:9px; padding-bottom: 9px;'>Laufzeit 1</span>"+
+										"<div style='padding-top:20px; padding-bottom:20px; max-width:160px;' class = 'input-group'>"+
+											"<span class='input-group-addon' style='padding-top:9px; padding-bottom: 9px;'>Laufzeit "+(1+(j-4)/3)+"</span>"+
 											"<span id='TimePeriode"+OutputNumber+""+(j-4)/3+"' class='input-group-addon' style='padding-top:9px; padding-bottom: 9px;'></span>"+
 										"</div>"+
 									"</div>"+
 									"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
-										"<div style='padding-top:20px; padding-bottom:20px; max-width:140px;' class = 'button-group'>"+
-											"<button id='buttonTimerRemove"+OutputNumber+""+(j-4)/3+"' class='btn btn-danger' style='width:40px; margin-right:40px;' type='button' onclick='setCleaningIntervalTimeXML(0,'StartTime1','StopTime1','ButtonCleanTime1')'><span class='glyphicon glyphicon-remove'></span></button>"+
-											addTimebutton+		
+										"<div style='padding-top:20px; padding-bottom:20px; max-width:160px;' class = 'button-group'>"+
+											"<button id='buttonTimerChange"+OutputNumber+""+(j-4)/3+"' class='btn btn-default' type='button' style='width:40px; margin-right:10px;' onclick='changeSelectedTimeinterval("+OutputNumber+", "+(j-4)/3+")'><span class='glyphicon glyphicon-pencil'></span></button>"+
+											"<button id='buttonTimerRemove"+OutputNumber+""+(j-4)/3+"' class='btn btn-danger' style='width:40px; margin-right:10px;' type='button' onclick='DeleteTimeperiode("+(j-4)/3+","+OutputNumber+")'><span class='glyphicon glyphicon-remove'></span></button>"+
+											"<button id='buttonTimerAdd"+OutputNumber+""+(j-4)/3+"' class='btn btn-default' type='button' style='width:40px;' onclick='addTimeperiode("+(j-4)/3+","+OutputNumber+")'><span class='glyphicon glyphicon-plus'></span></button>"+		
 										"</div>"+
-								"</div>"
+								"</div>"+
+							"</div>"
 							);
 							
 					for(k=0;k<24;k++){
@@ -232,8 +283,12 @@ function displaySetTimer(callback){
 						}
 					}
 					
-					$("#StartTime"+OutputNumber+""+(j-4)/3).val(arrOutputTimerall[i][j]);
-					$("#StopTime"+OutputNumber+""+(j-4)/3).val(arrOutputTimerall[i][j+1]);
+					$("#StartTime"+OutputNumber+""+(j-4)/3)
+														.val(arrOutputTimerall[i][j])
+														.prop("disabled", true)
+					$("#StopTime"+OutputNumber+""+(j-4)/3)
+								.val(arrOutputTimerall[i][j+1])
+								.prop("disabled", true)
 					$("#TimePeriode"+OutputNumber+""+(j-4)/3).text(arrOutputTimerall[i][j+2]);
 				}
 
@@ -290,12 +345,12 @@ if(radioValueChecked != undefined){
 						"<div class='radio'>"+
  							"<label>"+
       							"<input type='radio' name='Output"+OutputNumber+"' value='AUTO' "+checkedON+">"+
-								"<h4><b>EIN</b></h4>"+
+								"<h4><b>AUTO</b></h4>"+
 							"</label>"+
 						"</div>"+
 					"</div>"+
-				"<div id='table"+OutputNumber+"'>"+
-						
+			"<div id='table"+OutputNumber+"'>"+
+				"<div id='table"+OutputNumber+"_0'>"+
     						"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
 								"<div id='divStartTime"+OutputNumber+"0' style='padding-top:20px; max-width:140px;' class = 'input-group'>"+
 									"<span class='input-group-addon'>Ein 1</span>"+
@@ -316,11 +371,13 @@ if(radioValueChecked != undefined){
 							"</div>"+
 							"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
 								"<div style='padding-top:20px; padding-bottom:20px; max-width:140px;' class = 'button-group'>"+
-									"<button id='buttonTimerRemove"+OutputNumber+"0' class='btn btn-danger' style='width:40px; margin-right:40px;' type='button' onclick='setCleaningIntervalTimeXML(0,'StartTime1','StopTime1','ButtonCleanTime1')'><span class='glyphicon glyphicon-remove'></span></button>"+
-									"<button id='buttonTimerAdd"+OutputNumber+"' class='btn btn-default' type='button' style='width:40px;' onclick='clearCleaningIntervalTimeXML(0,'ButtonCleanTimeClear1')'><span class='glyphicon glyphicon-plus'></span></button>"+		
+									"<button id='buttonTimerChange"+OutputNumber+"0' class='btn btn-default' type='button' style='width:40px; margin-right:10px;' onclick='changeSelectedTimeinterval("+OutputNumber+", 0)'><span class='glyphicon glyphicon-pencil'></span></button>"+
+									"<button id='buttonTimerRemove"+OutputNumber+"0' class='btn btn-danger' style='width:40px; margin-right:10px;' type='button' onclick='DeleteTimeperiode(0,"+OutputNumber+")'><span class='glyphicon glyphicon-remove'></span></button>"+
+									"<button id='buttonTimerAdd"+OutputNumber+"0' class='btn btn-default' type='button' style='width:40px;' onclick='addTimeperiode(0, "+OutputNumber+")'><span class='glyphicon glyphicon-plus'></span></button>"+		
 								"</div>"+
 							"</div>"+
 						"</div>"+
+				"</div>"+
 				"</div>"+
 			"</div>"+
 		"</div>"+		
@@ -330,9 +387,11 @@ if(radioValueChecked != undefined){
 	var stopTime = "StopTime"+OutputNumber+"0";
 	$("#TimePeriode"+OutputNumber+"0").text("00:00");
 	$("#buttonTimerRemove"+OutputNumber+"0").hide();
-	$("#buttonTimerAdd"+OutputNumber).hide();
-	$("#buttonTimerAdd"+OutputNumber).after(
-		"<button id='buttonsetNewTimeperiode"+OutputNumber+"' class='btn btn-success' type='button' style='width:40px;' onclick='setNewTimperiod(0,"+OutputNumber+")' disabled><span class='glyphicon glyphicon-ok'></span></button>"		
+	$("#buttonTimerChange"+OutputNumber+"0").hide();
+	$("#buttonTimerAdd"+OutputNumber+"0").hide();
+	$("#buttonTimerAdd"+OutputNumber+"0").after(
+		"<button id='buttonsetNewTimeperiode"+OutputNumber+"0' class='btn btn-success' type='button' style='width:40px; margin-right:10px;' onclick='setNewTimeperiode(0,"+OutputNumber+")' disabled><span class='glyphicon glyphicon-ok'></span></button>"+
+		"<button id='buttonundoNew' class='btn btn-default' type='button' style='width:40px; margin-right:10px;' onclick='undoNew()'><span class='glyphicon glyphicon-remove'></span></button>"		
 	);
 	/*
 		$("#TimerSetforOutput input[value="+OutputNumber+"]").attr("checked", false);
@@ -348,6 +407,22 @@ if(radioValueChecked != undefined){
 });
 
 //Timer on Change
+$("input:radio").change(function(){
+	var radioName = this.name;
+	var radioValue = this.value;
+	var radioNamelength = radioName.length;
+	var OutputNumber = radioName.charAt(radioNamelength-1);
+	
+	writeModeData(OutputNumber,radioValue, function(Data){
+		if(Data.write != "success"){
+			if(radioValue === "OFF"){
+				$("input:radio[name="+radioName+"][value=AUTO]").prop("checked", true);
+			} else if(radioValue === "AUTO"){
+				$("input:radio[name="+radioName+"][value=OFF]").prop("checked", true);
+			}
+		}
+	});
+});
 
 }
 
@@ -356,8 +431,6 @@ function checkNewTimeset(Number, OutputNumber){
 	var StopTime = $("#StopTime"+OutputNumber+""+Number).val();
 	StartTime = Date.parse("1 1 2020 "+StartTime);
 	StopTime = Date.parse("1 1 2020 "+StopTime);
-	console.log(StartTime);
-	console.log(StopTime);
 	//finde Array for OutputNumber
 	/* arrOutputTimer
 		*	0: "3"
@@ -368,6 +441,7 @@ function checkNewTimeset(Number, OutputNumber){
 			5: "17:05"
 			6: "01:00"
 	*/
+	
 
 	for(i=0;i<arrOutputTimerall.length;i++){
 		if(arrOutputTimerall[i][0] == OutputNumber){
@@ -377,28 +451,92 @@ function checkNewTimeset(Number, OutputNumber){
 
 	var startFlag = false;
 	var stopFlag = false;
-	if(arrOutputTimerall[arrNum].length > 6 ){
-		console.log(getUTCtimestampfromString(arrOutputTimerall[arrNum][4]));	
+	
+	var arrSize =  arrOutputTimerall[arrNum].length;
+	if( arrSize > 4 ){		
 	//check if Starttime is between already set times
-	/*	for(i=0;i<arrOutputTimerall[arrNum].length;i++){
-		
+	//check Start Value
+		var StartIndex = undefined;
+		for (j=4;j<arrSize;j=j+3){
+			//Finde between which Array Elements Start is positioned and if collapses with another
+			var Startn = Date.parse("1 1 2020 "+arrOutputTimerall[arrNum][j]);
+			if(StartTime < Startn){
+				//StartIndex = Array element (Start-Stop) is greater than StartTime
+				StartIndex = j;
+				break;
+			}
 		}
-	*/
+		//Rand Funktion 
+		var firstStartTime = Date.parse("1 1 2020 "+arrOutputTimerall[arrNum][4]);
+		var lastStopTime = Date.parse("1 1 2020 "+arrOutputTimerall[arrNum][arrSize-2]);
+		var lastStartTime = Date.parse("1 1 2020 "+arrOutputTimerall[arrNum][arrSize-3]);
+		if (StartIndex == 4){
+			if(firstStartTime > StartTime){
+					startFlag = true;
+				} else {
+					startFlag = false;
+				}
+			if(lastStopTime < lastStartTime){
+				if(StartTime > lastStopTime){
+					startFlag = true;
+				} else {
+					startFlag = false;
+				}
+			}
+		}
+		
+		if (StartIndex == undefined){
+			if(lastStopTime < StartTime){
+				startFlag = true;
+			} else {
+				startFlag = false;
+			}
+		}
+		
+		if (StartIndex > 4){
+			var StopTimecomp = Date.parse("1 1 2020 "+arrOutputTimerall[arrNum][StartIndex-2]);
+			if(StartTime > StopTimecomp){
+				startFlag = true;
+			} else {
+				startFlag = false;
+			}
+		}
+//check stop
+		if (startFlag){
+			//Ausnahme z.B.: 23:00 bis 08:00
+			if(StartIndex == undefined){
+				if (StopTime < StartTime){
+					if(firstStartTime > StopTime){
+						stopFlag = true;
+					}
+				}
+				if (StopTime > StartTime){
+					stopFlag = true;
+				}
+			}
+			
+			if(StartIndex >= 4){
+				if(StopTime > StartTime && StopTime < Date.parse("1 1 2020 "+arrOutputTimerall[arrNum][StartIndex])){
+					stopFlag = true;
+				}
+			}
+			
+		}
 	} else {
-		startFlag = true;
-		if(StopTime > StartTime){
-		stopFlag = true;
+		if (StartTime != StopTime){
+			startFlag = true;
+			stopFlag = true;	
 		}
 	}
-	
+		
 		switch(startFlag){
 			case true:
 				$("#divStartTime"+OutputNumber+""+Number).removeClass("has-error");
 				$("#divStartTime"+OutputNumber+""+Number).addClass("has-success");
 				break;
 			case false:
-				$("#divStartTime"+OutputNumber+""+Number).addClass("has-success");
-				$("#divStartTime"+OutputNumber+""+Number).removeClass("has-error");
+				$("#divStartTime"+OutputNumber+""+Number).removeClass("has-success");
+				$("#divStartTime"+OutputNumber+""+Number).addClass("has-error");
 		}
 
 		switch(stopFlag){
@@ -413,62 +551,328 @@ function checkNewTimeset(Number, OutputNumber){
 
 	
 	if (startFlag && stopFlag){
-		var timePeriode = StopTime - StartTime;
-		var hours = Math.floor(timePeriode / 3600000);
-		var minutes = "0"+(timePeriode - hours*3600000)/60000;
+		if (StartTime < StopTime){
+			var timePeriode = StopTime - StartTime;
+			var hours = Math.floor(timePeriode / 3600000);
+			var minutes = "0"+(timePeriode - hours*3600000)/60000;
+		} else if(StopTime < StartTime){
+			var time24_00 = Date.parse("1 1 2020 24:00");
+			var time00_00 = Date.parse("1 1 2020 00:00");
+			var timePeriodeto24 = time24_00 - StartTime;
+			var timePeriodefrom00 = StopTime - time00_00;
+			var timePeriode = timePeriodeto24 + timePeriodefrom00;
+			var hours = Math.floor(timePeriode/3600000);
+			var minutes = "0"+(timePeriode - hours*3600000)/60000; 
+		}
 
-		$("#buttonsetNewTimeperiode"+OutputNumber).attr("disabled", false);
+		$("#buttonsetNewTimeperiode"+OutputNumber+""+Number).attr("disabled", false);
 		$("#TimePeriode"+OutputNumber+""+Number).text(hours+":"+minutes.substr(-2));
 	} else {
-		$("#buttonsetNewTimeperiode"+OutputNumber).attr("disabled", true);
+		$("#buttonsetNewTimeperiode"+OutputNumber+""+Number).attr("disabled", true);
 	}
 }
 
-// Write cleaning interval time to XML - file.
-function setCleaningIntervalTimeXML(interval,start,stop,ButtonCleanTime){
-	
-	var CleanInterval = interval;
-	var StartTime = document.getElementById(start).value;	
-	var StopTime = document.getElementById(stop).value;
-		calcTimePeriode(start,stop,function(){
-		getData("post","CleaningInterval.php",function()
-		{
-			if (xhttp.readyState==4 && xhttp.status==200)
-			{
-				document.getElementById(ButtonCleanTime).setAttribute("class","btn btn-success");
-				setTimeout(function(){document.getElementById(ButtonCleanTime).setAttribute("class","btn btn-default")},500);	
-			}
-		},
-		"CleanInterval="+CleanInterval+
-		"&StartTime="+StartTime+
-		"&StopTime="+StopTime+
-		"&CleanIntervalPeriode="+TimeDifference+
-		"&setCleanTime=s");
-		});
+//change selected time interval
+function changeSelectedTimeinterval(OutputNumber, Number){
+	$("#StartTime"+OutputNumber+""+Number).prop("disabled", false);
+	$("#StopTime"+OutputNumber+""+Number).prop("disabled", false);
+	$("#TimePeriode"+OutputNumber+Number).prop("disabled", false);
+	$("#buttonsetNewTimeperiode"+OutputNumber+""+Number).hide();
+	$("#buttonTimerChange"+OutputNumber+""+Number).hide();
+	$("#buttonTimerRemove"+OutputNumber+""+Number).hide();
+	$("#buttonTimerAdd"+OutputNumber+""+Number).hide();
+	$("#buttonTimerAdd"+OutputNumber+""+Number).after(
+		"<button id='buttonundo"+OutputNumber+"' class='btn btn-default' type='button' style='width:40px; margin-right:10px;' onclick='undochange("+OutputNumber+")'><span class='glyphicon glyphicon-remove'></span></button>"
+	);
+	$("#buttonTimerAdd"+OutputNumber+""+Number).after(
+		"<button id='buttonsetNewTimeperiode"+OutputNumber+""+Number+"' class='btn btn-success' type='button' style='width:40px; margin-right:10px;' onclick='ChangeTimeperiode("+Number+","+OutputNumber+")' disabled><span class='glyphicon glyphicon-ok'></span></button>"
+	);
+
+
+	arrOutputTimeralltemp = "";
+	arrOutputTimeralltemp = arrOutputTimerall;
+	for(i=0;i<arrOutputTimerall.length;i++){
+		if(arrOutputTimerall[i][0] == OutputNumber){
+			var IndexOut = i;
+			break;
+		}
+	}
+		//remove number of elements from tmparr
+		//NumberChange = 4+Number*3
+		arrOutputTimeralltemp[IndexOut].splice(4+Number*3,3);	
 }
 
-// Set Cleaning interval time XML data to "00:00"!
-function clearCleaningIntervalTimeXML(interval,ButtonCleanTimeClear){
+// Write new time Interval to XML - file.
+function setNewTimeperiode(Number,OutputNumber){
+	var StartTime = $("#StartTime"+OutputNumber+""+Number).val();
+	var StopTime = $("#StopTime"+OutputNumber+""+Number).val();
+	var timePeriode = $("#TimePeriode"+OutputNumber+Number).text();
 	
-	var CleanInterval = interval;
-	var StartTime = "00:00";	
-	var StopTime = "00:00";
-	var TimeDifference = "00:00";
-		getData("post","CleaningInterval.php",function()
+	getData("post","Timer.php",function()
 		{
 			if (xhttp.readyState==4 && xhttp.status==200)
 			{
-				getSetXMLData(function(){
-				document.getElementById(ButtonCleanTimeClear).setAttribute("class","btn btn-success");
-				setTimeout(function(){document.getElementById(ButtonCleanTimeClear).setAttribute("class","btn btn-default")},500);					   
-				});
+			var Data = JSON.parse(xhttp.responseText);
+			
+				if (Data.write == 'success'){
+					$("#StartTime"+OutputNumber+""+Number).prop("disabled", true);
+					$("#StopTime"+OutputNumber+""+Number).prop("disabled", true);
+					$("#divStartTime"+OutputNumber+""+Number).removeClass("has-success");
+					$("#divStopTime"+OutputNumber+""+Number).removeClass("has-success");
+					$("#buttonsetNewTimeperiode"+OutputNumber+""+Number).hide();
+					$("#buttonundoNew").remove();
+					$("#buttonTimerChange"+OutputNumber+"0").show();
+					$("#buttonTimerRemove"+OutputNumber+""+Number).show();
+					$("#buttonTimerAdd"+OutputNumber+""+Number).show();
+				}
+				if(callback){
+					callback(Data);
+				}
 			}
-		},
-		"CleanInterval="+CleanInterval+
-		"&StartTime="+StartTime+
-		"&StopTime="+StopTime+
-		"&CleanIntervalPeriode="+TimeDifference+
-		"&setCleanTime=s");
+		},"Start="+StartTime+"&Stop="+StopTime+"&Periode="+timePeriode+"&OutputNo="+OutputNumber+"&setNewTimeperiode='true'");		
+
+}
+
+function ChangeTimeperiode(Number, OutputNumber){
+	var StartTime = $("#StartTime"+OutputNumber+""+Number).val();
+	var StopTime = $("#StopTime"+OutputNumber+""+Number).val();
+	var timePeriode = $("#TimePeriode"+OutputNumber+Number).text();
+	
+	writeChangeData(StartTime,StopTime,timePeriode,OutputNumber,Number, function(Data){
+		if (Data.write == 'success'){
+			$("#StartTime"+OutputNumber+""+Number).prop("disabled", true);
+			$("#StopTime"+OutputNumber+""+Number).prop("disabled", true);
+			$("#divStartTime"+OutputNumber+""+Number).removeClass("has-success");
+			$("#divStopTime"+OutputNumber+""+Number).removeClass("has-success");
+			$("#buttonsetNewTimeperiode"+OutputNumber+""+Number).hide();
+			$("#buttonTimerChange"+OutputNumber+""+Number).show();
+			$("#buttonTimerRemove"+OutputNumber+""+Number).show();
+			$("#buttonTimerAdd"+OutputNumber+""+Number).show();
+			$("#table"+OutputNumber+" div").remove();
+			updateTableafterChange(OutputNumber);
+			}
+	});	
+}
+
+function addTimeperiode(Number, OutputNumber){
+$("#buttonTimerAdd"+OutputNumber+""+Number).attr("disabled",true);
+					$("#table"+OutputNumber+"_"+Number).after(
+								"<div id='table"+OutputNumber+"t'>"+
+		    						"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
+										"<div id='divStartTime"+OutputNumber+"t' style='padding-top:20px; max-width:160px;' class = 'input-group'>"+
+											"<span class='input-group-addon'>Ein</span>"+
+											"<select id='StartTime"+OutputNumber+"t' class='form-control' onchange='checkNewTimeset(\"t\", "+OutputNumber+")'></select>"+
+										"</div>"+
+									"</div>"+
+									"<div id='divStopTime"+OutputNumber+"t' class= 'col-xs-12 col-sm-3 col-lg-3'>"+
+										"<div style='padding-top:20px; max-width:160px;' class = 'input-group'>"+
+											"<span class='input-group-addon'>Aus </span>"+
+											"<select id='StopTime"+OutputNumber+"t' class='form-control' onchange='checkNewTimeset(\"t\", "+OutputNumber+")'></select>"+
+										"</div>"+ 
+									"</div>"+
+									"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
+										"<div style='padding-top:20px; padding-bottom:20px; max-width:160px;' class = 'input-group'>"+
+											"<span class='input-group-addon' style='padding-top:9px; padding-bottom: 9px;'>Laufzeit</span>"+
+											"<span id='TimePeriode"+OutputNumber+"t' class='input-group-addon' style='padding-top:9px; padding-bottom: 9px;'></span>"+
+										"</div>"+
+									"</div>"+
+									"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
+										"<div style='padding-top:20px; padding-bottom:20px; max-width:160px;' class = 'button-group'>"+
+											"<button id='buttonsetNewTimeperiode"+OutputNumber+"t' class='btn btn-success' type='button' style='width:40px; margin-right:10px;' onclick='SaveAddTimeperiode(\"t\","+OutputNumber+")' disabled><span class='glyphicon glyphicon-ok'></span></button>"+
+											"<button id='buttonundo"+OutputNumber+"' class='btn btn-default' type='button' style='width:40px; margin-right:10px;' onclick='undochange("+OutputNumber+")'><span class='glyphicon glyphicon-remove'></span></button>"+			
+										"</div>"+
+								"</div>"+
+							"</div>"
+							);
+							
+					for(k=0;k<24;k++){
+						for(x=0;x<60;x=x+5){
+							var y = document.getElementById("StopTime"+OutputNumber+"t");
+							var option1 = document.createElement("option");
+							option1.text = ("0"+k).slice(-2)+":"+("0"+x).slice(-2);
+							y.options.add(option1);
+						}
+					}
+					for(k=0;k<24;k++){
+						for(x=0;x<60;x=x+5){
+							var y = document.getElementById("StartTime"+OutputNumber+"t");
+							var option1 = document.createElement("option");
+							option1.text = ("0"+k).slice(-2)+":"+("0"+x).slice(-2);
+							y.options.add(option1);
+						}
+					}
+				
+}
+
+//Save Timeperiode and refresh table
+function SaveAddTimeperiode(Number, OutputNumber){
+	var StartTime = $("#StartTime"+OutputNumber+""+Number).val();
+	var StopTime = $("#StopTime"+OutputNumber+""+Number).val();
+	var timePeriode = $("#TimePeriode"+OutputNumber+Number).text();
+	
+	writeAddData(StartTime,StopTime,timePeriode,OutputNumber,Number, function(Data){
+		if (Data.write == 'success'){
+			$("#table"+OutputNumber+" div").remove();
+			updateTableafterChange(OutputNumber);
+			}
+	});	
+}
+
+//delete Timeperiode and refresh table
+function DeleteTimeperiode(Number,OutputNumber){
+	var StartTime = $("#StartTime"+OutputNumber+""+Number).val();
+	
+	deleteData(StartTime,OutputNumber,Number, function(Data){
+		if (Data.write == 'success'){
+			if(Number != 0){
+				$("#table"+OutputNumber+" div").remove();
+				updateTableafterChange(OutputNumber);	
+			} else {
+				location.reload();
+			}
+		}
+	});		
+}
+
+//undo change or add operation before writting to xml
+function undochange(OutputNumber){
+	$("#table"+OutputNumber+" div").remove();
+	updateTableafterChange(OutputNumber);	
+}
+
+function undoNew(){
+	location.reload();
+}
+
+function updateTableafterChange(OutputNumber){
+	updateOutputTimerall(function(arrOutputTimerTempall){
+						/* arrOutputTimer
+						*	0: "3"
+			​				1: "Poolbeleuchtung"
+​							2: "AUTO"
+							3: true​
+							4: "15:03"
+							5: "17:05"
+							6: "01:00"
+						*/
+					//	console.log("after write data = "+arrOutputTimerall);
+						arrOutputTimerall = [];
+						arrOutputTimerall = arrOutputTimerTempall;
+						
+						for(i=0;i<arrOutputTimerall.length;i++){
+							if(arrOutputTimerall[i][0] == OutputNumber.toString()){
+								var indexOut = i;
+								
+							}
+						}
+							
+							for(j=4;j<arrOutputTimerall[indexOut].length;j=j+3){
+								$("#table"+OutputNumber).append(
+									"<div id='table"+OutputNumber+"_"+(j-4)/3+"'>"+
+		    						"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
+										"<div id='divStartTime"+OutputNumber+""+(j-4)/3+"' style='padding-top:20px; max-width:160px;' class = 'input-group'>"+
+											"<span class='input-group-addon'>Ein "+(1+(j-4)/3)+"</span>"+
+											"<select id='StartTime"+OutputNumber+""+(j-4)/3+"' class='form-control' onchange='checkNewTimeset("+(j-4)/3+", "+OutputNumber+")'></select>"+
+										"</div>"+
+									"</div>"+
+									"<div id='divStopTime"+OutputNumber+""+(j-4)/3+"' class= 'col-xs-12 col-sm-3 col-lg-3'>"+
+										"<div style='padding-top:20px; max-width:160px;' class = 'input-group'>"+
+											"<span class='input-group-addon'>Aus "+(1+(j-4)/3)+"</span>"+
+											"<select id='StopTime"+OutputNumber+""+(j-4)/3+"' class='form-control' onchange='checkNewTimeset("+(j-4)/3+", "+OutputNumber+")'></select>"+
+										"</div>"+ 
+									"</div>"+
+									"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
+										"<div style='padding-top:20px; padding-bottom:20px; max-width:160px;' class = 'input-group'>"+
+											"<span class='input-group-addon' style='padding-top:9px; padding-bottom: 9px;'>Laufzeit "+(1+(j-4)/3)+"</span>"+
+											"<span id='TimePeriode"+OutputNumber+""+(j-4)/3+"' class='input-group-addon' style='padding-top:9px; padding-bottom: 9px;'></span>"+
+										"</div>"+
+									"</div>"+
+									"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
+										"<div style='padding-top:20px; padding-bottom:20px; max-width:160px;' class = 'button-group'>"+
+											"<button id='buttonTimerChange"+OutputNumber+""+(j-4)/3+"' class='btn btn-default' type='button' style='width:40px; margin-right:10px;' onclick='changeSelectedTimeinterval("+OutputNumber+", "+(j-4)/3+")'><span class='glyphicon glyphicon-pencil'></span></button>"+
+											"<button id='buttonTimerRemove"+OutputNumber+""+(j-4)/3+"' class='btn btn-danger' style='width:40px; margin-right:10px;' type='button' onclick='DeleteTimeperiode("+(j-4)/3+","+OutputNumber+")'><span class='glyphicon glyphicon-remove'></span></button>"+
+											"<button id='buttonTimerAdd"+OutputNumber+""+(j-4)/3+"' class='btn btn-default' type='button' style='width:40px;' onclick='addTimeperiode("+(j-4)/3+","+OutputNumber+")'><span class='glyphicon glyphicon-plus'></span></button>"+		
+										"</div>"+
+								"</div>"+
+								"</div>"
+							);
+							
+					for(k=0;k<24;k++){
+						for(x=0;x<60;x=x+5){
+							var y = document.getElementById("StopTime"+OutputNumber+""+(j-4)/3);
+							var option1 = document.createElement("option");
+							option1.text = ("0"+k).slice(-2)+":"+("0"+x).slice(-2);
+							y.options.add(option1);
+						}
+					}
+					for(k=0;k<24;k++){
+						for(x=0;x<60;x=x+5){
+							var y = document.getElementById("StartTime"+OutputNumber+""+(j-4)/3);
+							var option1 = document.createElement("option");
+							option1.text = ("0"+k).slice(-2)+":"+("0"+x).slice(-2);
+							y.options.add(option1);
+						}
+					}
+					
+					$("#StartTime"+OutputNumber+""+(j-4)/3)
+														.val(arrOutputTimerall[indexOut][j])
+														.prop("disabled", true)
+					$("#StopTime"+OutputNumber+""+(j-4)/3)
+								.val(arrOutputTimerall[indexOut][j+1])
+								.prop("disabled", true)
+					$("#TimePeriode"+OutputNumber+""+(j-4)/3).text(arrOutputTimerall[indexOut][j+2]);
+				}
+							
+			});
+}
+
+//update time after change
+function updateOutputTimerall(callback){
+	//read VDF.xml
+
+	getData("GET","/VDF.xml?sortoutcache="+sortoutcache.valueOf(),function(){
+		if (xhttp.readyState==4 && xhttp.status==200){
+			var getXMLData = xhttp.responseXML;
+			var z = getXMLData.getElementsByTagName("TimerControl");
+			var objOutputTimer = z[0].getElementsByTagName("OutputTimer");
+			
+			var arrOutputTimerTemp = [];
+			var arrOutputTimerTempall = [];
+
+			for (j=0;j<objOutputTimer.length;j++){
+				arrOutputTimerTemp = [];
+		//		var OutputNo = objOutputTimer[j].getElementsByTagName("Number")[0].childNodes[0].nodeValue;
+		//		var operationMode = objOutputTimer[j].getElementsByTagName("operationMode")[0].childNodes[0].nodeValue;
+			
+				arrOutputTimerTemp.push(arrOutputTimerall[j][0]);
+				arrOutputTimerTemp.push(arrOutputTimerall[j][1]);
+				arrOutputTimerTemp.push(arrOutputTimerall[j][2]);
+				arrOutputTimerTemp.push(arrOutputTimerall[j][3]);
+				/* arrOutputTimer
+				 *	0: "3"
+​					1: "Poolbeleuchtung"
+​					2: "AUTO"
+					3: true​
+					4: "15:03"
+					5: "17:05"
+					6: "01:00" 
+				 */
+				
+				var objOutputSetting = objOutputTimer[j].getElementsByTagName("TimerSetting");
+				for(k=0;k<objOutputSetting.length;k++){
+					arrOutputTimerTemp.push(objOutputSetting[k].getElementsByTagName("Start")[0].childNodes[0].nodeValue);
+					arrOutputTimerTemp.push(objOutputSetting[k].getElementsByTagName("Stop")[0].childNodes[0].nodeValue);
+					arrOutputTimerTemp.push(objOutputSetting[k].getElementsByTagName("Periode")[0].childNodes[0].nodeValue);
+				}
+				arrOutputTimerTempall[j] = arrOutputTimerTemp;
+
+			}
+				
+					if (callback){
+					callback(arrOutputTimerTempall);
+	}
+		}
+	});
 }
 
 function setTimerModeXML(radioID){
@@ -485,32 +889,6 @@ function setTimerModeXML(radioID){
 	
 	}
 
-//Workaround since span text can not be read with all browser
-//
-function calcTimePeriode(StartTime,StopTime,callback6){
-	var gTimeStart = document.getElementById(StartTime);
-	var gTimeStop = document.getElementById(StopTime);
-	var StartTime = new Date();
-	var StopTime = new Date();
-	var strStart = gTimeStart.value;
-	var strStop = gTimeStop.value;
-	StartTime.setUTCHours(strStart.substr(0,2));
-	StartTime.setUTCMinutes(strStart.substr(3,2));
-	StartTime.setUTCSeconds(0);
-	StopTime.setUTCHours(strStop.substr(0,2));
-	StopTime.setUTCMinutes(strStop.substr(3,2));
-	StopTime.setUTCSeconds(0);
-	var elapsed = StopTime - StartTime;
-	var difference = new Date(elapsed);
-	var elapsedhh = difference.getUTCHours();
-	var elapsedmm = difference.getUTCMinutes();	
-	TimeDifference = ("0"+elapsedhh).slice(-2)+":"+("0"+elapsedmm).slice(-2);
-	if (callback6){
-	callback6();
-	}
-}
-
-
 function setSelectTime(idName,callback){
 	for(i=0;i<24;i++){
 		for(x=0;x<60;x=x+5){
@@ -523,86 +901,6 @@ function setSelectTime(idName,callback){
 	if (callback){
 		callback();
 	}
-}
-
-function checktimeoverlapp(interval,start,stop,callback7){
-	var StartTimeOverlapp = new Date();
-	var StopTimeOverlapp = new Date();
-	StartTimeOverlapp.setUTCHours(start.substr(0,2));
-	StartTimeOverlapp.setUTCMinutes(start.substr(3,2));
-	StartTimeOverlapp.setUTCSeconds(0);
-	StopTimeOverlapp.setUTCHours(stop.substr(0,2));
-	StopTimeOverlapp.setUTCMinutes(stop.substr(3,2));
-	StopTimeOverlapp.setUTCSeconds(0);
-	
-	var StartTimeCompare = new Date();
-	var StopTimeCompare = new Date();
-
-getData("GET","/VDF.xml?sortoutcache="+sortoutcache.valueOf(),function(){
-	if (xhttp.readyState==4 && xhttp.status==200){
-		var getXMLData = xhttp.responseXML;
-		var w = getXMLData.getElementsByTagName("CleaningInterval");
-		var z = w.length;
-		var i=0;
-		overlappflag = 0;
-		for (i=0; i<z; i++){
-			if(i!=interval){
-				var StartCompare = w[i].getElementsByTagName("Start")[0].childNodes[0].nodeValue;
-				var StopCompare = w[i].getElementsByTagName("Stop")[0].childNodes[0].nodeValue;
-				StartTimeCompare.setUTCHours(StartCompare.substr(0,2));
-				StartTimeCompare.setUTCMinutes(StopCompare.substr(3,2));
-				StartTimeCompare.setUTCSeconds(0);
-				StopTimeCompare.setUTCHours(StopCompare.substr(0,2));
-				StopTimeCompare.setUTCMinutes(StartCompare.substr(3,2));
-				StopTimeCompare.setUTCSeconds(0);
-			//	document.getElementById("test0").innerHTML = StartTimeOverlapp<StartTimeCompare;
-			//	document.getElementById("test1").innerHTML = StopTimeOverlapp<StartTimeCompare;
-			//	document.getElementById("test2").innerHTML = StartTimeOverlapp>StartTimeCompare; 
-			//	document.getElementById("test3").innerHTML = StopTimeOverlapp>StopTimeCompare;
-
-				if(!((StartTimeOverlapp<StartTimeCompare && StopTimeOverlapp<StartTimeCompare) || (StartTimeOverlapp>StopTimeCompare && StopTimeOverlapp>StopTimeCompare))){
-				overlappflag =  1;						
-				}
-			}								
-		}
-		if (callback7){
-			callback7();
-		}
-	}
-	});
-
-}
-
-function calcTimer(interval,CleanTimeField,CleanTimePeriode,CleanTimeButton,StartTime,StopTime){
-	var gTimeStart = document.getElementById(StartTime);
-	var gTimeStop = document.getElementById(StopTime);
-
-	checktimeoverlapp(interval,gTimeStart.value,gTimeStop.value,function(){
-		if(overlappflag == 0){
-		document.getElementById(CleanTimeField).setAttribute("class", "row");
-		document.getElementById(CleanTimeButton).setAttribute("class", "btn btn-default");
-		var Laufzeit = document.getElementById(CleanTimePeriode);
-		var StartTime = new Date();
-		var StopTime = new Date();
-		var strStart = gTimeStart.value;
-		var strStop = gTimeStop.value;
-		StartTime.setUTCHours(strStart.substr(0,2));
-		StartTime.setUTCMinutes(strStart.substr(3,2));
-		StartTime.setUTCSeconds(0);
-		StopTime.setUTCHours(strStop.substr(0,2));
-		StopTime.setUTCMinutes(strStop.substr(3,2));
-		StopTime.setUTCSeconds(0);
-		var elapsed = StopTime - StartTime;
-		var difference = new Date(elapsed);
-		var elapsedhh = difference.getUTCHours();
-		var elapsedmm = difference.getUTCMinutes();
-		Laufzeit.innerHTML = ("0"+elapsedhh).slice(-2)+":"+("0"+elapsedmm).slice(-2);
-		}
-		else {
-			document.getElementById(CleanTimeField).setAttribute("class", "row has-error");
-			document.getElementById(CleanTimeButton).setAttribute("class", "btn btn-default disabled");
-		}	
-	});
 }
 
 // load functions ad webpage opening

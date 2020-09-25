@@ -64,25 +64,12 @@
 <GPIOIN><InputName>Eingang 2</InputName></GPIOIN>
 <GPIOIN><InputName>Eingang 3</InputName></GPIOIN>
 <GPIOIN><InputName>Eingang 4</InputName></GPIOIN>
-<CleaningInterval>
-	<Start>00:00</Start>
-	<Stop>00:00</Stop>
-	<Periode>00:00</Periode>
-</CleaningInterval>
-<CleaningInterval>
-	<Start>00:10</Start>
-	<Stop>00:15</Stop>
-	<Periode>00:05</Periode>
-</CleaningInterval>
-<CleaningInterval>
-	<Start>00:45</Start>
-	<Stop>00:50</Stop>
-	<Periode>00:05</Periode>
-</CleaningInterval>
 <CleaningSetting>
 	<OperationMode>OFF</OperationMode>
 	<tipCleaningTime>0</tipCleaningTime>
-</CleaningSetting>
+	
+	
+<CleaningInterval><Start>07:00</Start><Stop>09:00</Stop><Periode>2:00</Periode></CleaningInterval><CleaningInterval><Start>12:00</Start><Stop>14:00</Stop><Periode>2:00</Periode></CleaningInterval></CleaningSetting>
 <SolarSetting>
 	<operationMode>OFF</operationMode>
 	<backWaterTemp>30</backWaterTemp>
@@ -98,22 +85,15 @@
 </LevelControl>
 <TimerControl>
 	<OutputTimer>
-		<operationMode>AUTO</operationMode>
-		<Number>3</Number>
-		<TimerSetting>
-			<Start>15:05</Start>
-			<Stop>17:05</Stop>
-			<Periode>01:00</Periode>
-		</TimerSetting>
-		<TimerSetting>
-			<Start>15:05</Start>
-			<Stop>17:05</Stop>
-			<Periode>01:00</Periode>
-		</TimerSetting>
+		<operationMode>OFF</operationMode>
+		<Number>3</Number>	
+	
+	
 	</OutputTimer>
 	<OutputTimer>
 		<operationMode>OFF</operationMode>
-		<Number>4</Number>
-	</OutputTimer>		
+		<Number>4</Number>		
+		
+	<TimerSetting><Start>09:30</Start><Stop>12:00</Stop><Periode>2:30</Periode></TimerSetting></OutputTimer>		
 </TimerControl>
 </sensingbox>

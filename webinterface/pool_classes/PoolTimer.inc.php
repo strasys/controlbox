@@ -26,47 +26,43 @@ class TimerInterval
 		$date = new DateTime("now", new DateTimeZone($Timezone));
 		$actualTime = $date->getTimestamp();
 		
-		$NumberNodes = (int) $xml->TimerSetting->count();
-        $arrTimerFlag = array();
-		for ($i=0;$i<$NumberNodes;$i++){
-		    $TStart = new DateTime($xml->TimerSetting[$i]->Start, new DateTimeZone($Timezone));
-		    $TStart = $TStart->getTimestamp();
-		    $TStop = new DateTime($xml->TimerSetting[$i]->Stop, new DateTimeZone($Timezone));
-		    $TStop = $TStop->getTimestamp();
-			$TOutput = (int) $xml->TimerSetting[$i]->Outputnumber;
-			$arrTimerFlag[$i] = array('TOutput' => $TOutput,
-			                         'TOutStatus' => false 			
-			                         );
-			
-			if(($actualTime >= $TStart) && ($actualTime <= $TStop)){
-			    $arrTimerFlag[$i]['TOutStatus'] = true; 
-			    $DIGIclass->setOutsingle($TOutput,1);
-			} else {
-			    $DIGIclass->setOutsingle($TOutput,0);
-			}
+		$NumberOutputTimer = count($xml->TimerControl->OutputTimer);
+		for ($i=0;$i<$NumberOutputTimer;$i++){
+		    $OutputFlag = false;
+		    $TOutput = (int) $xml->TimerControl->OutputTimer[$i]->Number[0];
+		    if($xml->TimerControl->OutputTimer[$i]->operationMode[0] == 'OFF'){   
+		        $OutputFlag = false;
+		    } else if ($xml->TimerControl->OutputTimer[$i]->operationMode[0] == 'AUTO'){
+		        //get time periodes
+		        $NumberTimerSetting = count($xml->TimerControl->OutputTimer[$i]->TimerSetting);
+		        for($j=0;$j<$NumberTimerSetting;$j++){
+		            $TStart = new DateTime($xml->TimerControl->OutputTimer[$i]->TimerSetting[$j]->Start, new DateTimeZone($Timezone));
+		            $TStart = $TStart->getTimestamp();
+		            $TStop = new DateTime($xml->TimerControl->OutputTimer[$i]->TimerSetting[$j]->Stop, new DateTimeZone($Timezone));
+		            $TStop = $TStop->getTimestamp();
+		            //check special case z.B.: 23:00 bis 8:00 over midnight
+		            if($TStop < $TStart){
+		                if(($actualTime >= $TStart) || ($actualTime <= $TStop)){
+		                    $OutputFlag = true;
+		                }
+		            } else if ($TStop > $TStart){
+		                if(($actualTime >= $TStart) && ($actualTime <= $TStop)){
+		                    $OutputFlag = true;
+		                }
+		            }
+		        }    
+	       }
+	       switch ($OutputFlag){
+	           case true:
+	               $DIGIclass->setOutsingle($TOutput,1);
+	               break;
+	           case false:
+	               $DIGIclass->setOutsingle($TOutput,0);
+	               break;
+	       }
 	   }
-	}
-	/*
-	 * This function returns a boolean value. 
-	 * true = Operation Mode = AUTO
-	 * false = Operation Mode = OFF
-	 */
-	function getopModeFlag()
-	{
-		$xml = simplexml_load_file("/var/www/VDF.xml");		
-		(bool) $OperationFlag = false;
-
-		$strOperationMode = (string) $xml->TimerControl[0]->operationMode;
-		if ($strOperationMode == 'AUTO'){
-			$OperationFlag = true;
-		}
-		elseif ($strOperationMode == 'OFF'){
-			$OperationFlag = false;
-		}
-
-		return (bool) $OperationFlag;
-	}
-
-
+	   
+	   
+    }
 }
 ?>
