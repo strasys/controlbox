@@ -61,12 +61,12 @@ function setServerData(buttontype, num, newstatus, callback){
 		if (xhttp.readyState==4 && xhttp.status==200)
 		{
 			var setStatus = JSON.parse(xhttp.responseText); 
-			ServerData.GPIOout[num] = setStatus;
+
 			if (callback){
 			callback(setStatus);
 			}
 		}
-	},"ButtonType="+buttontype+"&newStatus="+newstatus+"&num="+num);
+	},"ButtonType="+buttontype+"&newStatus="+newstatus+"&num="+num);	
 }
 
 function displayStartHMI(callback){
@@ -97,7 +97,6 @@ function displayStartHMI(callback){
 					"<div class='row'>"+
 						"<h3 class='col-xs-2 display-info'><img id='imgLightButton1' src='/images/bulboff_icon_200_200.png'></h3>"+
 						"<h3 id='NameLightButton1' class='col-xs-10 display-button-name'></h3>"+
-						"<div id='LightButton1Spiner'></div>"+
 					"</div>"+	
 				"</div>"+
 			"</div>"+
@@ -106,7 +105,6 @@ function displayStartHMI(callback){
 					"<div class='row'>"+
 						"<h3 class='col-xs-2 display-info'><img id='imgLightButton2' src='/images/bulboff_icon_200_200.png'></h3>"+
 						"<h3 id='NameLightButton2' class='col-xs-10 display-button-name'></h3>"+
-						"<div id='LightButton2Spiner'></div>"+
 					"</div>"+	
 				"</div>"+
 			"</div>"+
@@ -189,7 +187,7 @@ $(this)
 	.ready($("#AirTemp").text(ServerData.AirTemp.toFixed(1)))
 
 $("#LightButton1").on("click", function(){
-	$("#LightButton1Spiner").addClass("loadersmall pos-rel");
+	clearTimeout(StartHMITimeout);
 	if(ServerData.GPIOout[3] == '0'){
 		var newstatus = '1';
 	} else if (ServerData.GPIOout[3] == '1'){
@@ -197,16 +195,13 @@ $("#LightButton1").on("click", function(){
 	}
 	setServerData("DigiOutput", 3, newstatus, function(setStatus){
 		setLightButtons(setStatus, "#LightButton1", "#imgLightButton1", function(){
-			$("#LightButton1Spiner").removeClass("loadersmall pos-rel");
-			if(StartHMITimeout === 'undefined'){
-				refreshStartHMI();
-			}
+			refreshStartHMI();
 		});	
 	});
 });
 
 $("#LightButton2").on("click", function(){
-	$("#LightButton2Spiner").addClass("loadersmall pos-rel");
+	clearTimeout(StartHMITimeout);
 	if(ServerData.GPIOout[4] == '0'){
 		var newstatus = '1';
 	} else if (ServerData.GPIOout[4] == '1'){
@@ -214,11 +209,8 @@ $("#LightButton2").on("click", function(){
 	}
 	setServerData("DigiOutput", 4, newstatus, function(setStatus){
 		setLightButtons(setStatus, "#LightButton2", "#imgLightButton2", function(){
-			$("#LightButton2Spiner").removeClass("loadersmall pos-rel");
-			if(StartHMITimeout === 'undefined'){
-				refreshStartHMI();
-			}
-		});
+			refreshStartHMI();
+		});	
 	});
 });
 
@@ -296,7 +288,7 @@ getXMLDataSolarHMI(function(){
 		setDeviceButtons(ServerData.GPIOout[1], "#SolarInfoHMIMixer", "#SolarInfoHMIMixerStatus", function(){
 			$("#BackwaterTemp").text(ServerData.BackwaterTemp.toFixed(1));
 			$("#SolarTemp").text(ServerData.SolarTemp.toFixed(1));
-			clearInterval(StartHMITimeout);
+			clearTimeout(StartHMITimeout);
 			refreshSolarHMI();
 		});
 	});
@@ -368,7 +360,7 @@ function displayFilterHMI(){
 
 getXMLDataCleaningHMI(function(){
 	setDeviceButtons(ServerData.GPIOout[0], "#CleaningInfoHMIPump", "#CleaningInfoHMIPumpStatus", function(){
-		clearInterval(StartHMITimeout);
+		clearTimeout(StartHMITimeout);
 			refreshFilterHMI();	
 	});
 });
@@ -434,7 +426,7 @@ function displayNiveauControlHMI(){
 	.slideDown("slow");
 	
 getXMLDataNiveauControlHMI(function(){
-	clearInterval(StartHMITimeout);
+	clearTimeout(StartHMITimeout);
 	setDeviceButtons(ServerData.GPIOout[2], "#NiveauControlHMIWaterValve", "#NiveauControlHMIStatusWaterValve", function(){
 		setDeviceInfolevel(ServerData.GPIOin[0], "#NiveauControlHMISensor", "#NiveauControlHMIStatusSensor", function(){
 			refreshNiveauControlHMI();
@@ -485,7 +477,7 @@ function displayOperationModeHMI(){
 	.slideDown("slow");
 
 getXMLDataOperationModeHMI(function(){
-	clearInterval(StartHMITimeout);
+	clearTimeout(StartHMITimeout);
 	refreshOperationModeHMI();
 });
 	
@@ -726,12 +718,6 @@ function setDataButtonsStartHMI(callback){
 }
 
 function refreshStartHMI(){
-	StartHMITimeout = setInterval(function(){
-		StartHMI();
-	}, 5000);
-}
-
-function StartHMI(){
 	getServerData(function(){
 		$("#PoolTemp").text(ServerData.PoolTemp.toFixed(1));
 		$("#AirTemp").text(ServerData.AirTemp.toFixed(1));
@@ -740,6 +726,9 @@ function StartHMI(){
 				getXMLDataStartHMI();			
 			});
 		});
+		StartHMITimeout = setTimeout(function(){
+			refreshStartHMI();
+		}, 5000);
 	});
 }
 

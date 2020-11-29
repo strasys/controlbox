@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sensingbox>
 <PT1000>
-	<PT1000Name1>Pool Temperatur</PT1000Name1></PT1000>
+	<PT1000Name1>Becken</PT1000Name1></PT1000>
 <PT1000>
-	<PT1000Name1>Außen-Temp.</PT1000Name1></PT1000>
+	<PT1000Name1>Luft</PT1000Name1></PT1000>
 <PT1000>
-	<PT1000Name1>Solar-Temp.</PT1000Name1></PT1000>
+	<PT1000Name1>Rücklauf</PT1000Name1></PT1000>
 <PT1000>
-	<PT1000Name1>Umlauf-Temp.</PT1000Name1></PT1000>
+	<PT1000Name1>Solar</PT1000Name1></PT1000>
 
 <HUMIDITY>
 	<HUMIDITYname1>Feuchte</HUMIDITYname1>
@@ -61,14 +61,12 @@
 <GPIOOUT><OutputName>Poolbeleuchtung</OutputName></GPIOOUT>
 <GPIOOUT><OutputName>Ausgang 5</OutputName></GPIOOUT>
 <GPIOIN><InputName>Schwimmer</InputName></GPIOIN>
-<GPIOIN><InputName>Eingang 2</InputName></GPIOIN>
-<GPIOIN><InputName>Eingang 3</InputName></GPIOIN>
+<GPIOIN><InputName>Mischer heiz</InputName></GPIOIN>
+<GPIOIN><InputName>Mischer umlauf</InputName></GPIOIN>
 <GPIOIN><InputName>Eingang 4</InputName></GPIOIN>
 <CleaningSetting>
 	<OperationMode>OFF</OperationMode>
 	<tipCleaningTime>0</tipCleaningTime>
-	
-	
 <CleaningInterval><Start>07:00</Start><Stop>09:00</Stop><Periode>2:00</Periode></CleaningInterval><CleaningInterval><Start>12:00</Start><Stop>14:00</Stop><Periode>2:00</Periode></CleaningInterval></CleaningSetting>
 <SolarSetting>
 	<operationMode>OFF</operationMode>
@@ -85,15 +83,15 @@
 </LevelControl>
 <TimerControl>
 	<OutputTimer>
-		<operationMode>OFF</operationMode>
+		<operationMode>AUTO</operationMode>
 		<Number>3</Number>	
 	
 	
-	</OutputTimer>
+	<TimerSetting><Start>18:10</Start><Stop>18:15</Stop><Periode>0:05</Periode></TimerSetting></OutputTimer>
 	<OutputTimer>
 		<operationMode>OFF</operationMode>
 		<Number>4</Number>		
 		
-	<TimerSetting><Start>09:30</Start><Stop>12:00</Stop><Periode>2:30</Periode></TimerSetting></OutputTimer>		
+	</OutputTimer>		
 </TimerControl>
 </sensingbox>

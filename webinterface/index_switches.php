@@ -8,9 +8,7 @@ ini_set('display_startup_errors', 1);
 include_once ('/var/www/privateplc_php.ini.php');
 session_start();
 //include_once ('/var/www/authentification.inc.php');
-include_once ('/var/www/hw_classes/PT1000.inc.php');
 include_once ('/var/www/hw_classes/GPIO.inc.php');
-include_once ('/var/www/hw_classes/HUMIDITY.inc.php');
 
 /* values do be displayed for pool with solar heater
  * PT1000 1 - 4: Becken, Luft, Rücklauf, Solar
@@ -19,19 +17,17 @@ include_once ('/var/www/hw_classes/HUMIDITY.inc.php');
  * Status: Automatikbetrieb - Gesamtanlage 
  * Status: Automatikbetrieb: Filtern, nachspeisen, Solar
  */
-
-	$PT1000ex1 = new PT1000;
-    
-	$PoolTemp = $PT1000ex1->getPT1000round05(0,1);
-	$AirTemp = $PT1000ex1->getPT1000round05(1,1);
-	$BackwaterTemp = $PT1000ex1->getPT1000round05(2,1);
-	$SolarTemp = $PT1000ex1->getPT1000round05(3,1);
 	
 	$GPIOhandler = new GPIO;
-	$GPIOin = $GPIOhandler->getIn();
-	$GPIOout = $GPIOhandler->getOut();
+    //ButtonType = DigiOutput
+	if($_POST["ButtonType"] == 'DigiOutput'){
+	    if($GPIOhandler->getOutSingle($_POST["num"]) != $_POST["newStatus"]){
+	        $GPIOhandler->setOutsingle($_POST["num"], $_POST["newStatus"]);
+	    }
+	}
 
-
+	
+/*	
 	$arr = array (
 	    'PoolTemp' => $PoolTemp,
 		'AirTemp' => $AirTemp,
@@ -41,8 +37,8 @@ include_once ('/var/www/hw_classes/HUMIDITY.inc.php');
 	    'GPIOout' => $GPIOout
 	);
 
-
-	echo json_encode($arr);
+*/
+	echo json_encode($GPIOhandler->getOutSingle($_POST["num"]));
 
 
 ?>

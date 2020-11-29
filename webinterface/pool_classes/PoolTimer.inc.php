@@ -29,11 +29,14 @@ class TimerInterval
 		$NumberOutputTimer = count($xml->TimerControl->OutputTimer);
 		for ($i=0;$i<$NumberOutputTimer;$i++){
 		    $OutputFlag = false;
+		    $OperationFlag = false;
 		    $TOutput = (int) $xml->TimerControl->OutputTimer[$i]->Number[0];
 		    if($xml->TimerControl->OutputTimer[$i]->operationMode[0] == 'OFF'){   
 		        $OutputFlag = false;
+		        $OperationFlag = false;
 		    } else if ($xml->TimerControl->OutputTimer[$i]->operationMode[0] == 'AUTO'){
 		        //get time periodes
+		        $OperationFlag = true;
 		        $NumberTimerSetting = count($xml->TimerControl->OutputTimer[$i]->TimerSetting);
 		        for($j=0;$j<$NumberTimerSetting;$j++){
 		            $TStart = new DateTime($xml->TimerControl->OutputTimer[$i]->TimerSetting[$j]->Start, new DateTimeZone($Timezone));
@@ -52,13 +55,15 @@ class TimerInterval
 		            }
 		        }    
 	       }
-	       switch ($OutputFlag){
-	           case true:
-	               $DIGIclass->setOutsingle($TOutput,1);
-	               break;
-	           case false:
-	               $DIGIclass->setOutsingle($TOutput,0);
-	               break;
+	       if ($OperationFlag){
+	        switch ($OutputFlag){
+	               case true:
+	                   $DIGIclass->setOutsingle($TOutput,1);
+	                   break;
+	               case false:
+	                   $DIGIclass->setOutsingle($TOutput,0);
+	                   break;
+	           }
 	       }
 	   }
 	   

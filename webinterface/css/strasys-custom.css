@@ -126,6 +126,16 @@ body
 	text-align:left;
 }
 
+.databox.info.btn.backbutton {
+	border-radius:3px; 
+	min-width:100%;
+	margin-top: 0px;
+	border-width: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-left: 10px;
+}
+
 
 .nav_active {
 	color: white;
@@ -264,6 +274,23 @@ border-color: #cbd9fb;
   position: relative;
     top: 50%;
     left: 50%;
+}
+
+.loadersmall {
+  border: 4px solid #999999;
+  border-radius: 50%;
+  border-top: 4px solid #ffa00e;
+  border-bottom: 4px solid #2179ff;;
+  width: 20px;
+  height: 20px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 1s linear infinite; 
+}
+
+.loadersmall.pos-rel {
+  position: relative;
+    top: 13px;
+    left: 90%;
 }
 
 @-webkit-keyframes spin {
