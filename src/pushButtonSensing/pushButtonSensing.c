@@ -17,7 +17,7 @@
 
 int getboolRunStop(char *charRunStop){
 	int boolRunStop;
-	char charStop[4], charRun[3];
+	char charStop[5], charRun[4];
 
 	strcpy(charStop,"stop");
 	strcpy(charRun, "run");
@@ -29,11 +29,6 @@ int getboolRunStop(char *charRunStop){
 	else if (strcmp(charRunStop,charRun) == 0)
 	{
 		boolRunStop = 1;
-	}
-	else
-	{
-		fprintf(stderr, "String comparison does not match: %s\n", strerror( errno ));
-		return EXIT_FAILURE;
 	}
 
 	return boolRunStop;
@@ -57,7 +52,8 @@ int getRunStopStatus() {
 	FILE *f = NULL;
 	char DIR_getRunStopStatus[255] = {};
 	char charRunStop[5] = {};
-	char fopenModus[2] = {};
+	char charRunStoptmp[5] = {};
+	char fopenModus[3] = {};
 	int flag = 0, RunStopStatus;
 
 	sprintf(DIR_getRunStopStatus, "/tmp/pushButtonSensingRunStop.txt");
@@ -72,8 +68,8 @@ int getRunStopStatus() {
 
 	if (flag == 0){
 		f = fopen(DIR_getRunStopStatus, fopenModus);
-		fread(charRunStop,sizeof(charRunStop),sizeof(charRunStop),f);
-		sprintf(charRunStop,"%s%s",charRunStop,"\0");
+		fread(charRunStoptmp,sizeof(charRunStoptmp),sizeof(charRunStoptmp),f);
+		sprintf(charRunStop,"%s%s",charRunStoptmp,"\0");
 		fclose(f);
 
 		RunStopStatus = getboolRunStop(charRunStop);
@@ -81,7 +77,7 @@ int getRunStopStatus() {
 	else if(flag == 1){
 		f = fopen(DIR_getRunStopStatus, fopenModus);
 		sprintf(charRunStop, "stop");
-		fwrite(charRunStop,5,5,f);
+		fwrite(charRunStop,1,sizeof(charRunStop),f);
 		fclose(f);
 		RunStopStatus = 0;
 	}
@@ -104,7 +100,7 @@ void setfileown(char *DIR, char *uid_Name, char *gid_Name){
 
 	getinfofile(&filedesc, uidowner, gidowner, fileprotection);
 
-	//	printf("getinfofile call: \n uidowner : %li\n gidowner : %li\n fileprotection : %lo\n", uidowner[0], gidowner[0], fileprotection[0]);
+	//printf("getinfofile call: \n uidowner : %li\n gidowner : %li\n fileprotection : %lo\n", uidowner[0], gidowner[0], fileprotection[0]);
 	strcpy(username, uid_Name);
 	getuidbyname(username, uidresult, gidresult);
 	strcpy(groupname, gid_Name);
@@ -124,11 +120,11 @@ void writeDigiInStatus(char *DigiInStatus) {
 	FILE *f = NULL;
 	char DIR_writeDigiInStatus[255] = {};
 	char InStatus[255] = {};
-	char fopenModus[2] = {};
+	char fopenModus[3] = {};
 	char buffer1[255] = {};
 	int i = 0;
 
-	sprintf(DIR_writeDigiInStatus, "/usr/lib/cgi-bin/pushButtonSensingDigiInStatus.txt");
+	sprintf(DIR_writeDigiInStatus, "/tmp/pushButtonSensingDigiInStatus.txt");
 
 	if (access(DIR_writeDigiInStatus, (R_OK | W_OK)) != -1){
 		sprintf(fopenModus, "r+");
@@ -144,7 +140,7 @@ void writeDigiInStatus(char *DigiInStatus) {
 	sprintf(buffer1,"%s",DigiInStatus);
 
 	f = fopen(DIR_writeDigiInStatus, fopenModus);
-	for (i=0; i<12; i++){
+	for (i=0; i<4; i++){
 		sprintf(InStatus,"IN:%i:%c\n",i,buffer1[i]);
 		fprintf(f,"%s",InStatus);
 	}
@@ -153,11 +149,11 @@ void writeDigiInStatus(char *DigiInStatus) {
 }
 
 int main(int argc, char *argv[], char *env[]){
-	char SensingInput[14] = {};
-	char InputStatusInit[14] = {};
-	char InputStatusNew[14] = {'1','1','1','1','1','1','1','1','1','1','1','1'};
-	char InputStatusOld[14]={'1','1','1','1','1','1','1','1','1','1','1','1'};
-	char InputStatus[14]={'1','1','1','1','1','1','1','1','1','1','1','1'};
+	char SensingInput[6] = {};
+	char InputStatusInit[4] = {};
+	char InputStatusNew[4] = {'1','1','1','1'};
+	char InputStatusOld[4]={'1','1','1','1'};
+	char InputStatus[4]={'1','1','1','1'};
 	int i = 0, runstop = 1, flagWriteDigiInStatus=0, sensingCycleTime;
 
 /*
@@ -168,7 +164,7 @@ int main(int argc, char *argv[], char *env[]){
  */
 	// Check arguments
 
-	for (i=1;i<13;i++){
+	for (i=1;i<6;i++){
 		printf("check argument %i: %c\n",i,argv[i][0]);
 
 		if ((argv[i][0] != '0') && (argv[i][0] != '1')){
@@ -178,14 +174,14 @@ int main(int argc, char *argv[], char *env[]){
 
 	}
 
-		for (i=1;i<13;i++)
+		for (i=1;i<6;i++)
 		{
 			sscanf(argv[i],"%c",&SensingInput[i-1]);
 		}
 
-	if (argv[13]!=0)
+	if (argv[6]!=0)
 	{
-		sensingCycleTime = atoi(argv[13])*1000; //sensing in xx ms
+		sensingCycleTime = atoi(argv[6])*1000; //sensing in xx ms
 	}
 	else
 	{
@@ -196,7 +192,7 @@ int main(int argc, char *argv[], char *env[]){
 	 * Write init status to file.
 	 * This enables other interface processes like php to read the set sensing inputs.
 	 */
-		for (i=0;i<12;i++){
+		for (i=0;i<4;i++){
 			if (SensingInput[i] == '0'){
 				InputStatusInit[i] = 'N';
 			}
@@ -215,12 +211,12 @@ int main(int argc, char *argv[], char *env[]){
 		 * 1 = low signal / 0 = high signal on input
 		 * N = Is the marker that this channel is not considered for sensing.
 		 */
-		for (i=0;i<12;i++)
+		for (i=0;i<4;i++)
 		{
 			if (SensingInput[i] == '1')
 			{
 
-				InputStatusNew[i] =	gpio_get_value(IN_OUT_2[i][0])+'0'; //The 0 is necessary to convert int to char.
+				InputStatusNew[i] =	gpio_get_value(IN_OUT_3[i][0])+'0'; //The 0 is necessary to convert int to char.
 
 			}
 			else

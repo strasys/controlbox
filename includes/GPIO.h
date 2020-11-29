@@ -13,6 +13,7 @@
 
 unsigned int IN_OUT_1[20][2];
 unsigned int IN_OUT_2[40][3];
+unsigned int IN_OUT_3[40][3];
 unsigned int RESET_4D[2];
 unsigned int TX_434MHz[2];
 

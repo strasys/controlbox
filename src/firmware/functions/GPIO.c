@@ -78,9 +78,34 @@ unsigned int IN_OUT_2[][3] = {
 		{ 115, 1, 0},	// P9_27 115 OUTPUT "DIGIOUT_UART1"
 		{ 0, 0, 0} };
 
+/*
+ * Variable naming is based on the add on board design
+ * comments are based on the beaglebone naming.
+ * Definition for: EL-200-010-002 (controlbox)
+ * applicable device tree:
+ */
+//definition: 1 = "out"; 0 = "in"
+//def.matrix: 0 = PortNumber; 1 = Input =0/Output=1; 2 = Initial value of Output pin
+unsigned int IN_OUT_3[][3] = {
+		{ 66, 0,  },	// P8_07 66 INPUT "IN0"
+		{ 67, 0,  },	// P8_08 67 INPUT "IN1"
+		{ 69, 0,  },	// P8_09 69 INPUT "IN2"
+		{ 68, 0,  },	// P8_10 68 INPUT "IN3"
+		{ 45, 1, 0},	// P8_11 45 OUTPUT "OUT0"
+		{ 44, 1, 0},	// P8_12 44 OUTPUT "OUT1"
+		{ 23, 1, 0},	// P8_13 23 OUTPUT "OUT2"
+		{ 26, 1, 0},	// P8_14 26 OUTPUT "OUT3"
+		{ 47, 1, 0},	// P8_15 47 OUTPUT "OUT4"
+		{ 31, 1, 0},	// P9_13 31 OUTPUT "Composer BLUE"
+		{ 51, 1, 0},	// P9_16 51 OUTPUT "Composer RED"
+		{ 50, 1, 0},	// P9_14 50 OUTPUT "Datatransf BLUE"
+		{ 48, 1, 0},	// P9_15 48 OUTPUT "Datatransf RED"
+		{ 0, 0, 0} };
+
 //GPIO gpio;
 /*
  * devicetype:
+ * EL-200-010-002 = 3
  * EL-100-020-001 = 2
  * EL-100-010-001 = 1
  */
@@ -115,6 +140,16 @@ void init_GPIO(int devicetype) {
 				//set value if the pin is an output pin.
 				if (IN_OUT_2[i][1] == 1){
 					gpio_set_value(IN_OUT_2[i][0], IN_OUT_2[i][2]);
+				}
+			}
+			break;
+	case 3:
+			for (i = 0; !IN_OUT_3[i][0] == 0; ++i) {
+				gpio_export(IN_OUT_3[i][0]);
+				gpio_set_direction(IN_OUT_3[i][0], IN_OUT_3[i][1]);
+				//set value if the pin is an output pin.
+				if (IN_OUT_3[i][1] == 1){
+					gpio_set_value(IN_OUT_3[i][0], IN_OUT_3[i][2]);
 				}
 			}
 			break;

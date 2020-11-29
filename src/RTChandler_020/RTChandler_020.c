@@ -49,6 +49,10 @@ int main(int argc, char *argv[], char *env[]) {
 		system(command);
 	}
 
+	if (setget == 'i'){
+		init_RTC(I2C1_path);
+	}
+
 //	if ((setget == 'g')) {
 	if (timedate == 'f') {
 		getFormatForDate(dateTime);

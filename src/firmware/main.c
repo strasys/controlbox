@@ -19,6 +19,7 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <fcntl.h>
+#include <time.h>
 #include "I2C-handler.h"
 #include "RTC_MCP7940N.h"
 #include "GPIO.h"
@@ -30,7 +31,7 @@
 
 void init(void){
 
-	init_GPIO(2);
+	init_GPIO(3);
 	//The mainboard EEPROM must be unbind
 	EEPROMinit(2, 54);
 	/*
@@ -68,7 +69,6 @@ void init(void){
 				//only for debug
 				//printf("extension %i: %i\n", i, extaddrEEPROM[i]);
 			}
-
 }
 
 void getFormatForDate(char * pDateTime) {
@@ -101,9 +101,45 @@ void initRTC(void){
 		init_RTC(I2C1_path);
 		char command[128];
 		char dateTime[13];
-		getFormatForDate(dateTime);
-		sprintf(command,"date -u %s",dateTime);
-		system(command);
+//Read out text file for webAccessStatus
+		FILE *f = NULL;
+		char DIR_getWebAccess[255] = {};
+		char charWebStatus[2] = {};
+			char fopenModus[3] = {};
+			int flag = 0;
+
+			sprintf(DIR_getWebAccess, "/var/www/tmp/webaccessStatus.txt");
+
+			if (access(DIR_getWebAccess, (R_OK | W_OK)) != -1) {
+				sprintf(fopenModus, "r+");
+				flag = 0;
+			}
+
+			if (flag == 0){
+				f = fopen(DIR_getWebAccess, fopenModus);
+				fread(charWebStatus,sizeof(charWebStatus),sizeof(charWebStatus),f);
+				sprintf(charWebStatus,"%s%s",charWebStatus,"\0");
+				fclose(f);
+			}
+		printf("Web status = %s\n", charWebStatus);
+
+		if (strcmp(charWebStatus,"0") == 0){
+			getFormatForDate(dateTime);
+			sprintf(command,"date -u %s",dateTime);
+			system(command);
+		}
+		if (strcmp(charWebStatus,"1") == 0){
+			//set RTC - clock
+			time_t rawtime = time(NULL);
+			struct tm *timeinfo;
+			timeinfo = gmtime(&rawtime);
+			RTC_set_hours(timeinfo->tm_hour,I2C1_path);
+			RTC_set_minutes(timeinfo->tm_min,I2C1_path);
+			RTC_set_seconds(timeinfo->tm_sec,I2C1_path);
+			RTC_set_day(timeinfo->tm_mday,I2C1_path);
+			RTC_set_month(timeinfo->tm_mon+1,I2C1_path);
+			RTC_set_year(timeinfo->tm_year-100,I2C1_path);
+		}
 		//error is not a problem yet!!
 	}
 }
@@ -113,6 +149,7 @@ int main(int argc, char *argv[], char *env[])
 
 		init();
 		initRTC();
+		system("php /var/www/set/data_cloud/PushCloudDataTransferService.php");
 
 	return (0);
 }
