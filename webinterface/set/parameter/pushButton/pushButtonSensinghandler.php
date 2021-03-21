@@ -1,23 +1,37 @@
 <?php 
+error_reporting(E_ALL | E_STRICT);
+// Um die Fehler auch auszugeben, aktivieren wir die Ausgabe
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+//
 include_once ('/var/www/privateplc_php.ini.php');
 session_start();
 include_once ('/var/www/authentification.inc.php');
-unset($getLoginStatus, $setgetComposerStatus, $runstop, $setrunstopStatus);
-$getLoginStatus = $_POST['getLoginStatus'];
-$setgetpushButtonSensingProcessStatus = $_POST['setgetpushButtonSensingProcessStatus'];
-$setrunstopStatus = $_POST['setrunstopStatus'];
-$sensingChannels = $_POST['sensingChannels']; // as an array Attention: Array includes comma values (0,1,1,1) Therefor 0 = 0 but 1 would be ,
-$sensingCycle = $_POST['sensingCycle'];
+include_once ('/var/www/service_classes/pushButtonService.inc.php');
 
-unset($arr);
-$get = "g";
-$set = "s";
+$PushButtonService = new pushButtonSensingService;
 
-if ($getLoginStatus == $get)
-{
-	transfer_javascript($loginstatus, $adminstatus);
+
+if($loginstatus != true){
+    $arr = array(
+        'loginstatus' => $loginstatus,
+        'adminstatus' => $adminstatus
+    );
+    echo json_encode($arr);
+    exit;
+}
+//get Log status
+if(isset($_POST["getLogData"])){
+    if ($_POST["getLogData"] == 'g'){
+        $arr = array(
+            'loginstatus' => $loginstatus,
+            'adminstatus' => $adminstatus
+        );
+        echo json_encode($arr);
+    }
 }
 
+/*
 if ($setgetpushButtonSensingProcessStatus == $get)
 {
 	$statusFile = fopen("/tmp/pushButtonSensingRunStop.txt", "r");

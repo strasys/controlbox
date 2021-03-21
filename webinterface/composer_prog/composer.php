@@ -1,8 +1,8 @@
 <?php 
-//error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL | E_STRICT);
 // Um die Fehler auch auszugeben, aktivieren wir die Ausgabe
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 //
 
 include_once "/var/www/hw_classes/GPIO.inc.php";
@@ -90,8 +90,8 @@ while ($loopstatus){
 	{
 		$PumpFlag = true;
 	}
-
-	/*
+	
+	/* 
 	 * Following block controls the Solar functionality.
 	 */
 	(bool) $SolarMixerFlag = false;

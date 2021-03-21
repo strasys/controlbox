@@ -31,9 +31,9 @@ class Solar
 		$setdiffOFFTemp = (int) $xml->SolarSetting[0]->diffOFFTemp;
 		$setSwitchOFFdelay = (int) $xml->SolarSetting[0]->SwitchOFFdelay;	
 		$setSwitchONdelay = (int) $xml->SolarSetting[0]->SwitchONdelay;		
-		$PoolTemp = $Temp->getPT1000(0);
-		$RoofTemp = $Temp->getPT1000(2);
-		$CyclingTemp = $Temp->getPT1000(3);
+		$PoolTemp = $Temp->getPT1000(0,1);
+		$RoofTemp = $Temp->getPT1000(2,1);
+		$CyclingTemp = $Temp->getPT1000(3,1);
 		
 		//$actualTime = strtoTime($RTC->getstrTimeHHMM()); 
 		$date = new DateTime();

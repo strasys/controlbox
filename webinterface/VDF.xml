@@ -67,7 +67,10 @@
 <CleaningSetting>
 	<OperationMode>OFF</OperationMode>
 	<tipCleaningTime>0</tipCleaningTime>
-<CleaningInterval><Start>07:00</Start><Stop>09:00</Stop><Periode>2:00</Periode></CleaningInterval><CleaningInterval><Start>12:00</Start><Stop>14:00</Stop><Periode>2:00</Periode></CleaningInterval></CleaningSetting>
+	<CleaningInterval><Start>07:00</Start><Stop>09:00</Stop><Periode>2:00</Periode></CleaningInterval>
+	<CleaningInterval><Start>10:00</Start><Stop>11:25</Stop><Periode>1:25</Periode></CleaningInterval>
+	<CleaningInterval><Start>17:00</Start><Stop>20:00</Stop><Periode>3:00</Periode></CleaningInterval>
+</CleaningSetting>
 <SolarSetting>
 	<operationMode>OFF</operationMode>
 	<backWaterTemp>30</backWaterTemp>
@@ -83,11 +86,11 @@
 </LevelControl>
 <TimerControl>
 	<OutputTimer>
-		<operationMode>AUTO</operationMode>
+		<operationMode>OFF</operationMode>
 		<Number>3</Number>	
 	
 	
-	<TimerSetting><Start>18:10</Start><Stop>18:15</Stop><Periode>0:05</Periode></TimerSetting></OutputTimer>
+	</OutputTimer>
 	<OutputTimer>
 		<operationMode>OFF</operationMode>
 		<Number>4</Number>		

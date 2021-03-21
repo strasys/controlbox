@@ -25,22 +25,68 @@ function setgetServer(setget, url, cfunc, senddata){
  * This function get's the login status.
  */
 
-function getStatusLogin(callback1){
+function getloginstatus(callback1){
 		setgetServer("post","pushButtonSensinghandler.php",function()
 		{
 			if (xhttp.readyState==4 && xhttp.status==200)
 			{
-			var getpushButtonSensingLogin = JSON.parse(xhttp.responseText); 
+			var getLogData = JSON.parse(xhttp.responseText); 
+			/*
+			LogData = [
+					(getLogData.loginstatus),
+					(getLogData.adminstatus)
+			                          ];
+			*/
 			
-			LoginStatus = [(getpushButtonSensingLogin.loginstatus),
-			               (getpushButtonSensingLogin.adminstatus)
-			               ];
 				if (callback1){
-				callback1();
+				callback1(getLogData);
 				}
 			}
-		},"getLoginStatus=g");		
+		},"getLogData=g");		
 }
+
+function getXMLData(callback4){
+	setgetrequestServer("GET","/VDF.xml?sortoutcache="+sortoutcache.valueOf(),function(){
+		
+		if (xhttp.readyState==4 && xhttp.status==200){
+			var getXMLData = xhttp.responseXML;
+			//var HUMIDITY = getXMLData.getElementsByTagName("HUMIDITY");
+			var PT1000 = getXMLData.getElementsByTagName("PT1000");
+			var OperationMode = getXMLData.getElementsByTagName("OperationModeDevice");
+			var GPIOOUT = getXMLData.getElementsByTagName("GPIOOUT");
+			//var GPIOUIN = getXMLData.getElementsByTagName("GPIOIN");
+			var CleaningSetting = getXMLData.getElementsByTagName("CleaningSetting");
+			var SolarSetting = getXMLData.getElementsByTagName("SolarSetting");
+			var LevelControl = getXMLData.getElementsByTagName("LevelControl");
+			//var TimerControl = getXMLData.getElementsByTagName("TimerControl");
+			
+			document.getElementById("PoolTempName").innerHTML = PT1000[0].getElementsByTagName("PT1000Name1")[0].childNodes[0].nodeValue;
+			document.getElementById("AirTempName").innerHTML = PT1000[1].getElementsByTagName("PT1000Name1")[0].childNodes[0].nodeValue;
+			//document.getElementById("AirTempName").innerHTML = PT1000[2].getElementsByTagName("PT1000Name1")[0].childNodes[0].nodeValue;
+			//document.getElementById("AirTempName").innerHTML = PT1000[3].getElementsByTagName("PT1000Name1")[0].childNodes[0].nodeValue;
+			//document.getElementById("NameLightButton1").innerHTML = GPIOOUT[0].getElementsByTagName("OutputName")[0].childNodes[0].nodeValue;
+			//document.getElementById("NameLightButton1").innerHTML = GPIOOUT[1].getElementsByTagName("OutputName")[0].childNodes[0].nodeValue;
+			//document.getElementById("NameLightButton1").innerHTML = GPIOOUT[2].getElementsByTagName("OutputName")[0].childNodes[0].nodeValue;
+			document.getElementById("NameLightButton1").innerHTML = GPIOOUT[3].getElementsByTagName("OutputName")[0].childNodes[0].nodeValue;
+			document.getElementById("NameLightButton2").innerHTML = GPIOOUT[4].getElementsByTagName("OutputName")[0].childNodes[0].nodeValue;
+			
+			setFunctionalButtons(CleaningSetting[0].getElementsByTagName("OperationMode")[0].childNodes[0].nodeValue, "#CleaningInfo", "#CleaningInfoStatus", function(){
+				setFunctionalButtons(SolarSetting[0].getElementsByTagName("operationMode")[0].childNodes[0].nodeValue, "#SolarInfo", "#SolarInfoStatus", function(){
+					setFunctionalButtons(LevelControl[0].getElementsByTagName("operationMode")[0].childNodes[0].nodeValue, "#LevelInfo", "#LevelInfoStatus", function(){
+						setFunctionalButtons(OperationMode[0].getElementsByTagName("AutomaticHand")[0].childNodes[0].nodeValue, "#OperationModeInfo", "#OperationModeInfoStatus", function(){
+						});
+					});
+				});
+			});
+		if (callback4){
+			callback4();
+			}
+		}	
+	});
+}
+
+
+
 /* 
  * setgetpushButtonSensingStatus can be used to get the most actual status of the 
  * push Button sensing process:
@@ -266,27 +312,35 @@ window.onload=startatLoad();
 //active site roots.
 //Check if the operater is already loged on the system as admin.
  function loadNavbar(callback1){
-			getStatusLogin(function(){
-				if (LoginStatus[0])
-				{
-					$(document).ready(function(){
-						$("#mainNavbar").load("/navbar.html?ver=2", function(){
-							$("#navbarSet").addClass("active");
-							$("#navbar_set span").toggleClass("nav_notactive nav_active");
-							$("#navbarlogin").hide();
-							$("#navbarSet").show();
-						});
-					});
-				}
-				else
-				{
-					window.location.replace("/index.html");
-				}
-				if (callback1){
-					callback1();
-				}
+			getloginstatus(function(log){
+		if (log.loginstatus)
+		{
+			$(document).ready(function(){
+				$("#mainNavbar").load("/navbar.html?ver=1", function(){
+					$("#navbarFunction").addClass("active");
+					$("#navbar_function span").toggleClass("nav_notactive nav_active")
+					$("#navbarlogin").hide();
+					$("#navbarSet").show();
+					$("#inputhh").prop("disabled", true);
+					$("#showSetTime").show();
+					
+					if (log.loginstatus == false)
+					{
+						$("#navbarSet").hide();
+						$("#showSetTime").hide();
+						$("#navbar_set").hide();
+					}
+				});	
 			});
-		 }
+		}
+		else
+		{
+		window.location.replace("/index.html");
+		}
+		if (callback1){
+			callback1();
+		}
+	});		 }
  /*
   * Refresh status of pushButtonSensing information's.
   */

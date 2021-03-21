@@ -26,13 +26,12 @@ class CleaningInterval
 		$Timezone = (string)($xml->timedate[0]->timezone);
 		$date = new DateTime("now", new DateTimeZone($Timezone));
 		$actualTime = $date->getTimestamp();
-		$NumberNodes = (int) $xml->CleaningInterval->count();
-
+		$NumberNodes = (int) $xml->CleaningSetting[0]->CleaningInterval->count();
 		for ($i=0;$i<$NumberNodes;$i++){
-		    $CStart = new DateTime($xml->CleaningInterval[$i]->Start, new DateTimeZone($Timezone));
-		    $CStart = $TStart->getTimestamp();
-		    $CStop = new DateTime($xml->CleaningInterval[$i]->Stop, new DateTimeZone($Timezone));
-		    $CStop = $TStop->getTimestamp();
+		    $CStart = new DateTime($xml->CleaningSetting[0]->CleaningInterval[$i]->Start, new DateTimeZone($Timezone)); 
+		    $CStart = $CStart->getTimestamp();
+		    $CStop = new DateTime($xml->CleaningSetting[0]->CleaningInterval[$i]->Stop, new DateTimeZone($Timezone));
+		    $CStop = $CStop->getTimestamp();
 			if(($actualTime >= $CStart) && ($actualTime <= $CStop)){
 				$TimeFlag = true;
 				break 1;
