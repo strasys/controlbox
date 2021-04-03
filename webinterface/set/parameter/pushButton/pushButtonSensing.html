@@ -32,115 +32,44 @@
 			<li class="active">Taster Eingänge</li>
 		</ol>
 
-		<div class="panel panel-info">
-			<div class="panel-heading">
-				<h3><b>Einstellungen: Taster Abfrage Funktion</b></h3>
+		<div class="databox info">
+			<div class="page-header">
+				<h3 style="color:#0087e8;"><b> Einstellungen: Taster Abfrage Funktion</b></h3>
 			</div>
 			<div class="panel-body">
-				<div class="row">	
-					<div class = "col-md-6">
-					<div class="panel panel-default">
-					<div class="panel-heading">
-					<h4>Taster Abfrage aktivieren / deaktivieren:</h4>
-					</div>
-						
-						<button class="btn" type="button" id="buttonpushButtonSensingOnOff" onclick="ButtonpushButtonSensingAction(0)" style = "width:100%;">
-							<h4> 
-								<strong>Taster Abfrage</strong>
-								<span class="badge" id="badgebuttonpushButtonSensingScriptOnOff"></span>
-							</h4>
-						</button>
-					</div>	
-					</div>
+				<div class="row">
+					<div class="row">
+						<div class="clo-xs-12 col-sm-6 col-md5" id="PushbuttonOperationmode">
+							<div class="radio">
+	 						<label>
+	      						<input type="radio" id="radioindicatorPushbuttonOFF" name="OptionsRadios" value="stop" onclick="setgetStatusPushButtonservice('set','stop')">
+							<h4><b>stop</b></h4>
+	   						</label>
+							</div>
+							<div class="radio">
+	 						<label>
+	      						<input type="radio" id="radioindicatorPushbuttonON" name="OptionsRadios" value="run" onclick="setgetStatusPushButtonservice('set','run')">
+							<h4><b>run</b></h4>
+							</label>
+							</div>
+						</div>	
+					</div> 	
+					
 					<div class="col-md-6">
-						<div class="panel panel-default">
-						<div class="panel-heading">
-						<h4>Taster Eingang wählen:</h4>
+						<div class="databox info">
+						<div class="page-header">
+							<h3 style="color:#0087e8;"><b> Tastereingänge</b></h3>
 						</div>
-						<div style="margin-left:10px;">
-						<div id="checkboxpushButtonSensing0" class="checkbox">
-						
-		    				<label>
-		      					<input id="inputcheckboxpushButtonSensing0" type="checkbox" style="margin-top: 10px;">
-		      					<h5><p id = "checkboxTextpushButtonSensing0"></p></h5>
-		    				</label>
-		    				
-		 				</div>
-		 				<div id="checkboxpushButtonSensing1" class="checkbox">
-		    				<label>
-		      					<input id="inputcheckboxpushButtonSensing1" type="checkbox" style="margin-top: 10px;">
-		      					<h5><p id = "checkboxTextpushButtonSensing1"></p></h5>
-		    				</label>
-		 				</div>
-		 				<div id="checkboxpushButtonSensing2" class="checkbox">
-		    				<label>
-		      					<input id="inputcheckboxpushButtonSensing2" type="checkbox" style="margin-top: 10px;">
-		      					<h5><p id = "checkboxTextpushButtonSensing2"></p></h5>
-		    				</label>
-		 				</div>
-		 				<div id="checkboxpushButtonSensing3" class="checkbox">
-		    				<label>
-		      					<input id="inputcheckboxpushButtonSensing3" type="checkbox" style="margin-top: 10px;">
-		      					<h5><p id = "checkboxTextpushButtonSensing3"></p></h5>
-		    				</label>
-						</div>
-		 				<div id="checkboxpushButtonSensing4" class="checkbox">
-		    				<label>
-		      					<input id="inputcheckboxpushButtonSensing4" type="checkbox" style="margin-top: 10px;">
-		      					<h5><p id = "checkboxTextpushButtonSensing4"></p></h5>
-		    				</label>
-		 				</div>
-		 				<div id="checkboxpushButtonSensing5" class="checkbox">
-		    				<label>
-		      					<input id="inputcheckboxpushButtonSensing5" type="checkbox" style="margin-top: 10px;">
-		      					<h5><p id = "checkboxTextpushButtonSensing5"></p></h5>
-		    				</label>
-		 				</div>
-		 				<div id="checkboxpushButtonSensing6" class="checkbox">
-		    				<label>
-		      					<input id="inputcheckboxpushButtonSensing6" type="checkbox" style="margin-top: 10px;">
-		      					<h5><p id = "checkboxTextpushButtonSensing6"></p></h5>
-		    				</label>
-		 				</div>
-		 				<div id="checkboxpushButtonSensing7" class="checkbox">
-		    				<label>
-		      					<input id="inputcheckboxpushButtonSensing7" type="checkbox" style="margin-top: 10px;">
-		      					<h5><p id = "checkboxTextpushButtonSensing7"></p></h5>
-		    				</label>
-		 				</div>
-		 				<div id="checkboxpushButtonSensing8" class="checkbox">
-		    				<label>
-		      					<input id="inputcheckboxpushButtonSensing8" type="checkbox" style="margin-top: 10px;">
-		      					<h5><p id = "checkboxTextpushButtonSensing8"></p></h5>
-		    				</label>
-		 				</div>
-		 				<div id="checkboxpushButtonSensing9" class="checkbox">
-		    				<label>
-		      					<input id="inputcheckboxpushButtonSensing9" type="checkbox" style="margin-top: 10px;">
-		      					<h5><p id = "checkboxTextpushButtonSensing9"></p></h5>
-		    				</label>
-		 				</div>
-		 				<div id="checkboxpushButtonSensing10" class="checkbox">
-		    				<label>
-		      					<input id="inputcheckboxpushButtonSensing10" type="checkbox" style="margin-top: 10px;">
-		      					<h5><p id = "checkboxTextpushButtonSensing10"></p></h5>
-		    				</label>
-		 				</div>
-		 				<div id="checkboxpushButtonSensing11" class="checkbox">
-		    				<label>
-		      					<input id="inputcheckboxpushButtonSensing11" type="checkbox" style="margin-top: 10px;">
-		      					<h5><p id = "checkboxTextpushButtonSensing11"></p></h5>
-		    				</label>
-		 				</div>
+						<div id="boxesPushButtonSensing" class="panel-body">
 		 				</div>
 		 				</div>
 		 			</div>
 		 			<div class="col-md-6">
-		 				<div class="panel panel-default">
-						<div class="panel-heading">
-						<h4>Prozess Statusmeldungen:</h4>
+		 				<div class="databox info">
+						<div class="page-header">
+							<h3 style="color:#0087e8;"><b> Status - Push Button</b></h3>
 						</div>
-							<div id="StatusinformationPushButtonSensing">
+							<div id="StatusinformationPushButtonSensing" class="panel-body">
 							</div>
 						</div>
 		 			</div>

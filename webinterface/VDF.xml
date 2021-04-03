@@ -46,6 +46,7 @@
 	<DNSService>run</DNSService>
 	<PushDataCloudService>stop</PushDataCloudService>
 	<indicatorLED>run</indicatorLED>
+	<pushButtonSensing>stop</pushButtonSensing>
 </OperationModeDevice>
 <timedate>
 	<timezone>Europe/Berlin</timezone>
