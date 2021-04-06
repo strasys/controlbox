@@ -82,6 +82,10 @@ if(isset($_POST["setgetStatusPushButtonservice"])){
 		rewind($statusFile);
 		fwrite($statusFile, $_POST["ONOFF"], 5);
 		fclose($statusFile);
+	
+		$cmp = "php /var/www/set/parameter/pushButton/pushButtonTask.php";
+		exec($cmp . " > /dev/null &");
+	
 	/*
 		if ($_POST["ONOFF"] == "run")
 		{

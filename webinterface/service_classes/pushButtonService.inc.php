@@ -15,7 +15,8 @@ class pushButtonSensingService
         if (!file_exists($statusFileDir))
         {
             $statusFile = fopen($statusFileDir, "w");
-            
+           // exec("chown www-data:root /var/www/tmp/pushButtonSensingDigiInStatus.txt");
+           // exec("chmod g+w /var/www/tmp/pushButtonSensingDigiInStatus.txt");
             $xml=simplexml_load_file("/var/www/VDF.xml") or die("Error: Cannot create object");
             $numGPIOIN = $xml->GPIOIN->count();
            
@@ -53,7 +54,7 @@ class pushButtonSensingService
         if (!file_exists($statusFileDir))
         {
             $statusFile = fopen($statusFileDir, "w");
-            
+            //exec("chown www-data:root /var/www/tmp/pushButtonSensingDigiInStatus.txt");
             $xml=simplexml_load_file("/var/www/VDF.xml") or die("Error: Cannot create object");
             $numGPIOIN = $xml->GPIOIN->count();
             
@@ -79,7 +80,32 @@ class pushButtonSensingService
         
         return $onlyStatusFile_arr;
     }
-	
+    
+    function getrunstopStatus(){
+        $statusFileDir = "/var/www/tmp/pushButtonSensingRunStop.txt";
+        if (!file_exists($statusFileDir))
+        {
+            $statusFile = fopen($statusFileDir, "w");
+            fwrite($statusFile, "stop");
+            fclose($statusFile);
+            $xml=simplexml_load_file("/var/www/VDF.xml") or die("Error: Cannot create object");
+            $xml->OperationModeDevice[0]->pushButtonSensing = $statusWord;
+            $xml->asXML("/var/www/VDF.xml");
+        }
+        
+            $statusFile = fopen($statusFileDir, "r");
+            $statusWord = trim(fgets($statusFile, 5));
+            fclose($statusFile);
+        
+        if($statusWord == 'run'){
+            $boolStatus = true;
+        } else if ($statusWord == 'stop'){
+            $boolStatus = false;
+        }
+        
+        return $boolStatus;         
+    }
+    
 	//get Inputs set for push button sensing and status
 	//1 = set for sensing
 	//0 = not set for sensing

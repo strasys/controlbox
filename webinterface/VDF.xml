@@ -46,7 +46,7 @@
 	<DNSService>run</DNSService>
 	<PushDataCloudService>stop</PushDataCloudService>
 	<indicatorLED>run</indicatorLED>
-	<pushButtonSensing>stop</pushButtonSensing>
+	<pushButtonSensing>run</pushButtonSensing>
 </OperationModeDevice>
 <timedate>
 	<timezone>Europe/Berlin</timezone>
@@ -68,7 +68,7 @@
 <CleaningSetting>
 	<OperationMode>OFF</OperationMode>
 	<tipCleaningTime>0</tipCleaningTime>
-	<CleaningInterval><Start>07:00</Start><Stop>09:00</Stop><Periode>2:00</Periode></CleaningInterval>
+	
 	<CleaningInterval><Start>10:00</Start><Stop>11:25</Stop><Periode>1:25</Periode></CleaningInterval>
 	<CleaningInterval><Start>17:00</Start><Stop>20:00</Stop><Periode>3:00</Periode></CleaningInterval>
 </CleaningSetting>
