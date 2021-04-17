@@ -88,6 +88,8 @@ void getinfofile(int *filedescr, long int *uidowner, long int *gidowner, long in
 
 struct stat buf;
 
+	printf("filedescr: %i\n",*filedescr);
+
 if (fstat(*filedescr, &buf) == -1)
 	{
 	fprintf(stderr, "getinfofile %s\n", strerror(errno));
@@ -96,6 +98,6 @@ if (fstat(*filedescr, &buf) == -1)
 	uidowner[0] = buf.st_uid;
 	gidowner[0] = buf.st_gid;
 	fileprotection[0] = buf.st_mode;
-//	printf ("uidowner : %li\n gidowner : %li\n fileportection %lo \n", uidowner[0], gidowner[0],  fileprotection[0]);
+	//printf ("uidowner : %li\n gidowner : %li\n fileportection %lo \n", uidowner[0], gidowner[0],  fileprotection[0]);
 }
 
