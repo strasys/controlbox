@@ -39,7 +39,7 @@
 			<div class="panel-body">
 				<div class="row">
 					<div class="row">
-						<div class="clo-xs-12 col-sm-6 col-md5" id="PushbuttonOperationmode">
+						<div class="clo-xs-12 col-sm-6 col-md-6" id="PushbuttonOperationmode">
 							<div class="radio">
 	 						<label>
 	      						<input type="radio" id="radioindicatorPushbuttonOFF" name="OptionsRadios" value="stop" onclick="setgetStatusPushButtonservice('set','stop')">
@@ -52,26 +52,33 @@
 							<h4><b>run</b></h4>
 							</label>
 							</div>
-						</div>	
-					</div> 	
-					
-					<div class="col-md-6">
-						<div class="databox info">
-						<div class="page-header">
-							<h3 style="color:#0087e8;"><b> Tastereingänge</b></h3>
 						</div>
-						<div id="boxesPushButtonSensing" class="panel-body">
-		 				</div>
-		 				</div>
-		 			</div>
-		 			<div class="col-md-6">
-		 				<div class="databox info">
-						<div class="page-header">
-							<h3 style="color:#0087e8;"><b> Status - Push Button</b></h3>
-						</div>
-							<div id="StatusinformationPushButtonSensing" class="panel-body">
+						<div class="clo-xs-12 col-sm-6 col-md-6">
+							<div class="input-group">
+								<span class='input-group-addon'>loop cycle time [ms]</span>
+								<select id='pushButtonloopCycle' class='form-control' style="width:50px;"></select>	
 							</div>
 						</div>
+					</div>
+					<div class="row">
+						<div class="clo-xs-12 col-md-6">
+							<div class="databox info">
+							<div class="page-header">
+								<h3 style="color:#0087e8;"><b> Tastereingänge</b></h3>
+							</div>
+							<div id="boxesPushButtonSensing" class="panel-body">
+			 				</div>
+			 				</div>
+			 			</div>
+			 			<div class="clo-xs-12 col-md-6">
+			 				<div class="databox info">
+							<div class="page-header">
+								<h3 style="color:#0087e8;"><b> Status - Push Button</b></h3>
+							</div>
+								<div id="StatusinformationPushButtonSensing" class="panel-body">
+								</div>
+							</div>
+			 			</div>
 		 			</div>
 				</div>		
 			</div>

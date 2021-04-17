@@ -148,7 +148,7 @@ function displayStartHMI(callback){
 			"</div>"+	
 		"</div>"
 	)
-	.slideDown("slow");
+	.slideDown("");
 
 $("#CleaningInfo").click(function(){
 	$("#panelhome")

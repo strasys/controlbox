@@ -83,18 +83,16 @@ if(isset($_POST["setgetStatusPushButtonservice"])){
 		fwrite($statusFile, $_POST["ONOFF"], 5);
 		fclose($statusFile);
 	
-		$cmp = "php /var/www/set/parameter/pushButton/pushButtonTask.php";
-		exec($cmp . " > /dev/null &");
-	
-	/*
+		
 		if ($_POST["ONOFF"] == "run")
 		{
-			$sensing = explode(",",$sensingChannels,12);
-			$cmd = " /usr/lib/cgi-bin/pushButtonSensing $sensing[0] $sensing[1] $sensing[2] $sensing[3] $sensing[4] $sensing[5] $sensing[6] $sensing[7] $sensing[8] $sensing[9] $sensing[10] $sensing[11]"; 
-			exec($cmd . " > /dev/null &");
+		    $cma = "php /var/www/set/parameter/pushButton/pushButtonTask.php";
+		    exec($cma . " > /dev/null &");
+		    
+			$cmb = " /usr/lib/cgi-bin/Button_Sensing ". $_POST['loopcycle']; 
+			exec($cmb . " > /dev/null &");
 		}
-	*/
-
+	
 		$xml=simplexml_load_file("/var/www/VDF.xml") or die("Error: Cannot create object");
 		$xml->OperationModeDevice[0]->pushButtonSensing = $_POST["ONOFF"];
 		$xml->asXML("/var/www/VDF.xml");

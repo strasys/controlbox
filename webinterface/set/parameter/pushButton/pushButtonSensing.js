@@ -120,7 +120,10 @@ function PushButtonCheckboxEvent(GPIONum){
 		},"PushButtonStatus=set&GPIONum="+GPIONum+"&CheckboxStatus="+checkboxStatus);
 }
 
-function setgetStatusPushButtonservice(keyword,ONOFF, callback){
+function setgetStatusPushButtonservice(keyword,ONOFF,callback){
+	
+		var loopcycle = $("#pushButtonloopCycle").val();
+
 	setgetServer("post","pushButtonSensing.php",function()
 		{
 			if (xhttp.readyState==4 && xhttp.status==200)
@@ -136,16 +139,31 @@ function setgetStatusPushButtonservice(keyword,ONOFF, callback){
 				}
 				 
 			}
-		},"setgetStatusPushButtonservice="+keyword+"&ONOFF="+ONOFF);
+		},"setgetStatusPushButtonservice="+keyword+"&ONOFF="+ONOFF+"&loopcycle="+loopcycle);
 }
 
+function setSelectLoopCycle(callback){
+		for(x=0;x<15;x++){
+			var y = document.getElementById("pushButtonloopCycle");
+			var option1 = document.createElement("option");
+			option1.text = 10*x+10;
+			y.options.add(option1);
+		}
+		$("#pushButtonloopCycle").val(80);
+	
+	if (callback){
+		callback();
+	}
+}
 
 // load functions at web page opening
 function startatLoad(){
 	loadNavbar(function(){
 		getStatusPushButtonSet(function(StatusPushButtonSet){
 			getNamingXMLData(StatusPushButtonSet, function(){
-				setgetStatusPushButtonservice('get');
+				setSelectLoopCycle(function(){
+					setgetStatusPushButtonservice('get');
+				});	
 			});
 		});	
 	});

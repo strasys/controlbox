@@ -20,6 +20,9 @@ if($pushButtonService->getrunstopStatus()){
 */
 
 while($pushButtonService->getrunstopStatus()){
+    
+    set_time_limit(5); //Set to 5 seconds.
+    
     $arrSensingStatus = array();
     $arrSensingStatus =  $pushButtonService->GetSensing();
     
@@ -35,6 +38,8 @@ while($pushButtonService->getrunstopStatus()){
         
         $pushButtonService->SetSensing(2, '0');
     }
+    
+    usleep(150000); //Time set in µs!
     
 }
 

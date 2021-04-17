@@ -87,7 +87,7 @@
 </LevelControl>
 <TimerControl>
 	<OutputTimer>
-		<operationMode>OFF</operationMode>
+		<operationMode>AUTO</operationMode>
 		<Number>3</Number>	
 	
 	
