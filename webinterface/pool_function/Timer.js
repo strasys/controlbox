@@ -241,13 +241,13 @@ function displaySetTimer(callback){
 		    						"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
 										"<div id='divStartTime"+OutputNumber+""+(j-4)/3+"' style='padding-top:20px; max-width:160px;' class = 'input-group'>"+
 											"<span class='input-group-addon'>Ein "+(1+(j-4)/3)+"</span>"+
-											"<select id='StartTime"+OutputNumber+""+(j-4)/3+"' class='form-control' onchange='checkNewTimeset("+(j-4)/3+", "+OutputNumber+")'></select>"+
+											"<input id='StartTime"+OutputNumber+""+(j-4)/3+"' class='form-control' type='time' onchange='checkNewTimeset("+(j-4)/3+", "+OutputNumber+")'></input>"+
 										"</div>"+
 									"</div>"+
 									"<div id='divStopTime"+OutputNumber+""+(j-4)/3+"' class= 'col-xs-12 col-sm-3 col-lg-3'>"+
 										"<div style='padding-top:20px; max-width:160px;' class = 'input-group'>"+
 											"<span class='input-group-addon'>Aus "+(1+(j-4)/3)+"</span>"+
-											"<select id='StopTime"+OutputNumber+""+(j-4)/3+"' class='form-control' onchange='checkNewTimeset("+(j-4)/3+", "+OutputNumber+")'></select>"+
+											"<input id='StopTime"+OutputNumber+""+(j-4)/3+"' class='form-control' type='time' onchange='checkNewTimeset("+(j-4)/3+", "+OutputNumber+")'></input>"+
 										"</div>"+ 
 									"</div>"+
 									"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
@@ -265,7 +265,7 @@ function displaySetTimer(callback){
 								"</div>"+
 							"</div>"
 							);
-							
+	/*						
 					for(k=0;k<24;k++){
 						for(x=0;x<60;x=x+5){
 							var y = document.getElementById("StopTime"+OutputNumber+""+(j-4)/3);
@@ -282,7 +282,7 @@ function displaySetTimer(callback){
 							y.options.add(option1);
 						}
 					}
-					
+	*/				
 					$("#StartTime"+OutputNumber+""+(j-4)/3)
 														.val(arrOutputTimerall[i][j])
 														.prop("disabled", true)
@@ -354,13 +354,13 @@ if(radioValueChecked != undefined){
     						"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
 								"<div id='divStartTime"+OutputNumber+"0' style='padding-top:20px; max-width:140px;' class = 'input-group'>"+
 									"<span class='input-group-addon'>Ein 1</span>"+
-									"<select id='StartTime"+OutputNumber+"0' class='form-control' onchange='checkNewTimeset(0, "+OutputNumber+")'></select>"+
+									"<input id='StartTime"+OutputNumber+"0' class='form-control' type='time' onchange='checkNewTimeset(0, "+OutputNumber+")'></input>"+
 								"</div>"+
 							"</div>"+
 							"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
 								"<div id='divStopTime"+OutputNumber+"0'style='padding-top:20px; max-width:140px;' class = 'input-group'>"+
 									"<span class='input-group-addon'>Aus 1</span>"+
-									"<select id='StopTime"+OutputNumber+"0' class='form-control' onchange='checkNewTimeset(0, "+OutputNumber+")'></select>"+
+									"<input id='StopTime"+OutputNumber+"0' class='form-control' type='time' onchange='checkNewTimeset(0, "+OutputNumber+")'></input>"+
 								"</div>"+
 							"</div>"+
 							"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
@@ -397,12 +397,14 @@ if(radioValueChecked != undefined){
 		$("#TimerSetforOutput input[value="+OutputNumber+"]").attr("checked", false);
 	$("#TimerSetforOutput input[value="+OutputNumber+"]").attr("disabled", true);
 	*/
+/*
 	$("#TimerSetforOutput input[value="+OutputNumber+"]").remove();
 	setSelectTime(startTime,function(){
 		setSelectTime(stopTime,function(){
 			
 		});
 	});
+*/
 }
 });
 
@@ -426,11 +428,16 @@ $("input:radio").change(function(){
 
 }
 
-function checkNewTimeset(Number, OutputNumber){
-	var StartTime = $("#StartTime"+OutputNumber+""+Number).val();
+function checkNewTimeset(Number, OutputNumber, callback){
+var StartTime = $("#StartTime"+OutputNumber+""+Number).val();
 	var StopTime = $("#StopTime"+OutputNumber+""+Number).val();
-	StartTime = Date.parse("1 1 2020 "+StartTime);
-	StopTime = Date.parse("1 1 2020 "+StopTime);
+	
+	StartTime = new Date(2020,0,1,StartTime.split(":")[0],StartTime.split(":")[1]).getTime()/1000;
+	StopTime = new Date(2020,0,1,StopTime.split(":")[0],StopTime.split(":")[1]).getTime()/1000;
+	
+	//StartTime = Date.parse("1 1 2020 "+StartTime);
+	//StopTime = Date.parse("1 1 2020 "+StopTime);
+	
 	//finde Array for OutputNumber
 	/* arrOutputTimer
 		*	0: "3"
@@ -442,7 +449,6 @@ function checkNewTimeset(Number, OutputNumber){
 			6: "01:00"
 	*/
 	
-
 	for(i=0;i<arrOutputTimerall.length;i++){
 		if(arrOutputTimerall[i][0] == OutputNumber){
 		var arrNum = i;
@@ -459,18 +465,19 @@ function checkNewTimeset(Number, OutputNumber){
 		var StartIndex = undefined;
 		for (j=4;j<arrSize;j=j+3){
 			//Finde between which Array Elements Start is positioned and if collapses with another
-			var Startn = Date.parse("1 1 2020 "+arrOutputTimerall[arrNum][j]);
+			var Startn = new Date(2020,0,1,arrOutputTimerall[arrNum][j].split(":")[0],arrOutputTimerall[arrNum][j].split(":")[1]).getTime()/1000;
 			if(StartTime < Startn){
 				//StartIndex = Array element (Start-Stop) is greater than StartTime
 				StartIndex = j;
 				break;
 			}
 		}
+		
 		//Rand Funktion 
-		var firstStartTime = Date.parse("1 1 2020 "+arrOutputTimerall[arrNum][4]);
-		var lastStopTime = Date.parse("1 1 2020 "+arrOutputTimerall[arrNum][arrSize-2]);
-		var lastStartTime = Date.parse("1 1 2020 "+arrOutputTimerall[arrNum][arrSize-3]);
-		if (StartIndex == 4){
+		var firstStartTime = new Date(2020,0,1,arrOutputTimerall[arrNum][4].split(":")[0],arrOutputTimerall[arrNum][4].split(":")[1]).getTime()/1000;
+		var lastStopTime = new Date(2020,0,1,arrOutputTimerall[arrNum][arrSize-2].split(":")[0],arrOutputTimerall[arrNum][arrSize-2].split(":")[1]).getTime()/1000;
+		var lastStartTime = new Date(2020,0,1,arrOutputTimerall[arrNum][arrSize-3].split(":")[0],arrOutputTimerall[arrNum][arrSize-3].split(":")[1]).getTime()/1000;
+		if (StartIndex == 2){
 			if(firstStartTime > StartTime){
 					startFlag = true;
 				} else {
@@ -493,14 +500,15 @@ function checkNewTimeset(Number, OutputNumber){
 			}
 		}
 		
-		if (StartIndex > 4){
-			var StopTimecomp = Date.parse("1 1 2020 "+arrOutputTimerall[arrNum][StartIndex-2]);
+		if (StartIndex > 2){
+			var StopTimecomp = new Date(2020,0,1,arrOutputTimerall[StartIndex-2].split(":")[0],arrOutputTimerall[StartIndex-2].split(":")[1]).getTime()/1000;
 			if(StartTime > StopTimecomp){
 				startFlag = true;
 			} else {
 				startFlag = false;
 			}
 		}
+		
 //check stop
 		if (startFlag){
 			//Ausnahme z.B.: 23:00 bis 08:00
@@ -516,12 +524,14 @@ function checkNewTimeset(Number, OutputNumber){
 			}
 			
 			if(StartIndex >= 4){
-				if(StopTime > StartTime && StopTime < Date.parse("1 1 2020 "+arrOutputTimerall[arrNum][StartIndex])){
+				var tempTime = new Date(2020,0,1,arrOutputTimerall[StartIndex].split(":")[0],arrOutputTimerall[StartIndex].split(":")[1]).getTime()/1000;
+				if(StopTime > StartTime && StopTime < tempTime)
+				 {
 					stopFlag = true;
 				}
-			}
-			
+			}		
 		}
+		
 	} else {
 		if (StartTime != StopTime){
 			startFlag = true;
@@ -549,26 +559,30 @@ function checkNewTimeset(Number, OutputNumber){
 				$("#divStopTime"+OutputNumber+""+Number).addClass("has-error");
 		}
 
-	
+
 	if (startFlag && stopFlag){
 		if (StartTime < StopTime){
 			var timePeriode = StopTime - StartTime;
-			var hours = Math.floor(timePeriode / 3600000);
-			var minutes = "0"+(timePeriode - hours*3600000)/60000;
+			var hours = Math.floor(timePeriode / 3600);
+			var minutes = "0"+(timePeriode - hours*3600)/60;
 		} else if(StopTime < StartTime){
-			var time24_00 = Date.parse("1 1 2020 24:00");
-			var time00_00 = Date.parse("1 1 2020 00:00");
+			var time24_00 = new Date(2020,0,1,24,00).getTime()/1000;
+			var time00_00 = new Date(2020,0,1,00,00).getTime()/1000;
 			var timePeriodeto24 = time24_00 - StartTime;
 			var timePeriodefrom00 = StopTime - time00_00;
 			var timePeriode = timePeriodeto24 + timePeriodefrom00;
-			var hours = Math.floor(timePeriode/3600000);
-			var minutes = "0"+(timePeriode - hours*3600000)/60000; 
+			var hours = Math.floor(timePeriode/3600);
+			var minutes = "0"+(timePeriode - hours*3600)/60; 
 		}
 
 		$("#buttonsetNewTimeperiode"+OutputNumber+""+Number).attr("disabled", false);
 		$("#TimePeriode"+OutputNumber+""+Number).text(hours+":"+minutes.substr(-2));
 	} else {
 		$("#buttonsetNewTimeperiode"+OutputNumber+""+Number).attr("disabled", true);
+	}
+	
+	if(callback){
+		callback(startFlag, stopFlag);
 	}
 }
 
@@ -603,7 +617,7 @@ function changeSelectedTimeinterval(OutputNumber, Number){
 }
 
 // Write new time Interval to XML - file.
-function setNewTimeperiode(Number,OutputNumber){
+function setNewTimeperiode(Number,OutputNumber,callback){
 	var StartTime = $("#StartTime"+OutputNumber+""+Number).val();
 	var StopTime = $("#StopTime"+OutputNumber+""+Number).val();
 	var timePeriode = $("#TimePeriode"+OutputNumber+Number).text();
@@ -661,13 +675,13 @@ $("#buttonTimerAdd"+OutputNumber+""+Number).attr("disabled",true);
 		    						"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
 										"<div id='divStartTime"+OutputNumber+"t' style='padding-top:20px; max-width:160px;' class = 'input-group'>"+
 											"<span class='input-group-addon'>Ein</span>"+
-											"<select id='StartTime"+OutputNumber+"t' class='form-control' onchange='checkNewTimeset(\"t\", "+OutputNumber+")'></select>"+
+											"<input id='StartTime"+OutputNumber+"t' class='form-control' type='time' onchange='checkNewTimeset(\"t\", "+OutputNumber+")'></input>"+
 										"</div>"+
 									"</div>"+
 									"<div id='divStopTime"+OutputNumber+"t' class= 'col-xs-12 col-sm-3 col-lg-3'>"+
 										"<div style='padding-top:20px; max-width:160px;' class = 'input-group'>"+
 											"<span class='input-group-addon'>Aus </span>"+
-											"<select id='StopTime"+OutputNumber+"t' class='form-control' onchange='checkNewTimeset(\"t\", "+OutputNumber+")'></select>"+
+											"<input id='StopTime"+OutputNumber+"t' class='form-control' type='time' onchange='checkNewTimeset(\"t\", "+OutputNumber+")'></input>"+
 										"</div>"+ 
 									"</div>"+
 									"<div class= 'col-xs-12 col-sm-3 col-lg-3'>"+
@@ -684,7 +698,7 @@ $("#buttonTimerAdd"+OutputNumber+""+Number).attr("disabled",true);
 								"</div>"+
 							"</div>"
 							);
-							
+				/*			
 					for(k=0;k<24;k++){
 						for(x=0;x<60;x=x+5){
 							var y = document.getElementById("StopTime"+OutputNumber+"t");
@@ -701,7 +715,7 @@ $("#buttonTimerAdd"+OutputNumber+""+Number).attr("disabled",true);
 							y.options.add(option1);
 						}
 					}
-				
+		*/		
 }
 
 //Save Timeperiode and refresh table

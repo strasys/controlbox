@@ -35,9 +35,9 @@ function getXMLData()
 				$data_split_array[$variable_array[$s]] = trim($string_parts[$s]);
 			} else {
 				//set inital timestamp
-				$date = new DateTime();
+				//$date = new DateTime();
 				//$_SERVER['REQUEST_TIME'];
-				$timestamp = $date->getTimestamp();
+				$timestamp = time()-100*60;
 				$data_split_array[$variable_array[$s]] = $timestamp;
 			}
 		}
@@ -107,6 +107,37 @@ function getDatatoSend($type, $ext, $metering_ID, $time_interval, $unit, $factor
 	}
 
 	return $metering_array;
+}
+
+function SendDataControlbox($Data_array){
+    
+    $send_var_array = array("productID", "meteringID", "value_metering", "time_stamp", "unit");
+    
+    //$Num_Data = sizeof($Data_array);
+    //echo "Num_Data = ".$Num_Data;
+    $data_string="";
+    
+    for($i=0;$i<5;$i++){
+            $data_string = $data_string.$send_var_array[$i].'='.$Data_array[$i].'&';
+    }
+   //echo $data_string."<br>";
+   
+    $trimmed = rtrim($data_string, '&');
+    
+    $username = 'johannes';
+    $userpasswd = 'key4StJo2403!';
+    //sudo apt-get install php5-curl => needed
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'https://test.wistcon.at/data/dataCloudhandlerControlbox.php');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $trimmed);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_USERPWD, $username.":".$userpasswd);
+    $return = curl_exec($ch);  
+    curl_close($ch);
+    return $return;
 }
 
 function SendData($Data_array){

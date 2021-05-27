@@ -1,9 +1,9 @@
 <?php
 // Gibt an welche PHP-Fehler �berhaupt angezeigt werden
-//error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL | E_STRICT);
 // Um die Fehler auch auszugeben, aktivieren wir die Ausgabe
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 // Da man in einem Produktivsystem �blicherweise keine Fehler ausgeben
 // will sondern sie nur mitloggen will, bietet es sich an dort die
 // Ausgabe der Fehler zu deaktivieren und sie stattdessen in ein Log-File
@@ -33,11 +33,6 @@ while ($loopstatus){
 
 	set_time_limit(10);
 
-	$t = 0;
-	$I2C_error_humidity = -1;
-	$I2C_error_temp = -1;
-	$transfer = array();
-
 	for($i=0;$i<$NumberofDatasets;$i++){
 		//SendData array = DeviceID, metering_ID, value_metering, timestamp, unit 
 		$SendData = $DataCloudClass->getDatatoSend($FetchXMLData[$i]['type'],
@@ -49,47 +44,20 @@ while ($loopstatus){
 			$FetchXMLData[$i]['timestamp'],
 			$DeviceID
 		);
-
-		if($SendData != NULL){
-			$transfer[$t] = $SendData;
-			switch ($t) {
-				case 0:
-					if ($transfer[0][2] > 1){
-						$I2C_error_humidity = 1;
-					}
-					break;
-				case 1:
-					if ($transfer[1][2] > -40){
-						$I2C_error_temp = 1;
-					}
-			}
-			$t+=1;
+		if ($SendData != NULL){
+		    //print_r($SendData);
+		    //if ($I2C_error_humidity == 1 && $I2C_error_temp == 1){
+		    //set timestamp to calculate next push ivent
+		    $return = $DataCloudClass->SendDataControlbox($SendData);
+		    $return_arr = $DataCloudClass->DatabaseSendData_return($return);
+		    $DataCloudClass->XMLDataWriteSendStatus($return_arr['database_write']);
+		    $FetchXMLData[$i]['timestamp'] = time();			
 		}
 	}
-
-		if ($transfer != NULL){
-			if ($I2C_error_humidity == 1 && $I2C_error_temp == 1){
-				//set timestamp to calculate next push ivent
-				$FetchXMLData[0]["timestamp"] = time();
-				$FetchXMLData[1]["timestamp"] = time();
-				$return = $DataCloudClass->SendData($transfer);
-				$return_arr = $DataCloudClass->DatabaseSendData_return($return);
-				$DataCloudClass->XMLDataWriteSendStatus($return_arr['database_write']);
-			}
-		}
-	
-/*	print_r($transfer);
-	ob_flush();
-        flush();
  
- */
+
 	sleep(5);
 
 }
-/*
-	print_r($transfer);
-	ob_flush();
-        flush();
- */
 ?>
 
