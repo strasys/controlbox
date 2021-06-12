@@ -96,3 +96,7 @@ $("#indicatorLEDService").on('click', function(){
 	window.location = "/set/parameter/indicator_LED/indicatorLEDService.html?ver=0";
 });
 
+$("#FIFOPufferingSetup").on('click', function(){
+	window.location = "/set/parameter/FIFOPuffering/FIFOPuffering.html?ver=0";
+});
+

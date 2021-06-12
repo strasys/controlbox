@@ -39,14 +39,10 @@ $loopstatus = true;
  * Ausgang 4 und weitere nicht relevant für Steuerung
  */
 
-$OUT = array (	
-        0 => 0,
-		1 => 0,
-		2 => 0,
-		3 => 0
-);
-
-$DIGI->setOut($OUT);
+$DIGI->setOutsingle(0,0);
+$DIGI->setOutsingle(1,0);
+$DIGI->setOutsingle(2,0);
+$DIGI->setOutsingle(3,0);
 
 /*
  * Set RUN LED blue to on and red to off
@@ -70,7 +66,7 @@ while ($loopstatus){
 	 * Without setting a time limit the loop will stop after a while.
 	 *Further this function should secure the run of the system.
 	 */
-	set_time_limit(5); //Set to 5 seconds.
+	set_time_limit(0); //Set to 5 seconds.
     
 	/*
 	 * Timer for Outputs like (pool lightning, fontaines, etc.)
@@ -124,7 +120,7 @@ while ($loopstatus){
 	}
 
 	/*
-	 * Watter level control function
+	 * Water level control function
 	 */
 	(bool) $WatterValveON = false;
 	if ($Niveau->getNiveauFlag() && $Niveau->getopModeFlag())
@@ -171,13 +167,10 @@ while ($loopstatus){
 	
 	if ($loopstatus == false)
 	{
-		$OUT = array (	
-		        0 => 0,
-				1 => 0,
-				2 => 0,
-				3 => 0
-		);
-		$DIGI->setOut($OUT);
+	    $DIGI->setOutsingle(0,0);
+	    $DIGI->setOutsingle(1,0);
+	    $DIGI->setOutsingle(2,0);
+	    $DIGI->setOutsingle(3,0);
 //indicator light switch of blue (5) and switch on red (6)
 		$DIGI->setOutsingle(5,0);
 		$DIGI->setOutsingle(6,1);

@@ -21,6 +21,10 @@ class TimerInterval
 	{	
 	    $DIGIclass = new GPIO();
 	    $xml = simplexml_load_file("/var/www/VDF.xml");
+	    if($xml == false){
+	        usleep(100000);
+	        $xml = simplexml_load_file("/var/www/VDF.xml");
+	    }
 		//get set timezone
 		$Timezone = (string)($xml->timedate[0]->timezone);
 		$date = new DateTime("now", new DateTimeZone($Timezone));
@@ -33,7 +37,7 @@ class TimerInterval
 		    $TOutput = (int) $xml->TimerControl->OutputTimer[$i]->Number[0];
 		    if($xml->TimerControl->OutputTimer[$i]->operationMode[0] == 'OFF'){   
 		        $OutputFlag = false;
-		        $OperationFlag = false;
+		        $OperationFlag = true;
 		    } else if ($xml->TimerControl->OutputTimer[$i]->operationMode[0] == 'AUTO'){
 		        //get time periodes
 		        $OperationFlag = true;
@@ -48,7 +52,7 @@ class TimerInterval
 		                if(($actualTime >= $TStart) || ($actualTime <= $TStop)){
 		                    $OutputFlag = true;
 		                }
-		            } else if ($TStop > $TStart){
+		            } elseif ($TStop > $TStart){
 		                if(($actualTime >= $TStart) && ($actualTime <= $TStop)){
 		                    $OutputFlag = true;
 		                }

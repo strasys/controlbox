@@ -17,10 +17,15 @@ class CleaningInterval
 	 */
 	function getTimeFlag()
 	{
-				
-		$xml = simplexml_load_file("/var/www/VDF.xml");
+	    
+	    (bool) $TimeFlag = false;
+	    
+	    $xml = simplexml_load_file("/var/www/VDF.xml");
+	    if ($xml == false){
+	        usleep(100000);
+	        $xml = simplexml_load_file("/var/www/VDF.xml");
+	    }
 		
-		(bool) $TimeFlag = false;
 		//$RTC = new RTC();
 		//get set timezone
 		$Timezone = (string)($xml->timedate[0]->timezone);
@@ -32,10 +37,15 @@ class CleaningInterval
 		    $CStart = $CStart->getTimestamp();
 		    $CStop = new DateTime($xml->CleaningSetting[0]->CleaningInterval[$i]->Stop, new DateTimeZone($Timezone));
 		    $CStop = $CStop->getTimestamp();
-			if(($actualTime >= $CStart) && ($actualTime <= $CStop)){
+		    if($CStop < $CStart){
+		        if(($actualTime >= $CStart) || ($actualTime <= $CStop)){
+		            $TimeFlag = true;
+		        }
+		    } elseif ($CStop > $CStart){
+		        if(($actualTime >= $CStart) && ($actualTime <= $CStop)){
 				$TimeFlag = true;
-				break 1;
-			}
+			    }
+		    }
 		}
 		return (bool) $TimeFlag;
 	}
@@ -46,7 +56,11 @@ class CleaningInterval
 	 */
 	function getopModeFlag()
 	{
-		$xml = simplexml_load_file("/var/www/VDF.xml");		
+		$xml = simplexml_load_file("/var/www/VDF.xml");
+		if($xml == false){
+		    usleep(100000);
+		    $xml = simplexml_load_file("/var/www/VDF.xml");
+		}
 		(bool) $OperationFlag = false;
 
 		$strOperationMode = (string) $xml->CleaningSetting[0]->OperationMode;

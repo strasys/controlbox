@@ -14,6 +14,10 @@ ini_set('error_log', '/pfad/zur/logdatei/php_error.log');
 */
 
 include_once ('/var/www/service_classes/pushButtonService.inc.php');
+include_once "/var/www/hw_classes/GPIO.inc.php";
+
+
+$DIGI = new GPIO();
 
 function writestatus($statusWord, $statusFile){
 		fwrite($statusFile,'',5);
@@ -26,7 +30,7 @@ function writestatus($statusWord, $statusFile){
 $xml=simplexml_load_file("/var/www/VDF.xml") or die("Error: Cannot create object");
 $DNSService = $xml->OperationModeDevice[0]->DNSService;
 $ComposerService = $xml->OperationModeDevice[0]->AutomaticHand;
-//$pushButtonSensingService = $xml->OperationModeDevice[0]->pushButtonSensing;
+$pushButtonSensingService = $xml->OperationModeDevice[0]->pushButtonSensing;
 $PushDataCloudService = $xml->OperationModeDevice[0]->PushDataCloudService;
 $indicatorLEDServicetask = $xml->OperationModeDevice[0]->indicatorLED;
 
@@ -73,6 +77,9 @@ $statusFile = fopen("/var/www/tmp/DNSservicestatus.txt", "w");
 			case 'stop':
 				$statusWord = "stop";
 				writestatus($statusWord, $statusFile);
+				//indicator light switch of blue (5) and switch on red (6)
+				$DIGI->setOutsingle(5,0);
+				$DIGI->setOutsingle(6,1);
 				break;
 			case 'run':
 				$statusWord = "run";
@@ -108,18 +115,17 @@ $statusFile = fopen("/var/www/tmp/DNSservicestatus.txt", "w");
 		}
 
 	}
-/*
+
 //Set status for pushButtonSensing Function
 	unset($statusFile, $statusWord);
-	$statusFile = fopen("/tmp/pushButtonSensingRunStop.txt", "w");
+	$statusFile = fopen("/var/www/tmp/pushButtonSensingRunStop.txt", "w");
 	if ($statusFile == false)
 	{
-		$errorMsg = "Error: fopen\"/tmp/pushButtonSensingRunStop.txt\", \"w\" ";
-		break;
+		die ("Error: fopen\"/var/www/tmp/pushButtonSensingRunStop.txt\", \"w\" ");
 	}
 	elseif ($statusFile)
 	{
-		exec("chown www-data:root /tmp/pushButtonSensingRunStop.txt");
+		exec("chown www-data:root /var/www/tmp/pushButtonSensingRunStop.txt");
 		switch (($pushButtonSensingService))
 		{
 			case 'stop':
@@ -129,15 +135,17 @@ $statusFile = fopen("/var/www/tmp/DNSservicestatus.txt", "w");
 			case 'run':
 				$statusWord = "run";
 				writestatus($statusWord, $statusFile);
-				$sensingClass = new pushButtonSensingService();
-				$arrforSensingSet = $sensingClass->getInputSetforSensing();
-				echo print_r($sensingClass->getInputToggleStatus());
-			//	echo print_r($arrforSensingSet);
-				$speed = 100;
-				$sensingClass->setInputforSensing($arrforSensingSet,$speed);
+			
+				$loopcycle = $xml->pushButtonSensingControl[0]->cycleTime;
+				$cma = "php /var/www/set/parameter/pushButton/pushButtonTask.php";
+				exec($cma . " > /dev/null &");
+				
+				$cmb = " /usr/lib/cgi-bin/Button_Sensing ". $loopcycle;
+				exec($cmb . " > /dev/null &");
+			
 		}
 	}
- */
+
 //Set status of indicator LED Service
 	unset($statusFile, $statusWord);
 	$statusFile = fopen("/var/www/tmp/indicatorLEDstatus.txt", "w");
@@ -162,5 +170,9 @@ $statusFile = fopen("/var/www/tmp/DNSservicestatus.txt", "w");
 		}
 
 	}
+
+//Start FIFOPuffer Task
+	$cmd = "php /var/www/hw_classes/FIFOPuffering/FIFOPufferingTask.php";
+	exec($cmd . " > /dev/null &");
  
 ?>

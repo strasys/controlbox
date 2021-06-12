@@ -73,7 +73,7 @@ function sethardwarehtmlinterface(callback){
 				var header = "PT1000 "+counter_PT1000;
 				var selectVal = "PT1000";
 				loadExtensions(i+1, idData, header, function(){
-					setSelectExt(idData+"_Select_Val", selectVal, idData+"_Select_Interval", function(){
+					setSelectExt4(idData+"_Select_Val", selectVal, idData+"_Select_Interval", function(){
 					});
 				});
 				break;
@@ -118,7 +118,7 @@ function sethardwarehtmlinterface(callback){
 
 function setSelectDigiInput(callback){
 	settimeinterval("Digi_IN_Select_Interval",function(){
-		for(i=0;i<12;i++){
+		for(i=0;i<4;i++){
 			var y = document.getElementById("Digi_IN_Select_Val");
 			var option1 = document.createElement("option");
 			option1.text = "DigiIN_"+i;
@@ -133,7 +133,7 @@ function setSelectDigiInput(callback){
 
 function setSelectDigiOutput(callback){
 	settimeinterval("Digi_OUT_Select_Interval",function(){
-		for(i=0;i<12;i++){
+		for(i=0;i<5;i++){
 			var y = document.getElementById("Digi_OUT_Select_Val");
 			var option1 = document.createElement("option");
 			option1.text = "DigiOUT_"+i;
@@ -149,6 +149,30 @@ function setSelectDigiOutput(callback){
 function setSelectExt(idSelectVal, selectVal, idSelectInterval, callback){
 	var i=0;
 		for(i=0;i<2;i++){
+			var y = document.getElementById(idSelectVal);
+			var option1 = document.createElement("option");
+			option1.text = selectVal+"_"+(i);
+			y.options.add(option1);	
+		}
+	
+		var timeinterval = [1,2,3,4,5,10,15,20,30,40,50,60];
+
+	for(i=0;i<(timeinterval.length);i++){
+		var y = document.getElementById(idSelectInterval);
+		var option1 = document.createElement("option");
+		option1.text = timeinterval[i];
+		y.options.add(option1);
+	}
+
+	
+	if(callback){
+		callback();
+	}
+}
+
+function setSelectExt4(idSelectVal, selectVal, idSelectInterval, callback){
+	var i=0;
+		for(i=0;i<4;i++){
 			var y = document.getElementById(idSelectVal);
 			var option1 = document.createElement("option");
 			option1.text = selectVal+"_"+(i);
@@ -281,16 +305,16 @@ function setDataPushModeXML(radioID){
 // load functions ad webpage opening
 function startatLoad(){
 	loadNavbar(function(){
-	//	setSelectDigiOutput(function(){
-		//	setSelectDigiInput(function(){
+		setSelectDigiOutput(function(){
+			setSelectDigiInput(function(){
 				getExtensions(function(){
 					getXMLDataCloud(function(){
 						sethardwarehtmlinterface();
 					});
 				});
-	//		});
+			});
 	
-	//	});
+		});
 	});
 }
 window.onload=startatLoad();

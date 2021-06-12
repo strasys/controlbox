@@ -9,6 +9,7 @@
  */
 
 include_once "/var/www/hw_classes/PT1000.inc.php";
+include_once '/var/www/hw_classes/FIFOPuffering/PT1000FIFO.inc.php';
 
 class Solar
 {
@@ -20,7 +21,11 @@ class Solar
 	function getSolarFlag()
 	{			
 		$xml = simplexml_load_file("/var/www/VDF.xml");
-		$Temp = new PT1000();
+		if($xml == false){
+		    usleep(100000);
+		    $xml = simplexml_load_file("/var/www/VDF.xml");
+		}
+		$Temp = new PT1000FIFO();
 		//$RTC = new RTC();
 		(bool) $SolarFlag = false;
 		(bool) $waitFlag = false;
@@ -31,10 +36,18 @@ class Solar
 		$setdiffOFFTemp = (int) $xml->SolarSetting[0]->diffOFFTemp;
 		$setSwitchOFFdelay = (int) $xml->SolarSetting[0]->SwitchOFFdelay;	
 		$setSwitchONdelay = (int) $xml->SolarSetting[0]->SwitchONdelay;		
-		$PoolTemp = $Temp->getPT1000(0,1);
-		$RoofTemp = $Temp->getPT1000(2,1);
-		$CyclingTemp = $Temp->getPT1000(3,1);
-		
+		$PoolTemp = $Temp->getPT1000(0);
+		$RoofTemp = $Temp->getPT1000(3);
+		$CyclingTemp = $Temp->getPT1000(2);
+	/*	
+		$RoofTemp = 18.0;
+		$CyclingTemp = 20.0;
+		echo("PoolTemp = ".$PoolTemp."<br>");
+		echo("RoofTemp = ".$RoofTemp."<br>");
+		echo("CyclingTemp = ".$CyclingTemp."<br>");
+		$Test = $RoofTemp - $CyclingTemp;
+		echo("RoofTemp - CyclingTemp = ".$Test."<br>");
+	*/
 		//$actualTime = strtoTime($RTC->getstrTimeHHMM()); 
 		$date = new DateTime();
 		//get UNIX - time stamp
@@ -43,6 +56,7 @@ class Solar
 		// waitmintime = UnixTime + x minutes => This is the minimum time the heating cycle is off after switch off.
 		// runmintime = UnixTime + x minutes => This is the minimum time the heating cycle is on after switch on.
 		// StatusSolar = shows the last status of the system => 0 = off, 1 = on
+		//echo("actualTime = ".$actualTime."<br>");
 		$artemp = array();
 		$i = 0;
 		$TempControlFile = fopen("/var/www/tmp/PoolTempControlFile.txt", "r");
@@ -69,7 +83,11 @@ class Solar
 			}
 			fclose($TempControlFile);
 		}
-
+		
+    /*  echo ("artemp[1] = ".$artemp[1]."<br>");
+        echo ("artemp[3] = ".$artemp[3]."<br>");
+        echo ("artemp[5] = ".$artemp[5]."<br>");
+    */
 		// Check if one of the waiting functions is activ!
 		
 		if (($artemp[1] > $actualTime) || ($artemp[3] > $actualTime)){
@@ -122,7 +140,11 @@ class Solar
 	 */
 	function getopModeFlag()
 	{
-		$xml = simplexml_load_file("/var/www/VDF.xml");		
+		$xml = simplexml_load_file("/var/www/VDF.xml");
+		if($xml == false){
+		    usleep(100000);
+		    $xml = simplexml_load_file("/var/www/VDF.xml");
+		}
 		(bool) $OperationFlag = false;
 
 		$strOperationMode = (string) $xml->SolarSetting[0]->operationMode;

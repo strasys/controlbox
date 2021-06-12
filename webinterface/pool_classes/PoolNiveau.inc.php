@@ -19,18 +19,23 @@ class Niveau
 	function getNiveauFlag()
 	{
 		$xml = simplexml_load_file("/var/www/VDF.xml");
+		if($xml == false){
+		    usleep(100000);
+		    $xml = simplexml_load_file("/var/www/VDF.xml");
+		}
 		$DIGI = new GPIO();
 		//$RTC = new RTC();
-		(bool) $NiveauFlag = false;
+		(bool) $ValveFlag = false;
 		//openFlag will be set when condition start water filling is given.
 		//It stays true until OvertravelTime elapses.
-		(bool) $openFlag = false;
+		//(bool) $openFlag = false;
 		(int) $NiveauSensor = $DIGI->getInSingle(0);
 		$OvertravelTime = (int) $xml->LevelControl[0]->Overtraveltime;
 		$TimeSensorMustON = (int) $xml->LevelControl[0]->SensorONTime * 60;
-	//	echo $TimeSensorMustON ."= TimeSensorMustON<br>";
-	//	$NiveauSensor = 1;
+		//echo "TimeSensorMustON = ".$TimeSensorMustON ."<br>";
+		//$NiveauSensor = 0;
 		$artemp = array();
+		//echo "NiveauSensor = ".$NiveauSensor."<br>";
 			$i = 0;
 			$NiveauControlFile = fopen("/var/www/tmp/PoolNiveauControlFile.txt", "r");
 			if ($NiveauControlFile == false){
@@ -48,7 +53,7 @@ class Niveau
 				for($i=0;$i<4;$i++)
 				{
 					$line = fgets($NiveauControlFile,200);
-				//	echo $line;
+					//echo $line."<br>";
 					$line = trim($line);
 					list($var,$varval) = explode(":",$line);
 					$artemp[$x] = $var;
@@ -63,50 +68,41 @@ class Niveau
 		//get UNIX - time stamp
 		$actualTime = $date->getTimestamp();
 		//check of openValveFlag is set to 1
-		if ($artemp[7] == 1)
+		
+		//Check time between first time NiveauSensor shows empty!
+		if ($NiveauSensor == 0)
 		{
-			//compare time stamp add water
-			if (($artemp[1] - $actualTime -1) >= 0){
-				$openFlag = true;
-			}
-			else
-			{
-				$openFlag = false;
-				$artemp[7] = 0;	
-			}
+		    //first time NiveauSensor from 1 to 0
+		    if ($artemp[5] == 0){
+		        $artemp[3] = $actualTime;
+		        $artemp[5] = 1;
+		    }
+		    elseif ((($actualTime - $artemp[3]) >= $TimeSensorMustON) && ($artemp[5] == 1)){
+		        $artemp[7] = 1;
+		    }
 		}
-
-		if (($NiveauSensor == 0)&&($openFlag == false))
+		elseif ($NiveauSensor == 1)
 		{
-			if ($artemp[5] == 0){
-				$artemp[3] = $actualTime;
-				$artemp[5] = 1;
-			}
-	//TODO: Absicherung durch SensorONFalg = 1
-			if ((($actualTime - $artemp[3]) >= $TimeSensorMustON) && $artemp[5]){
-				$NiveauFlag = true;
-				$artemp[1] = $actualTime + ($OvertravelTime * 60);
-				$artemp[5] = 0;
-				$artemp[7] = 1;
-			}		
-		}
-		else if (($NiveauSensor == 1)&&($openFlag == false))
-		{
-			$artemp[3] = $actualTime;
-			$artemp[5] = 0;
-			$NiveauFlag = false;
-		}
-		else if (($NiveauSensor == 1)&&($openFlag == true))
-		{
-			$NiveauFlag = true;
-			$artemp[3] = $actualTime;
-		}
-		else if (($NiveauSensor == 0)&&($openFlag == true))
-		{
-			$NiveauFlag = true;
-			$artemp[3] = $actualTime;
+		    $artemp[3] = $actualTime;
+		    $artemp[5] = 0;
 		}
 	
+		//control fresh water valve status
+		if (($artemp[7] == 1) && ($artemp[5] == 1)){
+            $ValveFlag = true;
+		}
+		elseif (($artemp[7] == 1) && ($artemp[5] == 0)){
+		    $artemp[1] = $actualTime + ($OvertravelTime * 60);
+		    $artemp[7] = 0;
+		    $ValveFlag = true;
+		}
+		elseif (($artemp[7] == 0) && ($artemp[5] == 0)){
+		    if(($artemp[1] - $actualTime -1) >= 0){
+		        $ValveFlag = true;
+		    } else {
+		        $ValveFlag = false;
+		    }
+		}
 
 		$NiveauControlFile = fopen("/var/www/tmp/PoolNiveauControlFile.txt", "w");
 			$i = 0;
@@ -115,7 +111,7 @@ class Niveau
 			}	
 			fclose($NiveauControlFile);	
 
-		return (bool) $NiveauFlag; 	
+		return (bool) $ValveFlag; 	
 	}
 	/*
 	 * This function returns a boolean value. 
@@ -124,7 +120,11 @@ class Niveau
 	 */
 	function getopModeFlag()
 	{
-		$xml = simplexml_load_file("/var/www/VDF.xml");		
+		$xml = simplexml_load_file("/var/www/VDF.xml");
+		if($xml == false){
+		    usleep(100000);
+		    $xml = simplexml_load_file("/var/www/VDF.xml");
+		}
 		(bool) $OperationFlag = false;
 
 		$strOperationMode = (string) $xml->LevelControl[0]->operationMode;
@@ -133,6 +133,17 @@ class Niveau
 		}
 		elseif ($strOperationMode == 'OFF'){
 			$OperationFlag = false;
+			
+			$NiveauControlFile = fopen("/var/www/tmp/PoolNiveauControlFile.txt", "r");
+			if ($NiveauControlFile == true){
+			    $NiveauControlFile = fopen("/var/www/tmp/PoolNiveauControlFile.txt","w");
+			    //exec("chown www-data:root /var/www/tmp/PoolNiveauControlFile.txt");
+			    fwrite($NiveauControlFile,"timeStampaddWater:0\r\n");
+			    fwrite($NiveauControlFile,"timeStampNiveau:0\r\n");
+			    fwrite($NiveauControlFile,"sensorOnFlag:0\r\n");
+			    fwrite($NiveauControlFile,"openValveFlag:0\r\n");
+			    fclose($NiveauControlFile);
+			}
 		}
 
 		return (bool) $OperationFlag;

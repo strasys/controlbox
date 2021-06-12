@@ -188,6 +188,7 @@ $(this)
 	.ready($("#PoolTemp").text(ServerData.PoolTemp.toFixed(1)))
 	.ready($("#AirTemp").text(ServerData.AirTemp.toFixed(1)))
 
+
 $("#LightButton1").on("click", function(){
 	$("#LightButton1Spiner").addClass("loadersmall pos-rel");
 	if(ServerData.GPIOout[3] == '0'){

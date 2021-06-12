@@ -24,6 +24,7 @@ class PT1000
 	function getPT1000round05($num, $hwext)
 	{
 	    unset($PT1000);
+	    usleep(100000);
 	    exec("flock /tmp/PT1000handlerlock /usr/lib/cgi-bin/PT1000_controlbox g $num $hwext", $PT1000);
 	    /*
 	     * round to 0,5 => 

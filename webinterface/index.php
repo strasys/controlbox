@@ -11,6 +11,7 @@ session_start();
 include_once ('/var/www/hw_classes/PT1000.inc.php');
 include_once ('/var/www/hw_classes/GPIO.inc.php');
 include_once ('/var/www/hw_classes/HUMIDITY.inc.php');
+include_once '/var/www/hw_classes/FIFOPuffering/PT1000FIFO.inc.php';
 
 /* values do be displayed for pool with solar heater
  * PT1000 1 - 4: Becken, Luft, Rücklauf, Solar
@@ -21,11 +22,17 @@ include_once ('/var/www/hw_classes/HUMIDITY.inc.php');
  */
 
 	$PT1000ex1 = new PT1000;
-    
+	$PT1000FIFO = new PT1000FIFO;
+ /* 
 	$PoolTemp = $PT1000ex1->getPT1000round05(0,1);
 	$AirTemp = $PT1000ex1->getPT1000round05(1,1);
 	$BackwaterTemp = $PT1000ex1->getPT1000round05(2,1);
 	$SolarTemp = $PT1000ex1->getPT1000round05(3,1);
+*/	
+	$PoolTemp = $PT1000FIFO->getPT1000(0);
+	$AirTemp = $PT1000FIFO->getPT1000(1);
+	$BackwaterTemp = $PT1000FIFO->getPT1000(2);
+	$SolarTemp = $PT1000FIFO->getPT1000(3);
 	
 	$GPIOhandler = new GPIO;
 	$GPIOin = $GPIOhandler->getIn();
@@ -38,7 +45,7 @@ include_once ('/var/www/hw_classes/HUMIDITY.inc.php');
 	    'BackwaterTemp' => $BackwaterTemp,
 	    'SolarTemp' => $SolarTemp,
 	    'GPIOin' => $GPIOin,
-	    'GPIOout' => $GPIOout
+	    'GPIOout' => $GPIOout,
 	);
 
 
