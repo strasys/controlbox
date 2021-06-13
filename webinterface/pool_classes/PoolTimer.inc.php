@@ -31,16 +31,40 @@ class TimerInterval
 		$actualTime = $date->getTimestamp();
 		
 		$NumberOutputTimer = count($xml->TimerControl->OutputTimer);
+		$FileDir = "/var/www/tmp/PoolTimer.txt";
+		if(!file_exists($FileDir)){
+		    $filehandle = fopen($FileDir,"w");
+		    for($i=0;$i<$NumberOutputTimer;$i++){
+		        $TOutput = (int) $xml->TimerControl->OutputTimer[$i]->Number[0];
+		        fwrite($filehandle,"DIGIOutput:".$TOutput.":1\n\r");
+		        $TOutputMonitor[$TOutput] = 1;
+		    }
+		    fclose($filehandle);
+		} else {
+		    $filehandle = fopen($FileDir,"r");
+		    for($i=0;$i<$NumberOutputTimer;$i++){
+		      $TOutput = (int) $xml->TimerControl->OutputTimer[$i]->Number[0];
+		      $tmpOutputMonitor = explode(":",trim(fgets($filehandle)));
+		      $TOutputMonitor[$TOutput] = $tmpOutputMonitor[2];
+		    }
+		    fclose($filehandle);
+		}
+		
 		for ($i=0;$i<$NumberOutputTimer;$i++){
 		    $OutputFlag = false;
 		    $OperationFlag = false;
 		    $TOutput = (int) $xml->TimerControl->OutputTimer[$i]->Number[0];
-		    if($xml->TimerControl->OutputTimer[$i]->operationMode[0] == 'OFF'){   
+		    if($xml->TimerControl->OutputTimer[$i]->operationMode[0] == 'OFF' && $TOutputMonitor[$TOutput] == 1){   
 		        $OutputFlag = false;
-		        $OperationFlag = true;
-		    } else if ($xml->TimerControl->OutputTimer[$i]->operationMode[0] == 'AUTO'){
+		        $OperationFlag = false;
+		        if($TOutputMonitor[$TOutput] == 1){
+		          $TOutputMonitor[$TOutput] = 0;
+		          $DIGIclass->setOutsingle($TOutput,0);
+		        }
+		    } elseif ($xml->TimerControl->OutputTimer[$i]->operationMode[0] == 'AUTO'){
 		        //get time periodes
-		        $OperationFlag = true;
+		        $OperationFlag = true; 
+		        $TOutputMonitor[$TOutput] = 1;
 		        $NumberTimerSetting = count($xml->TimerControl->OutputTimer[$i]->TimerSetting);
 		        for($j=0;$j<$NumberTimerSetting;$j++){
 		            $TStart = new DateTime($xml->TimerControl->OutputTimer[$i]->TimerSetting[$j]->Start, new DateTimeZone($Timezone));
@@ -68,9 +92,14 @@ class TimerInterval
 	                   $DIGIclass->setOutsingle($TOutput,0);
 	                   break;
 	           }
-	       }
+	       } 
 	   }
-	   
+	   $filehandle = fopen($FileDir,"r+");
+	   for($i=0;$i<$NumberOutputTimer;$i++){    
+	       $TOutput = (int) $xml->TimerControl->OutputTimer[$i]->Number[0];
+	       fwrite($filehandle,"DIGIOutput:".$TOutput.":".$TOutputMonitor[$TOutput]."\n\r");
+	   }
+	   fclose($filehandle);
 	   
     }
 }
