@@ -20,6 +20,7 @@ $DifferenceONTemp = "DifferenceONTemp";
 $DifferenceOFFTemp = "DifferenceOFFTemp";
 $SwitchOFFdelay = "SwitchOFFdelay";
 $SwitchONdelay = "SwitchONdelay";
+$ConditioningDelay = "ConditioningDelay";
 $operationMode = "operationMode";
 
 //get Log status
@@ -55,6 +56,12 @@ if (($TempTyp == $SwitchONdelay) && ($adminstatus)){
 	$xml=simplexml_load_file("/var/www/VDF.xml") or die("Error: Cannot create object");
 	$xml->SolarSetting[0]->SwitchONdelay = $_POST["TempValue"];
 	echo $xml->asXML("/var/www/VDF.xml");
+}
+
+if (($TempTyp == $ConditioningDelay) && ($adminstatus)){
+    $xml=simplexml_load_file("/var/www/VDF.xml") or die("Error: Cannot create object");
+    $xml->SolarSetting[0]->ConditioningTime = $_POST["TempValue"];
+    echo $xml->asXML("/var/www/VDF.xml");
 }
 
 if (($TempTyp == $operationMode) && ($adminstatus)){

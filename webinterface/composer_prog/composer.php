@@ -92,10 +92,14 @@ while ($loopstatus){
 	 */
 	(bool) $SolarMixerFlag = false;
 
-	if ($Solar->getopModeFlag() && $Solar->getSolarFlag())
+	if ($Solar->getopModeFlag())
 	{
-		$PumpFlag = true;
-		$SolarMixerFlag = true;	
+	    if ($Solar->getSolarFlag()['Pump'] == 1){
+	        $PumpFlag = true;
+	    }
+	    if ($Solar->getSolarFlag()['Solar'] == 1){
+	        $SolarMixerFlag = true;
+	    }	
 	}
 
 	/*

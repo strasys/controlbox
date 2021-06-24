@@ -57,7 +57,7 @@ function getXMLData(callback4){
 		document.getElementById("SolarDifferenceOFFTemp").value = w[0].getElementsByTagName("diffOFFTemp")[0].childNodes[0].nodeValue;
 		document.getElementById("SolarSwitchOFFdelay").value = w[0].getElementsByTagName("SwitchOFFdelay")[0].childNodes[0].nodeValue;
 		document.getElementById("SolarSwitchONdelay").value = w[0].getElementsByTagName("SwitchONdelay")[0].childNodes[0].nodeValue;
-
+		document.getElementById("ConditioningDelay").value = w[0].getElementsByTagName("ConditioningTime")[0].childNodes[0].nodeValue;
 
 	}
 	if (callback4){
@@ -114,6 +114,7 @@ function setSelectMenuesValues(callback5){
 	setSelectFieldsTemp("SolarDifferenceOFFTemp",1,12,1);
 	setSelectFieldsTemp("SolarSwitchOFFdelay",1,15,1);
 	setSelectFieldsTemp("SolarSwitchONdelay",1,15,1);
+	setSelectFieldsTemp("ConditioningDelay",0,3,0.5);
 
 	
 	if (callback5){
